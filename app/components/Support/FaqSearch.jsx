@@ -7,9 +7,10 @@
  * @author: Lee Burton <Lee.Burton@SmokinMedia.com>
  */
 import React from "react";
-import {request} from "./RequestHelpers";
 import counterpart from "counterpart";
 import {log} from "./SupportUtils";
+import {generateRequestOptions} from "./BitsharesHelpers";
+import config from "../../../config";
 
 class FaqSearch extends React.Component {
     constructor(props) {
@@ -35,22 +36,28 @@ class FaqSearch extends React.Component {
      */
     _fetchSearchResults = searchTerm => {
         let searchResults = [];
-        const url = `https://cryptobridge.freshdesk.com/search/solutions.json?search_key=${searchTerm}`;
 
-        request({url})
-            .then(res => res.json())
+        const requestOptions = generateRequestOptions(this.props.account);
+
+        return fetch(
+            `${config.support.url}/faq/search/${searchTerm}`,
+            requestOptions
+        )
+            .then(response => response.json())
             .then(response => {
-                response.results.forEach(article => {
-                    searchResults.push({
-                        id: article.id,
-                        type: article.result_type,
-                        title: article.title,
-                        text: article.description,
-                        url: `https://cryptobridge.freshdesk.com/${
-                            article.path
-                        }`
+                if (response.results) {
+                    response.results.forEach(article => {
+                        searchResults.push({
+                            id: article.id,
+                            type: article.result_type,
+                            title: article.title,
+                            text: article.description,
+                            url: `https://cryptobridge.freshdesk.com/${
+                                article.path
+                            }`
+                        });
                     });
-                });
+                }
 
                 this.setState({
                     searchResults
@@ -58,7 +65,7 @@ class FaqSearch extends React.Component {
             })
             .catch(error => {
                 log(
-                    `FaqSearch.jsx:_fetchSearchResults() - Freshdesk API fetch promise catch() (${error})`
+                    `FaqSearch.jsx:_fetchSearchResults() - FAQ API fetch promise catch() (${error})`
                 );
             });
     };
