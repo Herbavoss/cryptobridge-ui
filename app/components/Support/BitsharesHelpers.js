@@ -59,7 +59,6 @@ export const generateRequestOptions = account => {
         recipientPublicKeyStr
     );
     const nonce = TransactionHelper.unique_nonce_uint64();
-
     const token = signMemoWithKeys(
         memoPrivateKey,
         recipientPublicKey,
