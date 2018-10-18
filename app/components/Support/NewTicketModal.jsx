@@ -19,6 +19,7 @@ import SupportStore from "./stores/SupportStore";
 import Notification from "./Notification";
 import CBModal from "./CBModal";
 import config from "../../../config";
+import {log} from "./SupportUtils";
 
 export default class NewTicketModal extends Component {
     state = {
@@ -34,7 +35,7 @@ export default class NewTicketModal extends Component {
     reCaptchaEl = null;
     reCaptchaToken = "";
 
-    constructor(props) {
+    /*constructor(props) {
         super(props);
 
         this.onSupportChange = this.onSupportChange.bind(this);
@@ -50,7 +51,7 @@ export default class NewTicketModal extends Component {
 
     onSupportChange(state) {
         this.setState(state);
-    }
+    }*/
 
     /**
      * Displays the modal dialog
@@ -203,7 +204,7 @@ export default class NewTicketModal extends Component {
     _handleTicketCreate = async () => {
         let formState = {};
         let ticket = {};
-        const {account: username} = this.props;
+        const username = this.props.account.get("name");
 
         this.setState({
             isTicketCreatePending: true,
@@ -243,9 +244,7 @@ export default class NewTicketModal extends Component {
                 break;
         }
 
-        const requestOptions = generateRequestOptions(
-            this.state.currentAccount
-        );
+        const requestOptions = generateRequestOptions(this.props.account);
 
         const responseJson = await fetch(
             `${config.support.url}/support/tickets`,
@@ -426,6 +425,7 @@ export default class NewTicketModal extends Component {
                         <FaqSearch
                             searchTerm={this.state.searchTerm}
                             onChange={this._handleSearchTerm}
+                            account={this.props.account}
                         />
 
                         <Translate
