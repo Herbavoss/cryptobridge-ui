@@ -528,7 +528,7 @@ class Support extends React.Component {
 
                     <NewTicketModal
                         ref="new-ticket-modal"
-                        account={this.props.account.get("name")}
+                        account={this.props.account}
                         onTicketCreate={this._handleTicketCreate}
                     />
                 </div>
