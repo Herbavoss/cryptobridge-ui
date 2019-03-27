@@ -1,7 +1,5 @@
 /**
  * Freshdesk Request Helper function
- *
- * @author: Lee Burton <Lee.Burton@SmokinMedia.com>
  */
 import config from "../../../config";
 

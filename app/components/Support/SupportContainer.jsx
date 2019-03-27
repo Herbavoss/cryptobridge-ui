@@ -2,8 +2,6 @@
  * The Support Container component
  *
  * A wrapper component that passes in data from various stores.
- *
- * @author: Lee Burton <Lee.Burton@SmokinMedia.com>
  */
 import React from "react";
 import AltContainer from "alt-container";
@@ -68,7 +66,7 @@ class SupportContainer extends React.Component {
                         <div className="small-10 medium-6 large-4 xlarge-3 text-center">
                             <Translate
                                 component="h3"
-                                content="header.support"
+                                content="cryptobridge.support.title"
                             />
 
                             <div className="support-login__content">

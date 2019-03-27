@@ -1,7 +1,5 @@
 /**
  * The main Support component
- *
- * @author: Lee Burton <Lee.Burton@SmokinMedia.com>
  */
 import React from "react";
 import Translate from "react-translate-component";
@@ -503,7 +501,7 @@ class Support extends React.Component {
                         <Translate
                             style={{paddingBottom: 10, paddingLeft: 10}}
                             component="h3"
-                            content="header.support"
+                            content="cryptobridge.support.title"
                             className="panel-bg-color"
                         />
 

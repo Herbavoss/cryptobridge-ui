@@ -116,6 +116,13 @@ const BenchmarkPage = Loadable({
     loading: LoadingIndicator
 });
 
+/* CryptoBridge-specific imports */
+const Support = Loadable({
+    loader: () =>
+        import(/* webpackChunkName: "support" */ "./components/Support/SupportContainer"),
+    loading: LoadingIndicator
+});
+
 import LoginSelector from "./components/LoginSelector";
 import {CreateWalletFromBrainkey} from "./components/Wallet/WalletCreate";
 

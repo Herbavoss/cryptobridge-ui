@@ -3,8 +3,6 @@
  *
  * Renders a modal dialog with a standard layout, the content provided by props.children,
  * and open & close functionality. It can be used to create other modal dialogs.
- *
- * @author: Lee Burton <Lee.Burton@SmokinMedia.com>
  */
 import React, {Component} from "react";
 import ReactModal from "react-modal";

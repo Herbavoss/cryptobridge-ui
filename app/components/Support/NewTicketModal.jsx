@@ -2,8 +2,6 @@
  * NewTicketModal component
  *
  * Renders a modal dialog for creating a new support ticket.
- *
- * @author: Lee Burton <Lee.Burton@SmokinMedia.com>
  */
 import React, {Component} from "react";
 import counterpart from "counterpart";

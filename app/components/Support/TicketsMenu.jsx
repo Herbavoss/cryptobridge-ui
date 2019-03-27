@@ -2,8 +2,6 @@
  * The TicketsMenu component
  *
  * Renders the tickets menu from the supplied tickets array.
- *
- * @author: Lee Burton <Lee.Burton@SmokinMedia.com>
  */
 import React from "react";
 import Translate from "react-translate-component";

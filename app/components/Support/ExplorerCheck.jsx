@@ -2,8 +2,6 @@
  * ExplorerCheck component
  *
  * Renders a component with clickable Coin Explorer URL, if it exists.
- *
- * @author: Lee Burton <Lee.Burton@SmokinMedia.com>
  */
 import React from "react";
 import Translate from "react-translate-component";

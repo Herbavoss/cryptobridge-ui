@@ -1,7 +1,5 @@
 /**
  * Support Constants
- *
- * @author: Lee Burton <Lee.Burton@SmokinMedia.com>
  */
 export const IssuesEnum = {
     DEPOSIT: 1,

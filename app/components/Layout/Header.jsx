@@ -561,7 +561,7 @@ class Header extends React.Component {
                     <Translate
                         className="column-hide-small"
                         component="span"
-                        content="header.support"
+                        content="cryptobridge.support.title"
                     />
                 </a>
             );
@@ -1678,7 +1678,7 @@ class Header extends React.Component {
                                         />
                                     </div>
                                     <div className="table-cell">
-                                        <Translate content="header.support" />
+                                        <Translate content="cryptobridge.support.title" />
                                     </div>
                                 </li>
 

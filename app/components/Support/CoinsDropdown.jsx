@@ -2,8 +2,6 @@
  * CoinsDropdown component
  *
  * Renders a coins dropdown list.
- *
- * @author: Lee Burton <Lee.Burton@SmokinMedia.com>
  */
 import React from "react";
 import Select from "react-select";

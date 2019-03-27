@@ -2,8 +2,6 @@
  * MessageComposer component
  *
  * Renders a rich text editor.
- *
- * @author: Lee Burton <Lee.Burton@SmokinMedia.com>
  */
 import React from "react";
 import RichTextEditor from "react-rte";

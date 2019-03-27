@@ -2,8 +2,6 @@
  * The Notification component
  *
  * Renders a Notification for error messages, information, etc.
- *
- * @author: Lee Burton <Lee.Burton@SmokinMedia.com>
  */
 import React from "react";
 

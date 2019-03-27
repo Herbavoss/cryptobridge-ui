@@ -2,8 +2,6 @@
  * The Ticket component
  *
  * Renders a single ticket
- *
- * @author: Lee Burton <Lee.Burton@SmokinMedia.com>
  */
 import React from "react";
 import Translate from "react-translate-component";

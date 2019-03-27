@@ -1,7 +1,5 @@
 /**
  * Bitshares Helper Functions
- *
- * @author: Lee Burton <Lee.Burton@SmokinMedia.com>
  */
 import {Aes} from "bitsharesjs/es";
 import {PublicKey, TransactionHelper} from "bitsharesjs";

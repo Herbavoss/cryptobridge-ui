@@ -1,7 +1,6 @@
 /**
  * Support Utility Functions
  *
- * @author: Lee Burton <Lee.Burton@SmokinMedia.com>
  */
 import counterpart from "counterpart";
 import {kebabCase} from "lodash-es";

@@ -3,8 +3,6 @@
  *
  * Renders an FAQ Search component. Results matching the search criteria are fetched from the API,
  * and rendered as a list with clickable links.
- *
- * @author: Lee Burton <Lee.Burton@SmokinMedia.com>
  */
 import React from "react";
 import counterpart from "counterpart";
