@@ -463,51 +463,6 @@ class AccountOverview extends React.Component {
                         </td>
                     ) : null}
                     <td>{transferLink}</td>
-                    <td>
-                        {canDeposit && this.props.isMyAccount ? (
-                            <span>
-                                <Icon
-                                    style={{cursor: "pointer"}}
-                                    name="deposit"
-                                    title="icons.deposit.deposit"
-                                    className="icon-14x"
-                                    onClick={this._showDepositModal.bind(
-                                        this,
-                                        assetName
-                                    )}
-                                />
-                            </span>
-                        ) : (
-                            emptyCell
-                        )}
-                    </td>
-                    <td>
-                        {canWithdraw && this.props.isMyAccount ? (
-                            <span>
-                                <a
-                                    className={!canWithdraw ? "disabled" : ""}
-                                    onClick={
-                                        canWithdraw
-                                            ? this._showDepositWithdraw.bind(
-                                                  this,
-                                                  "withdraw_modal_new",
-                                                  assetName,
-                                                  false
-                                              )
-                                            : () => {}
-                                    }
-                                >
-                                    <Icon
-                                        name="withdraw"
-                                        title="icons.withdraw"
-                                        className="icon-14px"
-                                    />
-                                </a>
-                            </span>
-                        ) : (
-                            emptyCell
-                        )}
-                    </td>
                     <td
                         style={{textAlign: "center"}}
                         className="column-hide-small"
@@ -647,47 +602,6 @@ class AccountOverview extends React.Component {
                                         {emptyCell}
                                     </td>
                                     <td>{emptyCell}</td>
-                                    <td style={{textAlign: "center"}}>
-                                        {canBuy && this.props.isMyAccount ? (
-                                            <span>
-                                                <a
-                                                    onClick={this._showDepositWithdraw.bind(
-                                                        this,
-                                                        "bridge_modal",
-                                                        a,
-                                                        false
-                                                    )}
-                                                >
-                                                    <Icon
-                                                        name="dollar"
-                                                        title="icons.dollar.buy"
-                                                        className="icon-14px"
-                                                    />
-                                                </a>
-                                            </span>
-                                        ) : (
-                                            emptyCell
-                                        )}
-                                    </td>
-                                    <td>
-                                        {canDeposit &&
-                                        this.props.isMyAccount ? (
-                                            <span>
-                                                <Icon
-                                                    style={{cursor: "pointer"}}
-                                                    name="deposit"
-                                                    title="icons.deposit.deposit"
-                                                    className="icon-14x"
-                                                    onClick={this._showDepositModal.bind(
-                                                        this,
-                                                        asset.get("symbol")
-                                                    )}
-                                                />
-                                            </span>
-                                        ) : (
-                                            emptyCell
-                                        )}
-                                    </td>
                                     <td>{emptyCell}</td>
                                     <td>
                                         {isBitAsset ? (
@@ -940,13 +854,13 @@ class AccountOverview extends React.Component {
 
         includedBalances.push(
             <tr key="portfolio" className="total-value">
-                <td colSpan="15" />
+                <td colSpan="13" />
             </tr>
         );
 
         hiddenBalances.push(
             <tr key="portfolio" className="total-value">
-                <td colSpan="15" />
+                <td colSpan="13" />
             </tr>
         );
 
@@ -970,9 +884,15 @@ class AccountOverview extends React.Component {
         const showTotalValue = false;
         const showPriceValue = false;
         const showBuy = false;
+        const showDeposit = false;
+        const showWithdraw = false;
         const showTrade = false;
         const showBorrow = false;
         const showSettle = false;
+        const showAdvancedFeatures = settings.get(
+            "showAdvancedFeatures",
+            false
+        );
 
         return (
             <div className="grid-content app-tables no-padding" ref="appTables">
@@ -1160,12 +1080,16 @@ class AccountOverview extends React.Component {
                                                         <Translate content="exchange.buy" />
                                                     </th>
                                                 ) : null}
-                                                <th>
-                                                    <Translate content="modal.deposit.submit" />
-                                                </th>
-                                                <th>
-                                                    <Translate content="modal.withdraw.submit" />
-                                                </th>
+                                                {showDeposit ? (
+                                                    <th>
+                                                        <Translate content="modal.deposit.submit" />
+                                                    </th>
+                                                ) : null}
+                                                {showWithdraw ? (
+                                                    <th>
+                                                        <Translate content="modal.withdraw.submit" />
+                                                    </th>
+                                                ) : null}
                                                 {showTrade ? (
                                                     <th>
                                                         <Translate content="account.trade" />
@@ -1242,7 +1166,8 @@ class AccountOverview extends React.Component {
                                 />
                             </Tab>
 
-                            {account.get("proposals") &&
+                            {showAdvancedFeatures &&
+                            account.get("proposals") &&
                             account.get("proposals").size ? (
                                 <Tab
                                     title="explorer.proposals.title"
@@ -1271,34 +1196,40 @@ class AccountOverview extends React.Component {
                 />
 
                 {/* Withdraw Modal*/}
-                <SimpleDepositWithdraw
-                    ref="withdraw_modal"
-                    action="withdraw"
-                    fiatModal={this.state.fiatModal}
-                    account={this.props.account.get("name")}
-                    sender={this.props.account.get("id")}
-                    asset={this.state.withdrawAsset}
-                    modalId="simple_withdraw_modal"
-                    balances={this.props.balances}
-                    {...currentWithdrawAsset}
-                    isDown={this.props.gatewayDown.get("OPEN")}
-                />
+                {showWithdraw && showDeposit ? (
+                    <SimpleDepositWithdraw
+                        ref="withdraw_modal"
+                        action="withdraw"
+                        fiatModal={this.state.fiatModal}
+                        account={this.props.account.get("name")}
+                        sender={this.props.account.get("id")}
+                        asset={this.state.withdrawAsset}
+                        modalId="simple_withdraw_modal"
+                        balances={this.props.balances}
+                        {...currentWithdrawAsset}
+                        isDown={this.props.gatewayDown.get("OPEN")}
+                    />
+                ) : null}
 
-                <WithdrawModal
-                    ref="withdraw_modal_new"
-                    modalId="withdraw_modal_new"
-                    backedCoins={this.props.backedCoins}
-                    initialSymbol={this.state.withdrawAsset}
-                />
+                {showWithdraw ? (
+                    <WithdrawModal
+                        ref="withdraw_modal_new"
+                        modalId="withdraw_modal_new"
+                        backedCoins={this.props.backedCoins}
+                        initialSymbol={this.state.withdrawAsset}
+                    />
+                ) : null}
 
                 {/* Deposit Modal */}
-                <DepositModal
-                    ref="deposit_modal_new"
-                    modalId="deposit_modal_new"
-                    asset={this.state.depositAsset}
-                    account={this.props.account.get("name")}
-                    backedCoins={this.props.backedCoins}
-                />
+                {showDeposit ? (
+                    <DepositModal
+                        ref="deposit_modal_new"
+                        modalId="deposit_modal_new"
+                        asset={this.state.depositAsset}
+                        account={this.props.account.get("name")}
+                        backedCoins={this.props.backedCoins}
+                    />
+                ) : null}
 
                 {/* Bridge modal */}
                 <SimpleDepositBlocktradesBridge

@@ -31,6 +31,7 @@ class CryptoBridgeWithdrawModal extends React.Component {
         output_wallet_type: PropTypes.string,
         output_supports_memos: PropTypes.bool.isRequired,
         amount_to_withdraw: PropTypes.string,
+        withdrawal_payment_id_enabled: PropTypes.bool,
         balance: ChainTypes.ChainObject
     };
 
@@ -44,6 +45,8 @@ class CryptoBridgeWithdrawModal extends React.Component {
             ),
             withdraw_address_check_in_progress: true,
             withdraw_address_is_valid: null,
+            payment_id_is_valid: true,
+            payment_id: "",
             options_is_valid: false,
             confirmation_is_valid: false,
             withdraw_address_selected: WithdrawAddresses.getLast(
@@ -57,13 +60,17 @@ class CryptoBridgeWithdrawModal extends React.Component {
             feeStatus: {}
         };
 
+        this.unMounted = true;
+
         this._validateAddress(this.state.withdraw_address, props);
+        this._validatePaymentId(this.state.payment_id);
 
         this._checkBalance = this._checkBalance.bind(this);
         this._updateFee = debounce(this._updateFee.bind(this), 250);
     }
 
     componentWillMount() {
+        this.unMounted = false;
         this._updateFee();
         this._checkFeeStatus();
         TransactionConfirmStore.listen(this.onTrxIncluded);
@@ -135,6 +142,7 @@ class CryptoBridgeWithdrawModal extends React.Component {
                     this.props.output_coin_type +
                     ":" +
                     state.withdraw_address +
+                    (state.payment_id ? ":" + state.payment_id : "") +
                     (state.memo ? ":" + state.memo : "")
             }
         }).then(({fee, hasBalance, hasPoolBalance}) => {
@@ -172,6 +180,7 @@ class CryptoBridgeWithdrawModal extends React.Component {
                             this.props.output_coin_type +
                             ":" +
                             state.withdraw_address +
+                            (state.payment_id ? ":" + state.payment_id : "") +
                             (state.memo ? ":" + state.memo : "")
                     }
                 })
@@ -183,9 +192,11 @@ class CryptoBridgeWithdrawModal extends React.Component {
                     feeStatus[a] = status[idx];
                 });
                 if (!utils.are_equal_shallow(state.feeStatus, feeStatus)) {
-                    this.setState({
-                        feeStatus
-                    });
+                    if (!this.unMounted) {
+                        this.setState({
+                            feeStatus
+                        });
+                    }
                 }
                 this._checkBalance();
             })
@@ -246,18 +257,44 @@ class CryptoBridgeWithdrawModal extends React.Component {
         this._validateAddress(new_withdraw_address);
     }
 
+    onPaymentIdChanged(e) {
+        let new_payment_id = e.target.value.trim();
+        this.setState({
+            payment_id: new_payment_id
+        });
+        this._validatePaymentId(new_payment_id);
+    }
+
+    _validatePaymentId(new_payment_id) {
+        if (!this.unMounted) {
+            this.setState({
+                payment_id_is_valid:
+                    !new_payment_id ||
+                    (this.getPaymentIdType() === "hash" &&
+                        /^([0-9a-fA-F]{16}|[0-9a-fA-F]{64})$/.test(
+                            new_payment_id
+                        )) ||
+                    (this.getPaymentIdType() === "tag" &&
+                        /^([0-9]+)$/.test(new_payment_id))
+            });
+        }
+    }
+
     _validateAddress(new_withdraw_address, props = this.props) {
         validateAddress({
+            account: this.props.account,
             url: props.url,
             walletType: props.output_wallet_type,
             output_coin_type: props.output_coin_type,
             newAddress: new_withdraw_address
         }).then(isValid => {
             if (this.state.withdraw_address === new_withdraw_address) {
-                this.setState({
-                    withdraw_address_check_in_progress: false,
-                    withdraw_address_is_valid: isValid
-                });
+                if (!this.unMounted) {
+                    this.setState({
+                        withdraw_address_check_in_progress: false,
+                        withdraw_address_is_valid: isValid
+                    });
+                }
             }
         });
     }
@@ -373,6 +410,9 @@ class CryptoBridgeWithdrawModal extends React.Component {
                     this.props.output_coin_type +
                         ":" +
                         this.state.withdraw_address +
+                        (this.state.payment_id
+                            ? ":" + this.state.payment_id
+                            : "") +
                         (this.state.memo
                             ? ":" + new Buffer(this.state.memo, "utf-8")
                             : ""),
@@ -436,6 +476,7 @@ class CryptoBridgeWithdrawModal extends React.Component {
             this.props.output_coin_type +
                 ":" +
                 this.state.withdraw_address +
+                (this.state.payment_id ? ":" + this.state.payment_id : "") +
                 (this.state.memo
                     ? ":" + new Buffer(this.state.memo, "utf-8")
                     : ""),
@@ -588,8 +629,22 @@ class CryptoBridgeWithdrawModal extends React.Component {
         return {fee_asset_types};
     }
 
+    getHasPaymentId() {
+        return this.props.withdrawal_payment_id_enabled === true;
+    }
+
+    getPaymentIdType() {
+        switch (this.props.output_coin_symbol) {
+            case "XRP":
+                return "tag";
+
+            default:
+                return "hash";
+        }
+    }
+
     render() {
-        let {withdraw_address_selected, memo} = this.state;
+        let {withdraw_address_selected, payment_id, memo} = this.state;
         let storedAddress = WithdrawAddresses.get(
             this.props.output_wallet_type
         );
@@ -600,6 +655,7 @@ class CryptoBridgeWithdrawModal extends React.Component {
 
         let withdrawModalConfirmationId = this.getWithdrawModalConfirmationId();
         let invalid_address_message = null;
+        let invalid_payment_id_message = null;
         let options = null;
         let confirmation = null;
 
@@ -622,6 +678,16 @@ class CryptoBridgeWithdrawModal extends React.Component {
                             </a>
                         );
                     }, this)}
+                </div>
+            );
+        }
+
+        if (!this.state.payment_id_is_valid) {
+            invalid_payment_id_message = (
+                <div className="has-error" style={{paddingTop: 10}}>
+                    <Translate
+                        content={`cryptobridge.gateway.deposit_payment_id_${this.getPaymentIdType()}_invalid`}
+                    />
                 </div>
             );
         }
@@ -661,7 +727,7 @@ class CryptoBridgeWithdrawModal extends React.Component {
                                 )}
                             />
                             <Trigger close={withdrawModalConfirmationId}>
-                                <a href className="secondary button">
+                                <a href="#" className="secondary button">
                                     <Translate content="modal.confirmation.cancel" />
                                 </a>
                             </Trigger>
@@ -867,6 +933,26 @@ class CryptoBridgeWithdrawModal extends React.Component {
                         </div>
                         {invalid_address_message}
                     </div>
+                    {this.getHasPaymentId() ? (
+                        <div className="content-block">
+                            <label className="left-label">
+                                <Translate
+                                    content={`cryptobridge.gateway.deposit_payment_id_${this.getPaymentIdType()}`}
+                                />
+                            </label>
+                            <div className="inline-label input-wrapper">
+                                <input
+                                    type="text"
+                                    tabIndex="5"
+                                    onChange={this.onPaymentIdChanged.bind(
+                                        this
+                                    )}
+                                    value={payment_id}
+                                />
+                            </div>
+                            {invalid_payment_id_message}
+                        </div>
+                    ) : null}
 
                     {/* Memo input */}
                     {withdraw_memo}

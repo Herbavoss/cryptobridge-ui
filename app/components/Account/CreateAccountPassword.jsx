@@ -19,11 +19,14 @@ import SettingsActions from "actions/SettingsActions";
 import WalletUnlockActions from "actions/WalletUnlockActions";
 import Icon from "../Icon/Icon";
 import CopyButton from "../Utility/CopyButton";
+import ReCAPTCHA from "../Utility/ReCAPTCHA";
 import {withRouter} from "react-router-dom";
+import CryptoBridgeStore from "../../stores/CryptoBridgeStore";
+import sha256 from "js-sha256";
 
 class CreateAccountPassword extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             validAccountName: false,
             accountName: "",
@@ -39,9 +42,18 @@ class CreateAccountPassword extends React.Component {
                 45
             ),
             confirm_password: "",
+            us_citizen: null,
             understand_1: false,
             understand_2: false,
-            understand_3: false
+            understand_3: false,
+            understand_tos: false,
+            understand_tos_disclaimer: false,
+            understand_tos_link: props.terms ? props.terms.link : null,
+            understand_tos_version: props.terms ? props.terms.version : null,
+            understand_tos_hash: props.terms
+                ? sha256(props.terms.payload)
+                : null,
+            recaptchaToken: null
         };
         this.onFinishConfirm = this.onFinishConfirm.bind(this);
 
@@ -61,6 +73,19 @@ class CreateAccountPassword extends React.Component {
         ReactTooltip.rebuild();
     }
 
+    componentWillReceiveProps(np) {
+        if (
+            np.terms &&
+            JSON.stringify(np.terms) !== JSON.stringify(this.props.terms)
+        ) {
+            this.setState({
+                understand_tos_link: np.terms.link,
+                understand_tos_version: np.terms.version,
+                understand_tos_hash: sha256(np.terms.payload)
+            });
+        }
+    }
+
     shouldComponentUpdate(nextProps, nextState) {
         return !utils.are_equal_shallow(nextState, this.state);
     }
@@ -74,7 +99,18 @@ class CreateAccountPassword extends React.Component {
         if (!firstAccount) {
             valid = valid && this.state.registrar_account;
         }
-        return valid && this.state.understand_1 && this.state.understand_2;
+        return (
+            valid &&
+            this.state.understand_1 &&
+            this.state.understand_2 &&
+            this.state.understand_3 &&
+            this.state.understand_tos &&
+            this.state.understand_tos_disclaimer &&
+            this.state.understand_tos_hash &&
+            this.state.understand_tos_version &&
+            this.state.us_citizen !== null &&
+            this.state.recaptchaToken
+        );
     }
 
     onAccountNameChange(e) {
@@ -113,7 +149,7 @@ class CreateAccountPassword extends React.Component {
         WalletUnlockActions.checkLock.defer();
     }
 
-    createAccount(name, password) {
+    createAccount(name, password, reCaptchaToken) {
         let refcode = this.refs.refcode ? this.refs.refcode.value() : null;
         let referralAccount = AccountStore.getState().referralAccount;
         this.setState({loading: true});
@@ -124,7 +160,12 @@ class CreateAccountPassword extends React.Component {
             this.state.registrar_account,
             referralAccount || this.state.registrar_account,
             0,
-            refcode
+            refcode,
+            reCaptchaToken,
+            this.state.us_citizen,
+            this.state.understand_tos_version,
+            this.state.understand_tos_hash,
+            this.state.understand_tos_disclaimer
         )
             .then(() => {
                 AccountActions.setPasswordAccount(name);
@@ -142,14 +183,17 @@ class CreateAccountPassword extends React.Component {
                     TransactionConfirmStore.listen(this.onFinishConfirm);
                 } else {
                     // Account registered by the faucet
-                    FetchChain("getAccount", name, undefined, {
-                        [name]: true
-                    }).then(() => {
-                        this.setState({
-                            step: 2
+                    setTimeout(() => {
+                        // give the faucet & blockchain some time to assert registration
+                        FetchChain("getAccount", name, undefined, {
+                            [name]: true
+                        }).then(() => {
+                            this.setState({
+                                step: 2
+                            });
+                            this._unlockAccount(name, password);
                         });
-                        this._unlockAccount(name, password);
-                    });
+                    }, 5000);
                 }
             })
             .catch(error => {
@@ -168,6 +212,12 @@ class CreateAccountPassword extends React.Component {
             });
     }
 
+    onCitizenshipChange = e => {
+        this.setState({
+            us_citizen: e.currentTarget.value === "true"
+        });
+    };
+
     onSubmit(e) {
         e.preventDefault();
         if (!this.isValid()) return;
@@ -176,7 +226,14 @@ class CreateAccountPassword extends React.Component {
         //     this.createAccount(account_name);
         // } else {
         let password = this.state.generatedPassword;
-        this.createAccount(account_name, password);
+
+        if (this.state.recaptchaToken) {
+            this.createAccount(
+                account_name,
+                password,
+                this.state.recaptchaToken
+            );
+        }
     }
 
     onRegistrarAccountChange(registrar_account) {
@@ -188,7 +245,12 @@ class CreateAccountPassword extends React.Component {
     //     this.setState({hide_refcode: false});
     // }
 
+    onTermsAndConditionsClick = e => {
+        e.stopPropagation();
+    };
+
     _onInput(value, e) {
+        e.preventDefault();
         this.setState({
             [value]:
                 value === "confirm_password"
@@ -268,9 +330,8 @@ class CreateAccountPassword extends React.Component {
                                     rows="3"
                                     readOnly
                                     disabled
-                                >
-                                    {this.state.generatedPassword}
-                                </textarea>
+                                    defaultValue={this.state.generatedPassword}
+                                />
                                 <CopyButton
                                     text={this.state.generatedPassword}
                                     tip="tooltip.copy_password"
@@ -305,6 +366,82 @@ class CreateAccountPassword extends React.Component {
 
                     <br />
 
+                    <section style={{padding: "1rem 0"}}>
+                        <label className="left-label">
+                            <Translate
+                                content="cryptobridge.account.are_you_us_citizen"
+                                with={{
+                                    flagImg: (
+                                        <img
+                                            height={20}
+                                            width={20}
+                                            style={{marginLeft: 5}}
+                                            src={`${__BASE_URL__}language-dropdown/US.png`}
+                                        />
+                                    )
+                                }}
+                            />
+                        </label>
+                        <label
+                            htmlFor="us_citizen_yes"
+                            style={{
+                                display: "inline-block",
+                                marginRight: "1rem"
+                            }}
+                        >
+                            <input
+                                name="us_citizen"
+                                id="us_citizen_yes"
+                                type="radio"
+                                value="true"
+                                onChange={this.onCitizenshipChange}
+                                checked={this.state.us_citizen === true}
+                            />
+                            <Translate content="settings.yes" />
+                        </label>
+                        <label
+                            htmlFor="us_citizen_no"
+                            style={{display: "inline-block"}}
+                        >
+                            <input
+                                name="us_citizen"
+                                id="us_citizen_no"
+                                type="radio"
+                                value="false"
+                                onChange={this.onCitizenshipChange}
+                                checked={this.state.us_citizen === false}
+                            />
+                            <Translate content="settings.no" />
+                        </label>
+                    </section>
+
+                    <br />
+
+                    {/* If this is not the first account, show dropdown for fee payment account */}
+                    {firstAccount ? null : (
+                        <div className="full-width-content form-group no-overflow">
+                            <label>
+                                <Translate content="account.pay_from" />
+                            </label>
+                            <AccountSelect
+                                account_names={my_accounts}
+                                onChange={this.onRegistrarAccountChange.bind(
+                                    this
+                                )}
+                            />
+                            {registrar_account && !isLTM ? (
+                                <div
+                                    style={{textAlign: "left"}}
+                                    className="facolor-error"
+                                >
+                                    <Translate content="wallet.must_be_ltm" />
+                                </div>
+                            ) : null}
+                        </div>
+                    )}
+
+                    <div className="divider" />
+
                     <div
                         className="confirm-checks"
                         onClick={this._onInput.bind(this, "understand_3")}
@@ -319,9 +456,8 @@ class CreateAccountPassword extends React.Component {
                                 onChange={() => {}}
                                 checked={this.state.understand_3}
                                 style={{
-                                    position: "absolute",
-                                    top: "-5px",
-                                    left: "0"
+                                    pointerEvents: "none",
+                                    position: "absolute"
                                 }}
                             />
                             <div style={{paddingLeft: "30px"}}>
@@ -344,9 +480,8 @@ class CreateAccountPassword extends React.Component {
                                 onChange={() => {}}
                                 checked={this.state.understand_1}
                                 style={{
-                                    position: "absolute",
-                                    top: "-5px",
-                                    left: "0"
+                                    pointerEvents: "none",
+                                    position: "absolute"
                                 }}
                             />
                             <div style={{paddingLeft: "30px"}}>
@@ -371,9 +506,8 @@ class CreateAccountPassword extends React.Component {
                                 onChange={() => {}}
                                 checked={this.state.understand_2}
                                 style={{
-                                    position: "absolute",
-                                    top: "-5px",
-                                    left: "0"
+                                    pointerEvents: "none",
+                                    position: "absolute"
                                 }}
                             />
                             <div style={{paddingLeft: "30px"}}>
@@ -381,31 +515,95 @@ class CreateAccountPassword extends React.Component {
                             </div>
                         </label>
                     </div>
-                    {/* If this is not the first account, show dropdown for fee payment account */}
-                    {firstAccount ? null : (
-                        <div
-                            className="full-width-content form-group no-overflow"
-                            style={{paddingTop: 30}}
+
+                    <div
+                        className="confirm-checks"
+                        onClick={this._onInput.bind(this, "understand_tos")}
+                    >
+                        <label
+                            htmlFor="checkbox-tos"
+                            style={{position: "relative"}}
                         >
-                            <label>
-                                <Translate content="account.pay_from" />
-                            </label>
-                            <AccountSelect
-                                account_names={my_accounts}
-                                onChange={this.onRegistrarAccountChange.bind(
-                                    this
-                                )}
+                            <input
+                                type="checkbox"
+                                id="checkbox-tos"
+                                onChange={() => {}}
+                                checked={!!this.state.understand_tos}
+                                style={{
+                                    pointerEvents: "none",
+                                    position: "absolute"
+                                }}
                             />
-                            {registrar_account && !isLTM ? (
-                                <div
-                                    style={{textAlign: "left"}}
-                                    className="facolor-error"
-                                >
-                                    <Translate content="wallet.must_be_ltm" />
-                                </div>
-                            ) : null}
-                        </div>
-                    )}
+                            <div style={{paddingLeft: "30px"}}>
+                                <Translate
+                                    content="cryptobridge.account.terms_and_conditions_accept"
+                                    with={{
+                                        cryptobridge_terms_and_conditions: (
+                                            <a
+                                                href={
+                                                    this.props.terms
+                                                        ? this.props.terms.link
+                                                        : "https://crypto-bridge.org/terms-and-conditions"
+                                                }
+                                                target={"_blank"}
+                                                onClick={
+                                                    this
+                                                        .onTermsAndConditionsClick
+                                                }
+                                            >
+                                                <Translate content="cryptobridge.account.terms_and_conditions" />
+                                            </a>
+                                        )
+                                    }}
+                                />
+                            </div>
+                        </label>
+                    </div>
+
+                    <div
+                        className="confirm-checks"
+                        style={{paddingBottom: "1.5rem"}}
+                        onClick={e => {
+                            e.preventDefault();
+                            this.setState({
+                                understand_tos_disclaimer: !this.state
+                                    .understand_tos_disclaimer
+                            });
+                        }}
+                    >
+                        <label
+                            htmlFor="checkbox-tos-disclaimer"
+                            style={{position: "relative"}}
+                            onClick={e => {
+                                e.preventDefault();
+                                this.setState({
+                                    understand_tos_disclaimer: !this.state
+                                        .understand_tos_disclaimer
+                                });
+                            }}
+                        >
+                            <input
+                                type="checkbox"
+                                id="checkbox-tos-disclaimer"
+                                onChange={() => {}}
+                                checked={!!this.state.understand_tos_disclaimer}
+                                style={{
+                                    pointerEvents: "none",
+                                    position: "absolute"
+                                }}
+                            />
+                            <div style={{paddingLeft: "30px"}}>
+                                <Translate content="cryptobridge.account.terms_and_conditions_accept_disclaimer" />
+                            </div>
+                        </label>
+                    </div>
+
+                    <div className="divider" />
+
+                    <ReCAPTCHA
+                        onChange={this.onRecaptchaChange}
+                        payload={{user: this.state.accountName}}
+                    />
 
                     {/* Submit button */}
                     {this.state.loading ? (
@@ -638,6 +836,10 @@ class CreateAccountPassword extends React.Component {
         );
     }
 
+    onRecaptchaChange = token => {
+        this.setState({recaptchaToken: token});
+    };
+
     render() {
         let {step} = this.state;
         // let my_accounts = AccountStore.getMyAccounts();
@@ -676,9 +878,11 @@ CreateAccountPassword = withRouter(CreateAccountPassword);
 
 export default connect(CreateAccountPassword, {
     listenTo() {
-        return [AccountStore];
+        return [AccountStore, CryptoBridgeStore];
     },
     getProps() {
-        return {};
+        return {
+            terms: CryptoBridgeStore.getLatestTerms()
+        };
     }
 });

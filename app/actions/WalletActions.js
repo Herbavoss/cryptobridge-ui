@@ -6,6 +6,7 @@ import {TransactionBuilder, FetchChain} from "bitsharesjs/es";
 import {Apis} from "bitsharesjs-ws";
 import alt from "alt-instance";
 import SettingsStore from "stores/SettingsStore";
+import {cryptoBridgeAPIs} from "api/apiConfig";
 
 class WalletActions {
     /** Restore and make active a new wallet_object. */
@@ -45,13 +46,29 @@ class WalletActions {
         return name;
     }
 
+    _getRecaptchaHeaders(reCaptchaToken) {
+        return {
+            Accept: "application/json",
+            "Content-type": "application/json",
+            Recaptcha: reCaptchaToken,
+            "App-Version":
+                APP_VERSION + (APP_REVISION ? "-" + APP_REVISION : ""),
+            "App-Platform": __ELECTRON__ ? "electron" : "web"
+        };
+    }
+
     createAccountWithPassword(
         account_name,
         password,
         registrar,
         referrer,
         referrer_percent,
-        refcode
+        refcode,
+        reCaptchaToken,
+        us_citizen,
+        terms_version,
+        terms_hash,
+        waiver
     ) {
         let {privKey: owner_private} = WalletDb.generateKeyFromPassword(
             account_name,
@@ -116,51 +133,38 @@ class WalletActions {
                     );
                 }
 
+                const body = {
+                    name: account_name,
+                    owner_key: owner_private.toPublicKey().toPublicKeyString(),
+                    active_key: active_private
+                        .toPublicKey()
+                        .toPublicKeyString(),
+                    memo_key: memo_private.toPublicKey().toPublicKeyString(),
+                    us_citizen,
+                    terms_version,
+                    terms_hash,
+                    waiver
+                };
+
                 let create_account_promise = fetch(
-                    faucetAddress + "/api/v1/accounts",
+                    faucetAddress +
+                        cryptoBridgeAPIs.API_VERSION_V2 +
+                        cryptoBridgeAPIs.ACCOUNTS,
                     {
                         method: "post",
                         mode: "cors",
-                        headers: {
-                            Accept: "application/json",
-                            "Content-type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            account: {
-                                name: account_name,
-                                owner_key: owner_private
-                                    .toPublicKey()
-                                    .toPublicKeyString(),
-                                active_key: active_private
-                                    .toPublicKey()
-                                    .toPublicKeyString(),
-                                memo_key: memo_private
-                                    .toPublicKey()
-                                    .toPublicKeyString(),
-                                refcode: refcode,
-                                referrer: referrer
-                            }
-                        })
+                        headers: this._getRecaptchaHeaders(reCaptchaToken),
+                        body: JSON.stringify(body)
                     }
                 )
-                    .then(r =>
-                        r.json().then(res => {
-                            if (!res || (res && res.error)) {
-                                reject(res.error);
-                            } else {
-                                resolve(res);
-                            }
-                        })
-                    )
+                    .then(result => {
+                        resolve(body);
+                    })
                     .catch(reject);
 
                 return create_account_promise
                     .then(result => {
-                        if (result && result.error) {
-                            reject(result.error);
-                        } else {
-                            resolve(result);
-                        }
+                        resolve(body);
                     })
                     .catch(error => {
                         reject(error);
@@ -174,7 +178,12 @@ class WalletActions {
         registrar,
         referrer,
         referrer_percent,
-        refcode
+        refcode,
+        reCaptchaToken,
+        us_citizen,
+        terms_version,
+        terms_hash,
+        waiver
     ) {
         if (WalletDb.isLocked()) {
             let error = "wallet locked";
@@ -222,38 +231,38 @@ class WalletActions {
                 faucetAddress = faucetAddress.replace(/http:\/\//, "https://");
             }
 
+            const body = {
+                name: account_name,
+                owner_key: owner_private.private_key
+                    .toPublicKey()
+                    .toPublicKeyString(),
+                active_key: active_private.private_key
+                    .toPublicKey()
+                    .toPublicKeyString(),
+                memo_key: active_private.private_key
+                    .toPublicKey()
+                    .toPublicKeyString(),
+                us_citizen,
+                terms_version,
+                terms_hash,
+                waiver
+            };
+
             let create_account_promise = fetch(
-                faucetAddress + "/api/v1/accounts",
+                faucetAddress +
+                    cryptoBridgeAPIs.API_VERSION_V2 +
+                    cryptoBridgeAPIs.ACCOUNTS,
                 {
                     method: "post",
                     mode: "cors",
-                    headers: {
-                        Accept: "application/json",
-                        "Content-type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        account: {
-                            name: account_name,
-                            owner_key: owner_private.private_key
-                                .toPublicKey()
-                                .toPublicKeyString(),
-                            active_key: active_private.private_key
-                                .toPublicKey()
-                                .toPublicKeyString(),
-                            memo_key: active_private.private_key
-                                .toPublicKey()
-                                .toPublicKeyString(),
-                            //"memo_key": memo_private.private_key.toPublicKey().toPublicKeyString(),
-                            refcode: refcode,
-                            referrer: referrer
-                        }
-                    })
+                    headers: this._getRecaptchaHeaders(reCaptchaToken),
+                    body: JSON.stringify(body)
                 }
-            ).then(r => r.json());
+            );
 
             return create_account_promise
                 .then(result => {
-                    if (result.error) {
+                    if (result && result.error) {
                         throw result.error;
                     }
                     return updateWallet();

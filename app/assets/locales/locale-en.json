@@ -448,10 +448,6 @@
     "cancel": "Cancel",
     "counterpart": {
         "formats": {
-            "datetime": {
-                "short_datetime": "%d/%m/%y %H:%M",
-                "short_datetime_us": "%m/%d/%y %H:%M"
-            },
             "date": {
                 "full": "%F %T %Z",
                 "market_history": "%e/%m %H:%M:%S",
@@ -979,7 +975,6 @@
         "payments_beta": "Send (Beta)",
         "payments_legacy": "Send (legacy)",
         "settings": "Settings",
-        "support": "Support",
         "title": "CryptoBridge",
         "unlock": "Local Wallet Login",
         "unlock_password": "Cloud Wallet Login",
@@ -1070,7 +1065,6 @@
         "settle": "Settle",
         "share": "About",
         "shuffle": "Switch trading pair",
-        "support": "Support",
         "text": {
             "membership_stats": "Membership stats",
             "signed_messages": "Signed messages"
@@ -2033,12 +2027,30 @@
         }
     },
     "cryptobridge": {
+        "important": {
+            "title": "Important",
+            "user_verification":
+                "Please familiarize yourself with our Terms of Service (for all users) and identity verification (for US users). The grace period will end March 07, 2019 0:00 UTC. <a target=\"_blank\" href=\"https://crypto-bridge.org/2019/02/26/urgent-announcement-terms-of-service-identity-verification-requirements/\">Read more here.</a>"
+        },
         "general": {
             "check_url": "Please check that you are visiting %(url)s",
             "important": "Important",
             "news": "News"
         },
         "gateway": {
+            "deposit_fee": "Deposit fee",
+            "deposit_payment_id_tag_required":
+                "You MUST use this destination tag",
+            "deposit_payment_id_tag": "Destination Tag (optional)",
+            "deposit_payment_id_tag_invalid": "Destination Tag is not valid",
+            "deposit_payment_id_hash": "Payment ID (optional)",
+            "deposit_payment_id_hash_invalid": "Payment ID is not valid",
+            "deposit_tag_acknowledgement_alert":
+                "WARNING: Failure to follow correct %(asset)s deposit procedure will result in lost deposits.",
+            "deposit_tag_acknowledgement_info":
+                "<p>Depositing %(asset)s to CryptoBridge requires <strong>BOTH</strong> a deposit address and a deposit tag. To make a %(asset)s deposit, you need to use both:</p><ul><li>Address</li><li>Tag</li></ul><p>Do NOT send %(asset)s to CryptoBridge unless you know how to indicate a tag. If you fail to include the tag with your deposit the funds will be lost forever.</p>",
+            "deposit_tag_acknowledgement_confirm": "I understand. Continue.",
+            "copy_address_tag": "Copy Tag",
             "required_confirmations": "Required confirmations",
             "support_block": "For support, please contact CryptoBridge at:",
             "deposit_or_withdrawal": "Depositing or withdrawing coins",
@@ -2051,10 +2063,23 @@
                 "Your wallet must be unlocked before you make a deposit",
             "receive_funds": "Receiving funds",
             "receive_funds_intro":
-                "In order to receive funds from another person on CryptoBridge, simply give them your account name: "
+                "In order to receive funds from another person on CryptoBridge, simply give them your account name: ",
+            "account_tos_action_required": "Open Terms of Service",
+            "account_tos_action_required_label":
+                "Accepting the CryptoBridge Terms of Service is required",
+            "account_kyc_action_required": "Start user verification",
+            "account_kyc_action_required_label":
+                "US citizens are required to submit user verification to use CryptoBridge",
+            "account_kyc_action_pending": "Check your verification status",
+            "account_kyc_action_pending_label":
+                "Awaiting user verification by Fractal"
+        },
+        "header": {
+            "imprint": "Imprint",
+            "terms": "Terms and Conditions"
         },
         "footer": {
-            "title": "CryptoBridge decentralized exchange"
+            "title": "CryptoBridge"
         },
         "account": {
             "id": "BCO Staking ID",
@@ -2087,73 +2112,89 @@
                 "I hereby agree that by staking %(amount)s BCO, I fully understand that they will be locked away for %(month)s and that there is no way of claiming the funds before the staking term is over. I also accept the share in the profits of CryptoBridge platform which is attributed to my staked funds.",
             "no_balances": "You have no open BridgeCoin staking positions.",
             "bco_available": "Available: ",
-            "bco_not_available": "No BCO available "
+            "bco_not_available": "No BCO available ",
+            "terms_and_conditions": "CryptoBridge Terms and Conditions",
+            "terms_and_conditions_accept":
+                "I have read and agree to the %(cryptobridge_terms_and_conditions)s",
+            "terms_and_conditions_accept_disclaimer":
+                "I hereby renounce to my consumer right of revocation and acknowledge I can terminate the use of the service at anytime as described in §5.9 of CryptoBridge's Terms of Service",
+            "are_you_us_citizen": "Are you a %(flagImg)s U.S. citizen?",
+            "kyc_info":
+                "To continue using the CryptoBridge gateway, US citizens must first submit verification of their identity. Proceeding with this requirement will redirect you to our partner, Fractal. Upon completion, full functionality of your account be restored.",
+            "kyc_info_grace":
+                "To continue using the CryptoBridge gateway, US citizens must first submit verification of their identity. There will be a grace period allowing those who do not consent to the verification process to withdraw their funds which ends on %(deadlineDate)s. Proceeding with this requirement will redirect you to our partner, Fractal. Upon completion, full functionality of your account be restored.",
+            "kyc_info_pending":
+                "Our systems indicate you have begun the verification process. Trading, deposit and withdraw functionalities will be disabled until complete. Your submission should be approved by Fractal within 24 hours of submitting it. Please contact Fractal for issues related to the status of your verification."
         },
         "dashboard": {
-            "all_markets": "All Markets"
+            "all_markets": "All Markets",
+            "proposal_warning":
+                "DO NOT APPROVE any proposals from unknown accounts. Your account may be stolen if you approve a malicious proposal.",
+            "proposal_info":
+                "When in doubt, do nothing and ask questions in our Discord server %(discordLink)s"
         },
-        "support": {
-            "all_tickets": "All Tickets",
-            "open": "Open",
-            "in_progress": "In Progress",
-            "waiting_for_customer": "Awaiting User Response",
-            "waiting_for_support": "Awaiting Agent Response",
-            "blocked": "Blocked",
-            "closed": "Closed",
-            "new_ticket": "New Ticket",
-            "create_ticket": "Create Ticket",
-            "cancel": "Cancel",
-            "deposit": "Deposit",
-            "deposits": "Deposits",
-            "withdrawal": "Withdrawal",
-            "withdrawals": "Withdrawals",
-            "disabled_deposits_message":
-                "Deposits have currently been disabled at the request of the coin developers.",
-            "disabled_withdrawals_message":
-                "Withdrawals have currently been disabled at the request of the coin developers.",
-            "format": "format",
-            "reply": "Reply",
-            "close_ticket": "Close Ticket",
-            "support_intro_text":
-                "CryptoBridge now offers integrated support where you can manage your support tickets in one place, and see the current status. In order to use this service, you must first log in.",
-            "have_another_issue": "I have another issue",
-            "new_ticket_intro1":
-                "Please do not open multiple tickets for the same issue - doing so could slow down the processing of your issue.",
-            "new_ticket_intro2":
-                "Before opening a new ticket, please search our FAQs to find potential solutions to your issue:",
-            "coin_list_placeholder": "Select your coin…",
-            "loading_coin_list": "Loading coin list…",
-            "explorer_instructions":
-                "Before opening a ticket, please check the blockchain explorer for your transaction:",
-            "not_see_transaction": "I do not see my transaction",
-            "faq_search_placeholder": "Please enter your search criteria…",
-            "faq_search_aria_label": "Search through the FAQs",
-            "comment_successfully_posted":
-                "Your comment has been successfully posted",
-            "enter_your_reply": "Please enter your reply…",
-            "enter_your_message": "Please enter your message…",
-            "enter_amount": "Enter amount…",
-            "enter_transaction_id": "Enter the Transaction ID…",
-            "enter_recipient_address": "Enter the recipient address…",
-            "cannot_fetch_tickets":
-                "Sorry but we cannot fetch your support tickets right now. Please refresh your browser or try again later.",
-            "cannot_fetch_comments":
-                "Sorry but we cannot fetch your support ticket comments right now. Please refresh your browser or try again later.",
-            "cannot_reply_ticket":
-                "There was a problem replying to the ticket. Please refresh your browser or try again later.",
-            "cannot_close_ticket":
-                "There was a problem closing the ticket. Please refresh your browser or try again later.",
-            "cannot_create_ticket":
-                "There was a problem creating the ticket. Please refresh your browser or try again later.",
-            "amount": "Amount",
-            "message": "Message",
-            "transaction_id": "Transaction ID",
-            "recipient_address": "Recipient Address",
-            "issue": "Issue",
-            "issues_dropdown_placeholder": "What is your issue?",
-            "processing_please_wait": "Processing. Please wait...",
-            "saving_reply_please_wait": "Saving reply. Please wait...",
-            "incomplete_form_fields": "Please complete all required fields"
-        }
+      "support": {
+        "all_tickets": "All Tickets",
+        "open": "Open",
+        "in_progress": "In Progress",
+        "waiting_for_customer": "Awaiting User Response",
+        "waiting_for_support": "Awaiting Agent Response",
+        "blocked": "Blocked",
+        "closed": "Closed",
+        "new_ticket": "New Ticket",
+        "create_ticket": "Create Ticket",
+        "cancel": "Cancel",
+        "deposit": "Deposit",
+        "deposits": "Deposits",
+        "withdrawal": "Withdrawal",
+        "withdrawals": "Withdrawals",
+        "disabled_deposits_message":
+        "Deposits have currently been disabled at the request of the coin developers.",
+        "disabled_withdrawals_message":
+        "Withdrawals have currently been disabled at the request of the coin developers.",
+        "format": "format",
+        "reply": "Reply",
+        "close_ticket": "Close Ticket",
+        "support_intro_text":
+        "CryptoBridge now offers integrated support where you can manage your support tickets in one place, and see the current status. In order to use this service, you must first log in.",
+        "have_another_issue": "I have another issue",
+        "new_ticket_intro1":
+        "Please do not open multiple tickets for the same issue - doing so could slow down the processing of your issue.",
+        "new_ticket_intro2":
+        "Before opening a new ticket, please search our FAQs to find potential solutions to your issue:",
+        "coin_list_placeholder": "Select your coin…",
+        "loading_coin_list": "Loading coin list…",
+        "explorer_instructions":
+        "Before opening a ticket, please check the blockchain explorer for your transaction:",
+        "not_see_transaction": "I do not see my transaction",
+        "faq_search_placeholder": "Please enter your search criteria…",
+        "faq_search_aria_label": "Search through the FAQs",
+        "comment_successfully_posted":
+        "Your comment has been successfully posted",
+        "enter_your_reply": "Please enter your reply…",
+        "enter_your_message": "Please enter your message…",
+        "enter_amount": "Enter amount…",
+        "enter_transaction_id": "Enter the Transaction ID…",
+        "enter_recipient_address": "Enter the recipient address…",
+        "cannot_fetch_tickets":
+        "Sorry but we cannot fetch your support tickets right now. Please refresh your browser or try again later.",
+        "cannot_fetch_comments":
+        "Sorry but we cannot fetch your support ticket comments right now. Please refresh your browser or try again later.",
+        "cannot_reply_ticket":
+        "There was a problem replying to the ticket. Please refresh your browser or try again later.",
+        "cannot_close_ticket":
+        "There was a problem closing the ticket. Please refresh your browser or try again later.",
+        "cannot_create_ticket":
+        "There was a problem creating the ticket. Please refresh your browser or try again later.",
+        "amount": "Amount",
+        "message": "Message",
+        "transaction_id": "Transaction ID",
+        "recipient_address": "Recipient Address",
+        "issue": "Issue",
+        "issues_dropdown_placeholder": "What is your issue?",
+        "processing_please_wait": "Processing. Please wait...",
+        "saving_reply_please_wait": "Saving reply. Please wait...",
+        "incomplete_form_fields": "Please complete all required fields"
+      }
     }
 }

@@ -1,8 +1,6 @@
 import React from "react";
 import Translate from "react-translate-component";
 
-let secureLoginAddressPng = require("assets/other/secure-login-address.png");
-
 class CheckUrlWarning extends React.Component {
     render() {
         if (__ELECTRON__) {
@@ -22,12 +20,12 @@ class CheckUrlWarning extends React.Component {
                         content="cryptobridge.general.check_url"
                         component="span"
                     />
-                    <img
-                        className="secure-login-image"
-                        src={secureLoginAddressPng}
-                        alt=""
-                    />
                 </p>
+                <img
+                    className="secure-login-image"
+                    src={`${__BASE_URL__}img/secure-login-address.png`}
+                    alt=""
+                />
             </div>
         );
     }

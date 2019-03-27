@@ -391,6 +391,7 @@ class WalletUnlockModal extends React.Component {
                                     placeholder=" "
                                     useHR
                                     labelClass="login-label"
+                                    reserveErrorSpace
                                 />
                                 <CustomPasswordInput
                                     password_error={passwordError}

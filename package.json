@@ -1,15 +1,13 @@
 {
     "name": "CryptoBridge",
-    "version": "0.12.10",
+    "version": "0.17.0",
     "description": "Advanced wallet interface for the BitShares financial blockchain.",
     "homepage": "https://github.com/CryptoBridge/cryptobridge-ui",
     "author": "Sigve Kvalsvik <kvalsvik.crypto@gmail.com>",
     "contributors": [
         "James Calfee",
         "Dan Larimer",
-        "Valentine Zavgorodnev <valentine.zavgorodnev@gmail.com>",
-        "Lee Burton",
-        "Juan Carlos Miranda Carruana"
+        "Valentine Zavgorodnev <valentine.zavgorodnev@gmail.com>"
     ],
     "license": "MIT",
     "engines": {
@@ -30,12 +28,10 @@
         "profile-nougly": "cross-env NODE_ENV=production webpack --env.prod --env.profile --env.hash --env.noUgly --profile --json > stats-prod-nougly.json",
         "start": "cross-env NODE_ENV=development node server.js",
         "prestart-electron": "cross-env NODE_ENV=production webpack --env.hash --env.noUgly --env.electron --env.prod && npm run prepare-electron",
-        "start-testnet": "cross-env NODE_ENV=development __TESTNET__=true node server.js",
-        "start-dev": "cross-env NODE_ENV=development __DEVNET__=true __DEVNET_API__=http://localhost:5000 node server.js",
+        "start-dev": "cross-env NODE_ENV=development __DEVNET__=true __WALLET_URL__=http://localhost:8080 __API_URL__=http://localhost:5000 node server.js",
         "start-electron": "electron build/electron/index.js",
         "fix-locale-files": "node ./app/assets/locales-fixup.js",
         "postfix-locale-files": "./node_modules/prettier/bin-prettier.js app/assets/locales/locale-*.json --write",
-        "dev": "cross-env NODE_ENV=development __TESTNET__=true __CB_BASE_URL__='http://localhost:5000' node server.js",
         "build": "cross-env NODE_ENV=production webpack --env.prod",
         "build-nougly": "cross-env NODE_ENV=production webpack --env.prod --env.noUgly",
         "build-hash": "cross-env NODE_ENV=production webpack --env.prod --env.hash --env.baseUrl=''",
@@ -43,7 +39,8 @@
         "build-github": "cross-env NODE_ENV=production webpack --env.prod --env.hash --env.deprecated --env.baseUrl='/wallet/'",
         "build-electron": "cross-env NODE_ENV=production webpack --env.prod --env.electron --env.hash",
         "build-electron-nougly": "cross-env NODE_ENV=production webpack --env.prod --env.electron --env.noUgly --env.hash --progress --display-error-details --colors",
-        "build-testnet": "cross-env NODE_ENV=production webpack --env.prod --env.testnet",
+        "build-testnet": "cross-env NODE_ENV=production __TESTNET__=true __WALLET_URL__=https://wallet.testnet.crypto-bridge.org __API_URL__=https://api.testnet.crypto-bridge.org webpack --env.prod",
+        "build-stage": "cross-env NODE_ENV=production __STAGENET__=true __WALLET_URL__=https://wallet.stage.crypto-bridge.org __API_URL__=https://api.stage.crypto-bridge.org webpack --env.prod",
         "prepare-electron": "copyfiles -f resources/*.js build/electron/",
         "postbuild-electron": "npm run prepare-electron",
         "postbuild-electron-nougly": "npm run prepare-electron",
@@ -56,6 +53,7 @@
         "package-deb": "npm run prepackage && build  -p never --linux deb",
         "package-win": "npm run prepackage && build  -p never --windows",
         "package-mac": "npm run prepackage && build  -p never --mac dmg",
+        "package-all": "npm run package-mac && npm run package-deb && npm run package-win",
         "postpackage": "node write_digest.js"
     },
     "jest": {
@@ -87,7 +85,7 @@
     "browsersList": "electron 1.7",
     "build": {
         "productName": "CryptoBridge",
-        "appId": "org.bitshares.graphene",
+        "appId": "crypto-bridge.org",
         "files": [
             "build/electron",
             "!node_modules"
@@ -126,7 +124,7 @@
                 "deb",
                 "AppImage"
             ],
-            "synopsis": "CryptoBridge: Cryptocurrency and Decentralized Exchange"
+            "synopsis": "CryptoBridge: Gateway to Decentralized Trading"
         },
         "directories": {
             "buildResources": "resources",
@@ -157,6 +155,7 @@
         "intro.js": "^2.8.0-alpha.1",
         "jdenticon": "git+https://github.com/cryptonomex/jdenticon.git",
         "js-sha256": "^0.2.3",
+        "jsonwebtoken": "^8.4.0",
         "lodash-es": "^4.17.10",
         "lzma": "2.1.6",
         "moment": "^2.20.1",
@@ -175,6 +174,7 @@
         "react-datepicker2": "git+https://github.com/bitshares/react-datepicker2.git#9d4c2c28a23c970badcf765c35c5493d5a49afde",
         "react-dom": "^16.3.2",
         "react-foundation-apps": "git+https://github.com/bitshares/react-foundation-apps.git",
+        "react-google-recaptcha": "^1.0.5",
         "react-highcharts": "^16.0",
         "react-interpolate-component": "^0.12.0",
         "react-intl": "^2.4.0",
@@ -236,7 +236,7 @@
         "mini-css-extract-plugin": "^0.4.0",
         "mocha": "^5.1.1",
         "node-libs-browser": "^1.0.0",
-        "node-sass": "^4.9.0",
+        "node-sass": "^4.11.0",
         "postcss-loader": "^2.1.5",
         "prettier": "^1.10.2",
         "pretty-quick": "^1.4.1",
@@ -251,8 +251,8 @@
         "svgo-loader": "^2.1.0",
         "uglifyjs-webpack-plugin": "^1.2.7",
         "url-loader": "^1.0.1",
-        "webpack": "^4.8.1",
-        "webpack-cli": "^2.1.3",
+        "webpack": "^4.28.4",
+        "webpack-cli": "^3.3.0",
         "webpack-dev-middleware": "^3.1.3",
         "webpack-hot-middleware": "^2.22.1",
         "worker-loader": "^1.1.1"

@@ -113,7 +113,12 @@ class AccountActions {
         registrar,
         referrer,
         referrer_percent,
-        refcode
+        refcode,
+        reCaptchaToken,
+        us_citizen,
+        terms_version,
+        terms_hash,
+        waiver
     ) {
         return dispatch => {
             return WalletActions.createAccount(
@@ -121,7 +126,12 @@ class AccountActions {
                 registrar,
                 referrer,
                 referrer_percent,
-                refcode
+                refcode,
+                reCaptchaToken,
+                us_citizen,
+                terms_version,
+                terms_hash,
+                waiver
             ).then(() => {
                 dispatch(account_name);
                 return account_name;
@@ -135,7 +145,12 @@ class AccountActions {
         registrar,
         referrer,
         referrer_percent,
-        refcode
+        refcode,
+        reCaptchaToken,
+        us_citizen,
+        terms_version,
+        terms_hash,
+        waiver
     ) {
         return dispatch => {
             return WalletActions.createAccountWithPassword(
@@ -144,7 +159,12 @@ class AccountActions {
                 registrar,
                 referrer,
                 referrer_percent,
-                refcode
+                refcode,
+                reCaptchaToken,
+                us_citizen,
+                terms_version,
+                terms_hash,
+                waiver
             ).then(() => {
                 dispatch(account_name);
                 return account_name;

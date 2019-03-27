@@ -62,6 +62,9 @@ $slider-thumb-color: #f00;
 
 $incognito-bg: #ff3950;
 
+$message-important-bg: #e68a00;
+$message-notice-bg: #afafaf;
+
 .darkTheme {
     @include theme(
         $primary-text-color,
@@ -109,6 +112,8 @@ $incognito-bg: #ff3950;
         $main-content-margin-block-bg-color,
         $modal-bg-color,
         $mobile-input-bg,
-        $incognito-bg
+        $incognito-bg,
+        $message-important-bg,
+        $message-notice-bg
     );
 }

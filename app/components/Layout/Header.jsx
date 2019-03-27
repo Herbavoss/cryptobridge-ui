@@ -9,6 +9,7 @@ import SettingsActions from "actions/SettingsActions";
 import ZfApi from "react-foundation-apps/src/utils/foundation-api";
 import SendModal from "../Modal/SendModal";
 import DepositModal from "../Modal/DepositModal";
+import TosModal from "../Modal/TosModal";
 import GatewayStore from "stores/GatewayStore";
 import Icon from "../Icon/Icon";
 import Translate from "react-translate-component";
@@ -29,7 +30,7 @@ import WithdrawModal from "../Modal/WithdrawModalNew";
 import {List} from "immutable";
 import {ChainUtilities} from "chain/chainIds";
 
-var logo = require("assets/logo-cryptobridge.png");
+let logo = require("assets/logo-cryptobridge.png");
 
 // const FlagImage = ({flag, width = 20, height = 20}) => {
 //     return <img height={height} width={width} src={`${__BASE_URL__}language-dropdown/${flag.toUpperCase()}.png`} />;
@@ -130,6 +131,18 @@ class Header extends React.Component {
         e.preventDefault();
         this._closeDropdown();
         this.refs.withdraw_modal_new.show();
+    }
+
+    _showImprint(e) {
+        e.preventDefault();
+        this._closeDropdown();
+        window.open("https://crypto-bridge.org/imprint", "_blank");
+    }
+
+    _showTermsAndConditions(e) {
+        e.preventDefault();
+        this._closeDropdown();
+        window.open("https://crypto-bridge.org/terms-and-conditions", "_blank");
     }
 
     _triggerMenu(e) {
@@ -1122,6 +1135,39 @@ class Header extends React.Component {
                                     </a>
                                 </li>
                             )}
+                            <li className="benchmarkItem">
+                                <a
+                                    style={{flexFlow: "row"}}
+                                    className={cnames(
+                                        active.indexOf("benchmark/") !== -1
+                                            ? null
+                                            : "column-hide-xxs",
+                                        {
+                                            active:
+                                                active.indexOf("benchmark/") !==
+                                                -1
+                                        }
+                                    )}
+                                    onClick={this._onNavigate.bind(
+                                        this,
+                                        "/benchmark"
+                                    )}
+                                >
+                                    <span
+                                        className={"icon icon-1_5x"}
+                                        style={{
+                                            position: "relative",
+                                            top: "-5px",
+                                            left: "-8px"
+                                        }}
+                                    >
+                                        <img
+                                            src={`${__BASE_URL__}img/benchmark.png`}
+                                        />
+                                    </span>
+                                    <span>Benchmark</span>
+                                </a>
+                            </li>
                             {/* Dynamic Menu Item */}
                             <li>{dynamicMenuItem}</li>
                         </ul>
@@ -1562,6 +1608,7 @@ class Header extends React.Component {
                                                 active.indexOf("/settings") !==
                                                 -1
                                         },
+                                        "divider",
                                         "desktop-only"
                                     )}
                                     onClick={this._onNavigate.bind(
@@ -1588,6 +1635,7 @@ class Header extends React.Component {
                                                 active.indexOf("/settings") !==
                                                 -1
                                         },
+                                        "divider",
                                         "mobile-only",
                                         "has-submenu"
                                     )}
@@ -1656,15 +1704,13 @@ class Header extends React.Component {
                                 </li>
 
                                 <li
-                                    className={cnames(
-                                        {
-                                            active:
-                                                active.indexOf(
-                                                    "/help/introduction/cryptobridge"
-                                                ) !== -1
-                                        },
-                                        "divider"
-                                    )}
+                                    className={cnames({
+                                        divider: true,
+                                        active:
+                                            active.indexOf(
+                                                "/help/introduction/cryptobridge"
+                                            ) !== -1
+                                    })}
                                     onClick={this._onNavigate.bind(
                                         this,
                                         "/help/introduction/cryptobridge"
@@ -1679,6 +1725,37 @@ class Header extends React.Component {
                                     </div>
                                     <div className="table-cell">
                                         <Translate content="header.help" />
+                                    </div>
+                                </li>
+                                <li onClick={this._showImprint.bind(this)}>
+                                    <div className="table-cell">
+                                        <Icon
+                                            size="2x"
+                                            name="info-circle-o"
+                                            title="icons.info_circle_o"
+                                        />
+                                    </div>
+                                    <div className="table-cell">
+                                        <Translate content="cryptobridge.header.imprint" />
+                                    </div>
+                                </li>
+                                <li
+                                    className={
+                                        showAdvancedFeatures ? "divider" : null
+                                    }
+                                    onClick={this._showTermsAndConditions.bind(
+                                        this
+                                    )}
+                                >
+                                    <div className="table-cell">
+                                        <Icon
+                                            size="2x"
+                                            name="info-circle-o"
+                                            title="icons.info_circle_o"
+                                        />
+                                    </div>
+                                    <div className="table-cell">
+                                        <Translate content="cryptobridge.header.terms" />
                                     </div>
                                 </li>
 
@@ -1910,6 +1987,7 @@ class Header extends React.Component {
                     modalId="withdraw_modal_new"
                     backedCoins={this.props.backedCoins}
                 />
+                <TosModal />
             </div>
         );
     }

@@ -7,6 +7,7 @@ import SyncError from "./components/SyncError";
 import LoadingIndicator from "./components/LoadingIndicator";
 import BrowserNotifications from "./components/BrowserNotifications/BrowserNotificationsContainer";
 import Header from "components/Layout/Header";
+import Messages from "components/Layout/Messages";
 import ReactTooltip from "react-tooltip";
 import NotificationSystem from "react-notification-system";
 import TransactionConfirm from "./components/Blockchain/TransactionConfirm";
@@ -109,15 +110,14 @@ const ExistingAccount = Loadable({
     loading: LoadingIndicator
 });
 
-import LoginSelector from "./components/LoginSelector";
-import {CreateWalletFromBrainkey} from "./components/Wallet/WalletCreate";
-
-/* CryptoBridge-specific imports */
-const Support = Loadable({
+const BenchmarkPage = Loadable({
     loader: () =>
-        import(/* webpackChunkName: "support" */ "./components/Support/SupportContainer"),
+        import(/* webpackChunkName: "benchmark" */ "./components/CryptoBridge/Benchmark"),
     loading: LoadingIndicator
 });
+
+import LoginSelector from "./components/LoginSelector";
+import {CreateWalletFromBrainkey} from "./components/Wallet/WalletCreate";
 
 class App extends React.Component {
     constructor() {
@@ -216,6 +216,9 @@ class App extends React.Component {
             }.bind(this)
         );
         updateGatewayBackers();
+
+        // remove loader
+        document.getElementById("centerLoader").style.display = "none";
     }
 
     componentDidUpdate(prevProps) {
@@ -353,6 +356,11 @@ class App extends React.Component {
                                 />
                                 <Route path="/news" exact component={News} />
 
+                                <Route
+                                    path="/benchmark"
+                                    component={BenchmarkPage}
+                                />
+
                                 {/* Explorer routes */}
                                 <Route
                                     path="/explorer/:tab"
@@ -433,7 +441,6 @@ class App extends React.Component {
 
         return (
             <div
-                id="dummy5"
                 style={{backgroundColor: !theme ? "#2a2a2a" : null}}
                 className={theme}
             >
@@ -445,6 +452,7 @@ class App extends React.Component {
                             )}
                         />
                     ) : null}
+                    <Messages />
                     <div id="content-wrapper">
                         {content}
                         <NotificationSystem

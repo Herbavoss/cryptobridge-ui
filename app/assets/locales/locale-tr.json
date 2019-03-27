@@ -985,7 +985,6 @@
         "payments_beta": "Send (Beta)",
         "payments_legacy": "Send (legacy)",
         "settings": "Ayarlar",
-        "support": "Support",
         "title": "BitKapital",
         "unlock": "Kilidi Aç",
         "unlock_password": "Giriş yap",
@@ -1075,7 +1074,6 @@
         "settle": "Settle",
         "share": "About",
         "shuffle": "Switch trading pair",
-        "support": "Support",
         "text": {
             "membership_stats": "Membership stats",
             "signed_messages": "Signed messages"

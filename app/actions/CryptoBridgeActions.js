@@ -6,7 +6,14 @@ import {TransactionBuilder} from "bitsharesjs/es";
 
 const API_MARKET_URL = cryptoBridgeAPIs.BASE + cryptoBridgeAPIs.MARKETS;
 const API_NEWS_URL = "https://crypto-bridge.org/news.json";
-const BCO_ASSET_ID = "1.3.1564";
+const API_LOGIN_URL = cryptoBridgeAPIs.BASE_V2 + cryptoBridgeAPIs.LOGIN;
+const API_TERMS_URL = cryptoBridgeAPIs.BASE_V2 + cryptoBridgeAPIs.TERMS;
+const API_ME_URL = cryptoBridgeAPIs.BASE_V2 + cryptoBridgeAPIs.ACCOUNTS + "/me";
+
+import {
+    getRequestLoginOptions,
+    getRequestAccessOptions
+} from "lib/common/AccountUtils";
 
 let news = null;
 let newsTTL = 60 * 60 * 1000; // 60 minutes
@@ -22,9 +29,113 @@ const defaultMarkets = [
 let markets = {
     data: null
 };
+let accessData = {};
 let marketsTTL = 60 * 60 * 1000; // 60 minutes
 
 class CryptoBridgeActions {
+    login(account) {
+        if (account && accessData[account.get("name")]) {
+            return Promise.resolve(accessData[account.get("name")]);
+        }
+
+        const options = getRequestLoginOptions(account);
+
+        if (!options) {
+            return Promise.reject("No user key available");
+        }
+
+        return fetch(API_LOGIN_URL, options)
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json();
+                } else if (response.status === 403) {
+                    return response.json().then(body => {
+                        return Promise.reject(body.message);
+                    });
+                }
+
+                return Promise.reject("Auth error");
+            })
+            .then(access => {
+                if (access) {
+                    accessData[account.get("name")] = access;
+                }
+
+                return access;
+            });
+    }
+
+    updateAccount(account, data) {
+        return dispatch => {
+            return new Promise((resolve, reject) => {
+                this.login(account)
+                    .then(access => {
+                        fetch(
+                            API_ME_URL,
+                            Object.assign(getRequestAccessOptions(access), {
+                                method: "PUT",
+                                body: JSON.stringify(data)
+                            })
+                        )
+                            .then(() => {
+                                dispatch({
+                                    accountName: account.get("name"),
+                                    data
+                                });
+                                resolve();
+                            })
+                            .catch(err => {
+                                dispatch();
+                                reject(err);
+                            });
+                    })
+                    .catch(err => {
+                        dispatch();
+                        reject(err);
+                    });
+            });
+        };
+    }
+
+    getAccount(account) {
+        return dispatch => {
+            return new Promise((resolve, reject) => {
+                this.login(account)
+                    .then(access => {
+                        fetch(API_ME_URL, getRequestAccessOptions(access))
+                            .then(response => response.json())
+                            .then(account => {
+                                dispatch({access, account});
+                                resolve(account);
+                            })
+                            .catch(err => {
+                                dispatch({});
+                                reject(err);
+                            });
+                    })
+                    .catch(err => {
+                        dispatch({});
+                        reject(err);
+                    });
+            });
+        };
+    }
+
+    removeAccount(accountName) {
+        return dispatch => {
+            delete accessData[accountName];
+            dispatch(accountName);
+        };
+    }
+
+    getLatestTerms() {
+        return dispatch => {
+            fetch(API_TERMS_URL)
+                .then(reply => reply.json().then(dispatch))
+                .catch(err => {});
+        };
+    }
+
     getMarkets() {
         return dispatch => {
             const now = new Date();
@@ -90,12 +201,12 @@ class CryptoBridgeActions {
         let tr = new TransactionBuilder();
 
         tr.add_type_operation("vesting_balance_create", {
-            fee: {amount: "0", asset_id: BCO_ASSET_ID},
+            fee: {amount: "0", asset_id: __BCO_ASSET_ID__},
             creator: account,
             owner: account,
             amount: {
                 amount: amount * Math.pow(10, 7),
-                asset_id: BCO_ASSET_ID
+                asset_id: __BCO_ASSET_ID__
             },
             policy: [
                 1,
@@ -119,7 +230,7 @@ class CryptoBridgeActions {
         const balance = cvb.balance.amount;
 
         tr.add_type_operation("vesting_balance_withdraw", {
-            fee: {amount: "0", asset_id: BCO_ASSET_ID},
+            fee: {amount: "0", asset_id: __BCO_ASSET_ID__},
             owner: account,
             vesting_balance: cvb.id,
             amount: {

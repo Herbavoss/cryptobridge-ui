@@ -77,27 +77,33 @@ module.exports = function(env) {
     });
     const localeRegex = new RegExp(regexString);
 
+    const isStageNet = !!process.env.__STAGENET__ || !!env.stagenet;
     const isTestNet = !!process.env.__TESTNET__ || !!env.testnet;
     const isDevNet = !!process.env.__DEVNET__;
 
-    const recaptchaSiteKey = process.env.RECAPTCHA_SITE_KEY || "";
+    const recaptchaSiteKey =
+        process.env.RECAPTCHA_SITE_KEY ||
+        env.RECAPTCHA_SITE_KEY ||
+        "6LdlhIsUAAAAAHzlruhPZ4yJKPd5Zo18eLRFP7hj";
 
-    const walletUrl = isDevNet
-        ? "http://localhost:8080"
-        : isTestNet
-            ? "https://wallet.testnet.crypto-bridge.org"
-            : "https://wallet.crypto-bridge.org";
+    const cryptoBridgePubKey =
+        process.env.CRYPTOBRIDGE_PUB_KEY ||
+        env.CRYPTOBRIDGE_PUB_KEY ||
+        "BTS74ePvhPVtYw79orHZkHgfpGr5vRJ1ZPyDDZcCBEg275DGpCy8k";
+
+    const walletUrl =
+        process.env.__WALLET_URL__ || "https://wallet.crypto-bridge.org";
+    const apiUrl = process.env.__API_URL__ || "https://api.crypto-bridge.org";
 
     var plugins = [
         new HtmlWebpackPlugin({
             template: "!!handlebars-loader!app/assets/index.hbs",
             templateParameters: {
-                title: "CryptoBridge decentralized exchange",
-                walletUrl: walletUrl,
+                title: "CryptoBridge",
+                walletUrl,
                 INCLUDE_BASE: !!env.prod && !env.hash,
                 PRODUCTION: !!env.prod,
-                ELECTRON: !!env.electron,
-                recaptchaSiteKey: recaptchaSiteKey
+                ELECTRON: !!env.electron
             }
         }),
         new webpack.DefinePlugin({
@@ -109,10 +115,16 @@ module.exports = function(env) {
             __UI_API__: JSON.stringify(
                 env.apiUrl || "https://ui.bitshares.eu/api"
             ),
-            __DEVNET_API__: JSON.stringify(process.env.__DEVNET_API__ || false),
+            __API_URL__: JSON.stringify(apiUrl),
+            __WALLET_URL__: JSON.stringify(walletUrl),
             __DEVNET__: isDevNet,
             __TESTNET__: isTestNet,
+            __STAGENET__: isStageNet,
             __DEPRECATED__: !!env.deprecated,
+            __RECAPTCHA_SITE_KEY__: JSON.stringify(recaptchaSiteKey),
+            __CRYPTOBRIDGE_PUB_KEY__: JSON.stringify(cryptoBridgePubKey),
+            __BCO_ASSET_ID__: JSON.stringify(isDevNet ? "1.3.2" : "1.3.1564"),
+            __BCO_ASSET_PRECISION__: 7,
             DEFAULT_SYMBOL: "BTS"
         }),
         new webpack.ContextReplacementPlugin(
@@ -185,11 +197,9 @@ module.exports = function(env) {
     } else {
         plugins.push(
             new webpack.DefinePlugin({
-                "process.env": {
-                    NODE_ENV: JSON.stringify("development"),
-                    ...processEnv
-                },
-                __DEV__: true
+                "process.env": {NODE_ENV: JSON.stringify("development")},
+                __DEV__: true,
+                ...processEnv
             })
         );
         plugins.push(new webpack.HotModuleReplacementPlugin());
@@ -242,7 +252,8 @@ module.exports = function(env) {
             filename: env.prod ? "[name].[chunkhash].js" : "[name].js",
             chunkFilename: env.prod ? "[name].[chunkhash].js" : "[name].js",
             pathinfo: !env.prod,
-            sourceMapFilename: "[name].js.map"
+            sourceMapFilename: "[name].js.map",
+            globalObject: "this"
         },
         optimization: {
             splitChunks: {
@@ -290,7 +301,7 @@ module.exports = function(env) {
                         {
                             loader: "babel-loader",
                             options: {
-                                cacheDirectory: env.prod,
+                                cacheDirectory: env.prod ? false : true,
                                 plugins: ["react-hot-loader/babel"]
                             }
                         }
@@ -307,7 +318,7 @@ module.exports = function(env) {
                             loader: "babel-loader",
                             options: {
                                 compact: false,
-                                cacheDirectory: env.prod,
+                                cacheDirectory: env.prod ? false : true,
                                 plugins: ["react-hot-loader/babel"]
                             }
                         }
@@ -333,7 +344,8 @@ module.exports = function(env) {
                         path.resolve(
                             root_dir,
                             "app/assets/language-dropdown/img"
-                        )
+                        ),
+                        path.resolve(root_dir, "app/assets/other")
                     ],
                     use: [
                         {

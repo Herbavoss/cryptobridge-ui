@@ -60,6 +60,9 @@ $mobile-input-bg: $input-background;
 
 $incognito-bg: #ea340b;
 
+$message-important-bg: #e68a00;
+$message-notice-bg: #afafaf;
+
 .lightTheme {
     @include theme(
         $primary-text-color,
@@ -107,7 +110,9 @@ $incognito-bg: #ea340b;
         $main-content-margin-block-bg-color,
         $modal-bg-color,
         $mobile-input-bg,
-        $incognito-bg
+        $incognito-bg,
+        $message-important-bg,
+        $message-notice-bg
     );
 
     .change-up {

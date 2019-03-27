@@ -7,8 +7,8 @@ import CryptoBridgeWithdrawModal from "./CryptoBridgeWithdrawModal";
 import BaseModal from "../../Modal/BaseModal";
 import ZfApi from "react-foundation-apps/src/utils/foundation-api";
 import AccountBalance from "../../Account/AccountBalance";
-import AssetDepositInfo from "components/Utility/AssetDepositInfo";
-import AssetDepositFeeWarning from "../../Utility/AssetDepositFeeWarning";
+import AssetDepositFeeWarning from "components/Utility/AssetDepositFeeWarning";
+import AssetInfo from "components/Utility/AssetInfo";
 import AssetName from "components/Utility/AssetName";
 import assetUtils from "common/asset_utils";
 import LinkToAccountById from "components/Utility/LinkToAccountById";
@@ -18,9 +18,13 @@ import LoadingIndicator from "components/LoadingIndicator";
 import counterpart from "counterpart";
 import WalletUnlockActions from "../../../actions/WalletUnlockActions";
 import WalletDb from "../../../stores/WalletDb";
+import CryptoBridgeStore from "../../../stores/CryptoBridgeStore";
 import AccountActions from "../../../actions/AccountActions";
 import QRCode from "qrcode.react";
 import PropTypes from "prop-types";
+import CryptoBridgeDepositAccept from "./CryptoBridgeDepositAccept";
+import {connect} from "alt-react";
+import AccountStore from "../../../stores/AccountStore";
 
 class CryptoBridgeGatewayDepositRequest extends React.Component {
     static propTypes = {
@@ -42,17 +46,20 @@ class CryptoBridgeGatewayDepositRequest extends React.Component {
         min_deposit: PropTypes.number,
         is_available: PropTypes.bool.isRequired,
         required_confirmations: PropTypes.number,
+        deposit_fee: PropTypes.number,
         deposit_fee_enabled: PropTypes.bool.isRequired,
         deposit_fee_time_frame: PropTypes.number,
         deposit_fee_percentage: PropTypes.number,
         deposit_fee_minimum: PropTypes.number,
         deposit_fee_percentage_low_amounts: PropTypes.number,
+        withdrawal_payment_id_enabled: PropTypes.bool,
         coin_info: PropTypes.arrayOf(PropTypes.object)
     };
 
     static defaultProps = {
         autosubscribe: false,
         required_confirmations: 0,
+        deposit_fee: 0,
         deposit_fee_enabled: false,
         deposit_fee_time_frame: 0,
         deposit_fee_percentage: 0,
@@ -60,6 +67,7 @@ class CryptoBridgeGatewayDepositRequest extends React.Component {
         deposit_fee_percentage_low_amounts: 0,
         gate_fee: 0,
         min_deposit: 0,
+        withdrawal_payment_id_enabled: false,
         coin_info: []
     };
 
@@ -74,7 +82,6 @@ class CryptoBridgeGatewayDepositRequest extends React.Component {
 
         this.addDepositAddress = this.addDepositAddress.bind(this);
         this._copy = this._copy.bind(this);
-        document.addEventListener("copy", this._copy);
     }
 
     _copy(e) {
@@ -100,22 +107,24 @@ class CryptoBridgeGatewayDepositRequest extends React.Component {
                 .addCryptoBridgeNameSpace(this.props.deposit_coin_type)
                 .toLowerCase(), // TODO why does the backup coin need bridge namespace?
             outputCoinType: this.props.receive_coin_type,
-            outputAddress: this.props.account.get("name"),
+            account: this.props.account,
             url: cryptoBridgeAPIs.BASE,
             stateCallback: this.addDepositAddress
         };
     }
 
     componentWillMount() {
+        document.addEventListener("copy", this._copy);
+
         if (WalletDb.isLocked()) {
             this._unlockWallet();
+        } else {
+            getDepositAddress({
+                coin: this.props.receive_coin_type,
+                account: this.props.account,
+                stateCallback: this.addDepositAddress
+            });
         }
-
-        getDepositAddress({
-            coin: this.props.receive_coin_type,
-            account: this.props.account.get("name"),
-            stateCallback: this.addDepositAddress
-        });
     }
 
     componentWillUnmount() {
@@ -123,13 +132,20 @@ class CryptoBridgeGatewayDepositRequest extends React.Component {
     }
 
     componentWillReceiveProps(np) {
-        if (np.account !== this.props.account) {
+        if (
+            np.account &&
+            !np.isLocked &&
+            (np.account !== this.props.account ||
+                np.isLocked !== this.props.isLocked)
+        ) {
             getDepositAddress({
                 coin: np.receive_coin_type,
-                account: np.account.get("name"),
+                account: np.account,
                 stateCallback: this.addDepositAddress
             });
         }
+
+        this.setState({});
     }
 
     addDepositAddress(receive_address) {
@@ -137,6 +153,12 @@ class CryptoBridgeGatewayDepositRequest extends React.Component {
             receive_address.error.message === "no_address"
                 ? this.setState({emptyAddressDeposit: true})
                 : this.setState({emptyAddressDeposit: false});
+        }
+
+        if (receive_address && typeof receive_address.address === "string") {
+            const address = receive_address.address.split(":");
+            receive_address.address = address[0];
+            receive_address.tag = address[1] || null;
         }
 
         this.setState({receive_address});
@@ -199,7 +221,7 @@ class CryptoBridgeGatewayDepositRequest extends React.Component {
 
         let account_balances_object = this.props.account.get("balances");
 
-        const {gate_fee, min_deposit} = this.props;
+        const {gate_fee, min_deposit, deposit_fee} = this.props;
 
         let balance = "0 " + this.props.receive_asset.get("symbol");
         if (this.props.deprecated_in_favor_of) {
@@ -227,17 +249,17 @@ class CryptoBridgeGatewayDepositRequest extends React.Component {
         //     }
         // }
 
-        let receive_address = this.state.receive_address;
+        let receive_address = this.state.receive_address || {};
         let {emptyAddressDeposit} = this.state;
         let indicatorButtonAddr = this.state.loading;
 
-        if (!receive_address) {
-            return (
-                <div style={{margin: "3rem"}}>
-                    <LoadingIndicator type="three-bounce" />
-                </div>
-            );
-        }
+        // if (!receive_address || this.props.isLocked) {
+        //     return (
+        //         <div style={{margin: "3rem"}}>
+        //             <LoadingIndicator type="three-bounce" />
+        //         </div>
+        //     );
+        // }
 
         let withdraw_modal_id = this.getWithdrawModalId();
         let deposit_address_fragment = null;
@@ -309,6 +331,116 @@ class CryptoBridgeGatewayDepositRequest extends React.Component {
             lineHeight: 1.4
         };
 
+        const accountIsAuthenticated = !WalletDb.isLocked();
+        const accountIsCleared = !CryptoBridgeStore.getAccountRequiresForcedAction(
+            this.props.account.get("name")
+        );
+
+        const accountRequiresKycAction = CryptoBridgeStore.getAccountRequiresKycAction(
+            this.props.account.get("name")
+        );
+        const accountRequiresTosAction = CryptoBridgeStore.getAccountRequiresTosAction(
+            this.props.account.get("name")
+        );
+
+        const accountRequiresAction =
+            accountIsAuthenticated &&
+            (accountRequiresTosAction || accountRequiresKycAction);
+
+        const login = (
+            <div className="content-block">
+                <Translate
+                    className="label alert"
+                    component="label"
+                    content="cryptobridge.gateway.deposit_login"
+                    style={labelStyle}
+                />
+                <div>
+                    <button
+                        className="button primary"
+                        onClick={this._unlockWallet}
+                    >
+                        <Translate content="header.unlock_short" />
+                    </button>
+                </div>
+            </div>
+        );
+
+        const withdraw = (
+            <div className="button-group" style={{paddingTop: 20}}>
+                <button
+                    className="button success"
+                    style={{fontSize: "1.3rem"}}
+                    onClick={this.onWithdraw.bind(this)}
+                >
+                    <Translate content="gateway.withdraw_now" />{" "}
+                </button>
+            </div>
+        );
+
+        const authenticationInfo = accountRequiresAction ? (
+            <div className="content-block">
+                {accountRequiresTosAction ? (
+                    <Translate
+                        className="label warning"
+                        component="label"
+                        content="cryptobridge.gateway.account_tos_action_required_label"
+                        style={labelStyle}
+                    />
+                ) : null}
+                {accountRequiresKycAction ? (
+                    <Translate
+                        className="label warning"
+                        component="label"
+                        content="cryptobridge.gateway.account_kyc_action_required_label"
+                        style={labelStyle}
+                    />
+                ) : null}
+            </div>
+        ) : null;
+
+        const kycIsPending = CryptoBridgeStore.getAccountKycIsPending(
+            this.props.account.get("name")
+        );
+
+        const authentication = !accountIsAuthenticated ? (
+            login
+        ) : !accountIsCleared ? (
+            <div className="content-block">
+                <div>
+                    {CryptoBridgeStore.getAccountRequiresTosForcedAction(
+                        this.props.account.get("name")
+                    ) ? (
+                        <button
+                            className="button primary"
+                            onClick={() => {
+                                ZfApi.publish("tos_modal", "open");
+                            }}
+                        >
+                            <Translate content="cryptobridge.gateway.account_tos_action_required" />
+                        </button>
+                    ) : CryptoBridgeStore.getAccountRequiresKycForcedAction(
+                        this.props.account.get("name")
+                    ) ? (
+                        <button
+                            className="button primary"
+                            onClick={() => {
+                                ZfApi.publish("tos_modal", "open");
+                            }}
+                        >
+                            <Translate
+                                content={`cryptobridge.gateway.account_kyc_action_${
+                                    kycIsPending ? "pending" : "required"
+                                }`}
+                            />
+                        </button>
+                    ) : null}
+                </div>
+            </div>
+        ) : !isDeposit ? (
+            withdraw
+        ) : null;
+
         if (isDeposit) {
             return (
                 <div className="Blocktrades__gateway grid-block no-padding no-margin">
@@ -365,7 +497,8 @@ class CryptoBridgeGatewayDepositRequest extends React.Component {
                                             <Translate content="cryptobridge.gateway.deposit_minimum" />:
                                         </td>
                                         <td style={depositRightCellStyle}>
-                                            {(min_deposit || gate_fee * 2) +
+                                            {(min_deposit ||
+                                                deposit_fee + gate_fee * 2) +
                                                 " "}
                                             <AssetName
                                                 name={this.props.receive_asset.get(
@@ -374,6 +507,21 @@ class CryptoBridgeGatewayDepositRequest extends React.Component {
                                             />
                                         </td>
                                     </tr>
+                                    {this.props.deposit_fee > 0 && (
+                                        <tr>
+                                            <td>
+                                                <Translate content="cryptobridge.gateway.deposit_fee" />:
+                                            </td>
+                                            <td style={depositRightCellStyle}>
+                                                {this.props.deposit_fee + " "}
+                                                <AssetName
+                                                    name={this.props.receive_asset.get(
+                                                        "symbol"
+                                                    )}
+                                                />
+                                            </td>
+                                        </tr>
+                                    )}
                                     {this.props.required_confirmations > 0 && (
                                         <tr>
                                             <td>
@@ -396,144 +544,183 @@ class CryptoBridgeGatewayDepositRequest extends React.Component {
                             component="h4"
                             content="gateway.deposit_inst"
                         />
-
-                        <div className="grid-block no-padding no-margin">
-                            <div
-                                className="small-12 medium-7 large-9"
-                                style={{paddingRight: "1rem"}}
-                            >
-                                <label className="left-label">
-                                    <Translate
-                                        content="gateway.deposit_to"
-                                        asset={assetUtils.replaceAssetSymbol(
-                                            this.props.deposit_asset
-                                        )}
-                                    />:
-                                </label>
-                                <label className="fz_12 left-label">
-                                    <Translate content="gateway.deposit_notice_delay" />
-                                </label>
-                                <AssetDepositFeeWarning
-                                    asset={{
-                                        name: assetUtils.replaceAssetSymbol(
-                                            this.props.deposit_asset
-                                        ),
-                                        depositFeeEnabled: this.props
-                                            .deposit_fee_enabled,
-                                        depositFeeTimeframe: this.props
-                                            .deposit_fee_time_frame,
-                                        depositFeePercentage: this.props
-                                            .deposit_fee_percentage,
-                                        depositFeePercentageLowAmounts: this
-                                            .props
-                                            .deposit_fee_percentage_low_amounts,
-                                        depositFeeMinimum: this.props
-                                            .deposit_fee_minimum
-                                    }}
-                                />
-                                <AssetDepositInfo
-                                    asset={{info: this.props.coin_info}}
-                                />
-                                {WalletDb.isLocked() ? (
-                                    <div className="content-block">
+                        <CryptoBridgeDepositAccept
+                            asset={this.props.deposit_asset}
+                            name={this.props.deposit_asset_name}
+                        >
+                            <div className="grid-block no-padding no-margin">
+                                <div
+                                    className="small-12 medium-7 large-9"
+                                    style={{paddingRight: "1rem"}}
+                                >
+                                    <label className="left-label">
                                         <Translate
-                                            className="label alert"
-                                            component="label"
-                                            content="cryptobridge.gateway.deposit_login"
-                                            style={labelStyle}
-                                        />
-                                        <div>
-                                            <button
-                                                className="button primary"
-                                                onClick={this._unlockWallet}
-                                            >
-                                                <Translate content="header.unlock_short" />
-                                            </button>
-                                        </div>
-                                    </div>
-                                ) : null}
-
-                                <Translate
-                                    className="label warning"
-                                    component="label"
-                                    content="gateway.min_deposit_warning_asset"
-                                    minDeposit={min_deposit || gate_fee * 2}
-                                    coin={assetUtils.replaceAssetSymbol(
-                                        this.props.deposit_asset
-                                    )}
-                                    style={labelStyle}
-                                />
-
-                                {!WalletDb.isLocked() ? (
-                                    <div>
-                                        {emptyAddressDeposit ? (
-                                            <Translate content="gateway.please_generate_address" />
-                                        ) : (
-                                            deposit_address_fragment
-                                        )}
-                                        <div>
-                                            {deposit_memo && (
-                                                <span>
-                                                    memo: {deposit_memo}
-                                                </span>
+                                            content="gateway.deposit_to"
+                                            asset={assetUtils.replaceAssetSymbol(
+                                                this.props.deposit_asset
                                             )}
-                                        </div>
-                                        <div
-                                            className="button-group"
-                                            style={{paddingTop: 10}}
-                                        >
-                                            {deposit_address_fragment ? (
-                                                <div
-                                                    className="button"
-                                                    onClick={this.toClipboard.bind(
-                                                        this,
-                                                        clipboardText
-                                                    )}
-                                                >
-                                                    <Translate content="gateway.copy_address" />
+                                        />:
+                                    </label>
+                                    <label className="fz_12 left-label">
+                                        <Translate content="gateway.deposit_notice_delay" />
+                                    </label>
+                                    <AssetDepositFeeWarning
+                                        asset={{
+                                            name: assetUtils.replaceAssetSymbol(
+                                                this.props.deposit_asset
+                                            ),
+                                            depositFeeEnabled: this.props
+                                                .deposit_fee_enabled,
+                                            depositFeeTimeframe: this.props
+                                                .deposit_fee_time_frame,
+                                            depositFeePercentage: this.props
+                                                .deposit_fee_percentage,
+                                            depositFeePercentageLowAmounts: this
+                                                .props
+                                                .deposit_fee_percentage_low_amounts,
+                                            depositFeeMinimum: this.props
+                                                .deposit_fee_minimum
+                                        }}
+                                    />
+                                    <AssetInfo
+                                        asset={{info: this.props.coin_info}}
+                                        type={"deposit"}
+                                    />
+
+                                    {authenticationInfo}
+                                    {authentication}
+
+                                    <Translate
+                                        className="label warning"
+                                        component="label"
+                                        content="gateway.min_deposit_warning_asset"
+                                        minDeposit={
+                                            min_deposit ||
+                                            deposit_fee + gate_fee * 2
+                                        }
+                                        coin={assetUtils.replaceAssetSymbol(
+                                            this.props.deposit_asset
+                                        )}
+                                        style={labelStyle}
+                                    />
+
+                                    {accountIsAuthenticated &&
+                                    accountIsCleared ? (
+                                        <div>
+                                            {emptyAddressDeposit ? (
+                                                <Translate content="gateway.please_generate_address" />
+                                            ) : (
+                                                <div>
+                                                    <span
+                                                        style={{
+                                                            wordBreak:
+                                                                "break-word"
+                                                        }}
+                                                    >
+                                                        {receive_address &&
+                                                        receive_address.tag ? (
+                                                            <span>
+                                                                Address:{" "}
+                                                            </span>
+                                                        ) : null}
+                                                        {
+                                                            deposit_address_fragment
+                                                        }
+                                                        <br />
+                                                    </span>
+                                                    {receive_address &&
+                                                    receive_address.tag ? (
+                                                        <span
+                                                            style={{
+                                                                display:
+                                                                    "inline-block",
+                                                                marginTop: 5
+                                                            }}
+                                                        >
+                                                            Tag:{" "}
+                                                            {
+                                                                receive_address.tag
+                                                            }
+                                                        </span>
+                                                    ) : null}
                                                 </div>
-                                            ) : null}
-                                            {memoText ? (
-                                                <div
-                                                    className="button"
-                                                    onClick={this.toClipboard.bind(
-                                                        this,
-                                                        memoText
-                                                    )}
-                                                >
-                                                    <Translate content="gateway.copy_memo" />
-                                                </div>
-                                            ) : null}
-                                            <button
-                                                className={
-                                                    "button spinner-button-circle"
-                                                }
-                                                onClick={this.requestDepositAddressLoad.bind(
-                                                    this
+                                            )}
+                                            <div>
+                                                {deposit_memo && (
+                                                    <span>
+                                                        memo: {deposit_memo}
+                                                    </span>
                                                 )}
+                                            </div>
+                                            <div
+                                                className="button-group"
+                                                style={{paddingTop: 10}}
                                             >
-                                                {indicatorButtonAddr ? (
-                                                    <LoadingIndicator type="circle" />
+                                                {deposit_address_fragment ? (
+                                                    <div
+                                                        className="button"
+                                                        onClick={this.toClipboard.bind(
+                                                            this,
+                                                            clipboardText
+                                                        )}
+                                                    >
+                                                        <Translate content="gateway.copy_address" />
+                                                    </div>
                                                 ) : null}
-                                                <Translate content="gateway.generate_new" />
-                                            </button>
+                                                {receive_address &&
+                                                receive_address.tag ? (
+                                                    <div
+                                                        className="button"
+                                                        onClick={this.toClipboard.bind(
+                                                            this,
+                                                            receive_address.tag
+                                                        )}
+                                                    >
+                                                        <Translate content="cryptobridge.gateway.copy_address_tag" />
+                                                    </div>
+                                                ) : null}
+                                                {memoText ? (
+                                                    <div
+                                                        className="button"
+                                                        onClick={this.toClipboard.bind(
+                                                            this,
+                                                            memoText
+                                                        )}
+                                                    >
+                                                        <Translate content="gateway.copy_memo" />
+                                                    </div>
+                                                ) : null}
+                                                <button
+                                                    className={
+                                                        "button spinner-button-circle"
+                                                    }
+                                                    onClick={this.requestDepositAddressLoad.bind(
+                                                        this
+                                                    )}
+                                                >
+                                                    {indicatorButtonAddr ? (
+                                                        <LoadingIndicator type="circle" />
+                                                    ) : null}
+                                                    <Translate content="gateway.generate_new" />
+                                                </button>
+                                            </div>
                                         </div>
+                                    ) : null}
+                                </div>
+                                {accountIsAuthenticated && accountIsCleared ? (
+                                    <div className="small-12 medium-5 large-3">
+                                        {deposit_address_fragment &&
+                                            !memoText &&
+                                            clipboardText && (
+                                                <QRCode
+                                                    size={140}
+                                                    value={clipboardText}
+                                                />
+                                            )}
                                     </div>
                                 ) : null}
                             </div>
-                            {!WalletDb.isLocked() ? (
-                                <div className="small-12 medium-5 large-3">
-                                    {deposit_address_fragment &&
-                                        !memoText &&
-                                        clipboardText && (
-                                            <QRCode
-                                                size={140}
-                                                value={clipboardText}
-                                            />
-                                        )}
-                                </div>
-                            ) : null}
-                        </div>
+                        </CryptoBridgeDepositAccept>
                     </div>
                 </div>
             );
@@ -624,15 +811,13 @@ class CryptoBridgeGatewayDepositRequest extends React.Component {
                                 asset={this.props.deposit_asset}
                             />:
                         </label>
-                        <div className="button-group" style={{paddingTop: 20}}>
-                            <button
-                                className="button success"
-                                style={{fontSize: "1.3rem"}}
-                                onClick={this.onWithdraw.bind(this)}
-                            >
-                                <Translate content="gateway.withdraw_now" />{" "}
-                            </button>
-                        </div>
+                        <AssetInfo
+                            asset={{info: this.props.coin_info}}
+                            type={"withdrawal"}
+                        />
+
+                        {authenticationInfo}
+                        {authentication}
                     </div>
                     <BaseModal id={withdraw_modal_id} overlay={true}>
                         <br />
@@ -656,6 +841,9 @@ class CryptoBridgeGatewayDepositRequest extends React.Component {
                                 output_supports_memos={
                                     this.props.supports_output_memos
                                 }
+                                withdrawal_payment_id_enabled={
+                                    this.props.withdrawal_payment_id_enabled
+                                }
                                 memo_prefix={withdraw_memo_prefix}
                                 modal_id={withdraw_modal_id}
                                 balance={
@@ -672,6 +860,21 @@ class CryptoBridgeGatewayDepositRequest extends React.Component {
     }
 }
 
-export default BindToChainState(CryptoBridgeGatewayDepositRequest, {
-    keep_updating: true
+CryptoBridgeGatewayDepositRequest = BindToChainState(
+    CryptoBridgeGatewayDepositRequest,
+    {keep_updating: true}
+);
+
+CryptoBridgeGatewayDepositRequest = connect(CryptoBridgeGatewayDepositRequest, {
+    listenTo() {
+        return [WalletDb, CryptoBridgeStore, AccountStore];
+    },
+    getProps() {
+        return {
+            isLocked: WalletDb.isLocked(),
+            cbAccounts: CryptoBridgeStore.getState().accounts
+        };
+    }
 });
+
+export default CryptoBridgeGatewayDepositRequest;
