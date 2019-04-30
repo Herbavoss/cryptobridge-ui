@@ -6,7 +6,7 @@ import {
     getBackedCoins,
     getActiveWallets
 } from "common/gatewayMethods";
-import {blockTradesAPIs} from "api/apiConfig";
+import {cryptoBridgeAPIs} from "api/apiConfig";
 
 let inProgress = {};
 
@@ -18,7 +18,7 @@ const onGatewayTimeout = (dispatch, gateway) => {
 
 class GatewayActions {
     fetchCoins({
-        backer = "OPEN",
+        backer = "BRIDGE",
         url = undefined,
         urlBridge = undefined,
         urlWallets = undefined
@@ -69,7 +69,7 @@ class GatewayActions {
         }
     }
 
-    fetchCoinsSimple({backer = "RUDEX", url = undefined} = {}) {
+    fetchCoinsSimple({backer = "BRIDGE", url = undefined} = {}) {
         if (!inProgress["fetchCoinsSimple_" + backer]) {
             inProgress["fetchCoinsSimple_" + backer] = true;
             return dispatch => {
@@ -111,13 +111,13 @@ class GatewayActions {
                 );
                 Promise.all([
                     fetchCoins(
-                        blockTradesAPIs.BASE + blockTradesAPIs.COINS_LIST
+                        cryptoBridgeAPIs.BASE + cryptoBridgeAPIs.COINS_LIST
                     ),
                     fetchTradingPairs(
-                        blockTradesAPIs.BASE + blockTradesAPIs.TRADING_PAIRS
+                        cryptoBridgeAPIs.BASE + cryptoBridgeAPIs.TRADING_PAIRS
                     ),
                     getActiveWallets(
-                        blockTradesAPIs.BASE + blockTradesAPIs.ACTIVE_WALLETS
+                        cryptoBridgeAPIs.BASE + cryptoBridgeAPIs.ACTIVE_WALLETS
                     )
                 ])
                     .then(result => {

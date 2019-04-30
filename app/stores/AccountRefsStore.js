@@ -6,7 +6,6 @@ import {ChainStore} from "bitsharesjs";
 import {Apis} from "bitsharesjs-ws";
 import PrivateKeyStore from "stores/PrivateKeyStore";
 import PrivateKeyActions from "actions/PrivateKeyActions";
-import chainIds from "chain/chainIds";
 
 class AccountRefsStore extends BaseStore {
     constructor() {
@@ -33,7 +32,7 @@ class AccountRefsStore extends BaseStore {
     }
 
     _getChainId() {
-        return Apis.instance().chain_id || chainIds.MAIN_NET;
+        return Apis.instance().chain_id || __CHAIN_ID__;
     }
 
     onAddPrivateKey({private_key_object}) {

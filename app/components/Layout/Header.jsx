@@ -352,7 +352,7 @@ class Header extends React.Component {
             !!a &&
             Apis.instance() &&
             Apis.instance().chain_id &&
-            Apis.instance().chain_id.substr(0, 8) === "4018d784";
+            Apis.instance().chain_id.substr(0, 8) === __CHAIN_ID_SHORT__;
 
         if (starredAccounts.size) {
             for (let i = tradingAccounts.length - 1; i >= 0; i--) {
@@ -411,7 +411,7 @@ class Header extends React.Component {
 
         let tradeUrl = this.props.lastMarket
             ? `/market/${this.props.lastMarket}`
-            : "/market/USD_BTS";
+            : "/market/BRIDGE.BCO_BRIDGE.BTC"; // CRYPTOBRIDGE
 
         // Account selector: Only active inside the exchange
         let account_display_name, accountsList;

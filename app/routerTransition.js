@@ -21,6 +21,7 @@ import counterpart from "counterpart";
 import PrivateKeyActions from "actions/PrivateKeyActions";
 import SettingsActions from "actions/SettingsActions";
 import {Notification} from "bitshares-ui-style-guide";
+import {cryptoBridgeAPIs} from "./api/apiConfig";
 
 ChainStore.setDispatchFrequency(60);
 
@@ -89,27 +90,43 @@ class RouterTransitioner {
             this._autoSelection =
                 this._getLastNode().indexOf("fake.automatic-selection") !== -1;
 
-            this._initConnectionManager(urls);
+            const initConnection = urls => {
+                this._initConnectionManager(urls);
 
-            if (
-                !latenciesEstablished ||
-                Object.keys(apiLatencies).length == 0
-            ) {
-                this.doLatencyUpdate()
-                    .then(
-                        this._initiateConnection.bind(
-                            this,
-                            appInit,
-                            resolve,
-                            reject
+                if (
+                    !latenciesEstablished ||
+                    Object.keys(apiLatencies).length == 0
+                ) {
+                    this.doLatencyUpdate()
+                        .then(
+                            this._initiateConnection.bind(
+                                this,
+                                appInit,
+                                resolve,
+                                reject
+                            )
                         )
-                    )
-                    .catch(err => {
-                        console.log("catch doLatency", err);
-                    });
-            } else {
-                this._initiateConnection(appInit, resolve, reject);
-            }
+                        .catch(err => {
+                            console.log("catch doLatency", err);
+                        });
+                } else {
+                    this._initiateConnection(appInit, resolve, reject);
+                }
+            };
+
+            /* CRYPTOBRIDGE fetch nodes */
+            fetch(cryptoBridgeAPIs.BASE + cryptoBridgeAPIs.GEO_NODES)
+                .then(reply => reply.json())
+                .then(nodes => {
+                    if (!__IS_LOCAL_CHAIN__) {
+                        urls = nodes.map(node => node.url);
+                    }
+                    initConnection(urls);
+                })
+                .catch(() => {
+                    this._initConnectionManager();
+                    this._initiateConnection(appInit, resolve, reject);
+                });
         });
     }
 

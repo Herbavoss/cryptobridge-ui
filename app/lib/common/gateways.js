@@ -64,7 +64,7 @@ export const availableGateways = {
         useFullAssetName: true, // Adds <gateway>.<asset> to memo and address object
         intermediateAccount: "cryptobridge", // Fixed intermediateAccount
         options: {
-            enabled: false,
+            enabled: true,
             selected: false
         }
     },

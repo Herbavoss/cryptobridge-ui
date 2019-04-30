@@ -66,11 +66,31 @@ module.exports = function(env) {
         regexString = regexString + (l + (i < locales.length - 1 ? "|" : ""));
     });
     const localeRegex = new RegExp(regexString);
+
+    /* CRYPTOBRIDGE */
+    const recaptchaSiteKey =
+        process.env.RECAPTCHA_SITE_KEY ||
+        "6LdlhIsUAAAAAHzlruhPZ4yJKPd5Zo18eLRFP7hj";
+
+    const cryptoBridgePubKey =
+        process.env.CRYPTOBRIDGE_PUB_KEY ||
+        "BTS74ePvhPVtYw79orHZkHgfpGr5vRJ1ZPyDDZcCBEg275DGpCy8k";
+
+    const chainId =
+        process.env.CHAIN_ID ||
+        "92e31f3a1e262c773eb2d3d7741b0d7a75ff91ded998759fb1611014d9310378";
+
+    const walletUrl = process.env.WALLET_URL || "http://localhost:8080";
+    const apiUrl = process.env.API_URL || "http://localhost:3000";
+    const apiSupportUrl =
+        process.env.API_SUPPORT_URL || "https://localhost:5000";
+    /* /CRYPTOBRIDGE */
+
     var plugins = [
         new HtmlWebpackPlugin({
             template: "!!handlebars-loader!app/assets/index.hbs",
             templateParameters: {
-                title: "BitShares " + __VERSION__,
+                title: "CryptoBridge",
                 INCLUDE_BASE: !!env.prod && !env.hash,
                 PRODUCTION: !!env.prod,
                 ELECTRON: !!env.electron
@@ -87,7 +107,33 @@ module.exports = function(env) {
             __DEPRECATED__: !!env.deprecated,
             DEFAULT_SYMBOL: "BTS",
             __GIT_BRANCH__: JSON.stringify(git.branch()),
-            __PERFORMANCE_DEVTOOL__: !!env.perf_dev
+            __PERFORMANCE_DEVTOOL__: !!env.perf_dev,
+
+            /* CRYPTOBRIDGE */
+            __IS_LOCAL_CHAIN__:
+                chainId ===
+                "92e31f3a1e262c773eb2d3d7741b0d7a75ff91ded998759fb1611014d9310378",
+
+            __CHAIN_ID_LOCAL__: JSON.stringify(
+                "92e31f3a1e262c773eb2d3d7741b0d7a75ff91ded998759fb1611014d9310378"
+            ),
+            __CHAIN_ID_TEST__: JSON.stringify(
+                "2821abbb9923c830cf8300136c431674756270d9019f56c00e80b296e3afc079"
+            ),
+            __CHAIN_ID_MAIN__: JSON.stringify(
+                "4018d7844c78f6a6c41c6a552b898022310fc5dec06da467ee7905a8dad512c8"
+            ),
+
+            __CHAIN_ID__: JSON.stringify(chainId),
+            __CHAIN_ID_SHORT__: JSON.stringify(chainId.substr(0, 8)),
+
+            __CRYPTOBRIDGE_PUB_KEY__: JSON.stringify(cryptoBridgePubKey),
+            __RECAPTCHA_SITE_KEY__: JSON.stringify(recaptchaSiteKey),
+
+            __WALLET_URL: JSON.stringify(walletUrl),
+            __API_URL__: JSON.stringify(apiUrl),
+            __API_SUPPORT_URL__: JSON.stringify(apiSupportUrl)
+            /* /CRYPTOBRIDGE */
         }),
         new webpack.ContextReplacementPlugin(
             /moment[\/\\]locale$/,

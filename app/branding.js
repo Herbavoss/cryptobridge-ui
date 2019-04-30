@@ -9,7 +9,7 @@
  * @returns {string}
  */
 export function getWalletName() {
-    return "BitShares";
+    return "CryptoBridge";
 }
 
 /**
@@ -17,7 +17,7 @@ export function getWalletName() {
  * @returns {string}
  */
 export function getWalletURL() {
-    return "https://wallet.bitshares.org";
+    return "https://wallet.crypto-bridge.org";
 }
 
 /**
@@ -38,7 +38,7 @@ export function getFaucet() {
  * @returns {*}
  */
 export function getLogo() {
-    return require("assets/logo-ico-blue.png");
+    return require("assets/cryptobridge/logo-cryptobridge.png");
 }
 
 /**
@@ -64,10 +64,14 @@ export function getDefaultLogin() {
  *
  * @returns {[string,string,string,string,string,string]}
  */
-export function getUnits(chainId = "4018d784") {
-    if (chainId === "4018d784")
-        return ["BTS", "USD", "CNY", "BTC", "EUR", "GBP"];
-    else if (chainId === "39f5e2ed") return ["TEST"];
+export function getUnits(chainId = __CHAIN_ID_SHORT__) {
+    if (chainId === __CHAIN_ID_MAIN__.substr(0, 8))
+        // MAIN
+        return ["BTC", "BTS"];
+    else if (chainId === __CHAIN_ID_TEST__.substr(0, 8)) return ["BTC", "BTS"];
+    // TEST
+    else if (chainId === __CHAIN_ID_LOCAL__.substr(0, 8)) return ["BTC", "BTS"];
+    // LOCAL
     // unknown chain id: (need to return at least one unit)
     else return ["BTS"];
 }
@@ -79,7 +83,7 @@ export function getUnits(chainId = "4018d784") {
  */
 
 export function getMyMarketsBases() {
-    return ["BTC", "ETH", "BTS", "USD", "CNY"];
+    return ["BTC", "USDT", "ETH", "LTC", "RVN", "BTS"];
 }
 
 /**
@@ -192,6 +196,16 @@ export function getMyMarketsQuotes() {
         allTokens = allTokens.concat(tokens[type]);
     }
     return allTokens;
+}
+
+/**
+ * The core asset
+ *
+ * @returns {string}
+ */
+
+export function getMyCoreAsset() {
+    return "BTS";
 }
 
 /**
@@ -318,13 +332,13 @@ export function getAssetHideNamespaces() {
 export function allowedGateway(gateway) {
     return (
         [
-            "OPEN",
-            "RUDEX",
-            "BRIDGE",
-            "GDEX",
-            "XBTSX",
-            "SPARKDEX",
-            "CITADEL"
+            // "OPEN",
+            // "RUDEX",
+            "BRIDGE"
+            // "GDEX",
+            // "XBTSX",
+            // "SPARKDEX",
+            // "CITADEL"
         ].indexOf(gateway) >= 0
     );
 }

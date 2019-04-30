@@ -197,7 +197,8 @@ export default class DropDownMenu extends React.Component {
                         mainText: "header.payments",
                         mainCallback: this.props.showSend,
                         subText: "header.payments_legacy",
-                        subURL: "/transfer"
+                        subURL: "/transfer",
+                        subEnabled: false
                     },
                     {
                         icon: {
@@ -208,7 +209,8 @@ export default class DropDownMenu extends React.Component {
                         mainText: "modal.deposit.submit",
                         mainCallback: this.props.showDeposit,
                         subText: "header.deposit_legacy",
-                        subURL: "/deposit-withdraw"
+                        subURL: "/deposit-withdraw",
+                        subEnabled: false
                     },
                     {
                         icon: {
@@ -219,7 +221,8 @@ export default class DropDownMenu extends React.Component {
                         mainText: "modal.withdraw.submit",
                         mainCallback: this.props.showWithdraw,
                         subText: "header.withdraw_legacy",
-                        subURL: "/deposit-withdraw"
+                        subURL: "/deposit-withdraw",
+                        subEnabled: false
                     }
                 ].map(
                     (
@@ -229,7 +232,8 @@ export default class DropDownMenu extends React.Component {
                             disabled,
                             mainText,
                             subText,
-                            mainCallback
+                            mainCallback,
+                            subEnabled
                         },
                         index
                     ) => (
@@ -252,25 +256,27 @@ export default class DropDownMenu extends React.Component {
                             </div>
                             <div className="table-cell">
                                 <Translate content={mainText} />{" "}
-                                <span
-                                    onClick={
-                                        disabled
-                                            ? () => {}
-                                            : event => {
-                                                  event.stopPropagation();
-                                                  this.props.onNavigate.bind(
-                                                      this,
-                                                      subURL
-                                                  )(event);
-                                              }
-                                    }
-                                    className={cnames(
-                                        "header-dropdown-sub-link",
-                                        {enabled: !disabled}
-                                    )}
-                                >
-                                    <Translate content={subText} />
-                                </span>
+                                {subEnabled && (
+                                    <span
+                                        onClick={
+                                            disabled
+                                                ? () => {}
+                                                : event => {
+                                                      event.stopPropagation();
+                                                      this.props.onNavigate.bind(
+                                                          this,
+                                                          subURL
+                                                      )(event);
+                                                  }
+                                        }
+                                        className={cnames(
+                                            "header-dropdown-sub-link",
+                                            {enabled: !disabled}
+                                        )}
+                                    >
+                                        <Translate content={subText} />
+                                    </span>
+                                )}
                             </div>
                         </li>
                     )

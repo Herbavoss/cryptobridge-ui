@@ -10,6 +10,7 @@ import {
     getDefaultLogin,
     getMyMarketsBases,
     getMyMarketsQuotes,
+    getMyCoreAsset,
     getUnits
 } from "branding";
 
@@ -122,6 +123,14 @@ class SettingsStore {
      * @private
      */
     _getDefaultChoices() {
+        /* CRYPTOBRIDGE */
+        let apiServer = settingsAPIs.WS_NODE_LIST.slice(0); // clone all default servers as configured in apiConfig.js
+
+        if (__IS_LOCAL_CHAIN__) {
+            apiServer = apiServer.slice(0, 2);
+        }
+        /* CRYPTOBRIDGE */
+
         return {
             locale: [
                 "en",
@@ -135,7 +144,7 @@ class SettingsStore {
                 "ru",
                 "ja"
             ],
-            apiServer: settingsAPIs.WS_NODE_LIST.slice(0), // clone all default servers as configured in apiConfig.js
+            apiServer,
             unit: getUnits(this._getChainId()),
             showSettles: [{translate: "yes"}, {translate: "no"}],
             showAssetPercent: [{translate: "yes"}, {translate: "no"}],
@@ -436,6 +445,13 @@ class SettingsStore {
                 markets_4018d784: "BTS",
                 markets_39f5e2ed: "TEST"
             };
+
+            /* CRYPTOBRIDGE */
+            topMarkets[`markets_${__CHAIN_ID_SHORT__}`] = getMyMarketsQuotes();
+            bases[`markets_${__CHAIN_ID_SHORT__}`] = getMyMarketsBases();
+            coreAssets[`markets_${__CHAIN_ID_SHORT__}`] = getMyCoreAsset();
+            /* /CRYPTOBRIDGE */
+
             let coreAsset = coreAssets[this.starredKey] || "BTS";
             /*
             * Update units depending on the chain, also make sure the 0 index
@@ -664,7 +680,7 @@ class SettingsStore {
     }
 
     _getChainId() {
-        return (Apis.instance().chain_id || "4018d784").substr(0, 8);
+        return (Apis.instance().chain_id || __CHAIN_ID_SHORT__).substr(0, 8);
     }
 
     _getChainKey(key) {
