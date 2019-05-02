@@ -38,7 +38,9 @@ export const bitsparkAPIs = {
 };
 
 export const cryptoBridgeAPIs = {
-    BASE: "https://api.crypto-bridge.org/api/v1",
+    BASE: `${__API_URL__}/api/v1`,
+    BASE_V1: `${__API_URL__}/api/v1`,
+    BASE_V2: `${__API_URL__}/api/v2`,
     COINS_LIST: "/coins",
     ACTIVE_WALLETS: "/wallets",
     MARKETS: "/markets",

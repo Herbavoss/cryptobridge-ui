@@ -89,7 +89,10 @@ class CryptoLinkFormatter extends React.Component {
     render() {
         let {size, asset} = this.props;
         let conf = this.props;
-        let assetTemplate = this.assetTemplates[asset];
+        let assetTemplate = this.assetTemplates[asset] || {
+            template: "{address}",
+            params: []
+        };
 
         var error = false;
         if (typeof assetTemplate != "undefined") {

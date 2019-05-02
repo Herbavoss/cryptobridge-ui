@@ -15,7 +15,7 @@ function setCacheClearTimer(key) {
 }
 
 export function fetchCoins(
-    url = cryptoBridgeAPIs.BASE + cryptoBridgeAPIs.COINS_LIST
+    url = cryptoBridgeAPIs.BASE_V1 + cryptoBridgeAPIs.COINS_LIST
 ) {
     const key = "fetchCoins_" + url;
     let currentPromise = fetchInProgess[key];
@@ -47,7 +47,7 @@ export function fetchCoins(
 }
 
 export function fetchCoinsSimple(
-    url = cryptoBridgeAPIs.BASE + cryptoBridgeAPIs.COINS_LIST
+    url = cryptoBridgeAPIs.BASE_V1 + cryptoBridgeAPIs.COINS_LIST
 ) {
     return fetch(url)
         .then(reply =>
@@ -62,7 +62,7 @@ export function fetchCoinsSimple(
 }
 
 export function fetchTradingPairs(
-    url = cryptoBridgeAPIs.BASE + cryptoBridgeAPIs.TRADING_PAIRS
+    url = cryptoBridgeAPIs.BASE_V1 + cryptoBridgeAPIs.TRADING_PAIRS
 ) {
     const key = "fetchTradingPairs_" + url;
     let currentPromise = fetchInProgess[key];
@@ -98,7 +98,7 @@ export function fetchTradingPairs(
 export function getDepositLimit(
     inputCoin,
     outputCoin,
-    url = cryptoBridgeAPIs.BASE + cryptoBridgeAPIs.DEPOSIT_LIMIT
+    url = cryptoBridgeAPIs.BASE_V1 + cryptoBridgeAPIs.DEPOSIT_LIMIT
 ) {
     return fetch(
         url +
@@ -127,7 +127,7 @@ export function estimateOutput(
     inputAmount,
     inputCoin,
     outputCoin,
-    url = cryptoBridgeAPIs.BASE + cryptoBridgeAPIs.ESTIMATE_OUTPUT
+    url = cryptoBridgeAPIs.BASE_V1 + cryptoBridgeAPIs.ESTIMATE_OUTPUT
 ) {
     return fetch(
         url +
@@ -158,7 +158,7 @@ export function estimateInput(
     outputAmount,
     inputCoin,
     outputCoin,
-    url = cryptoBridgeAPIs.BASE + cryptoBridgeAPIs.ESTIMATE_INPUT
+    url = cryptoBridgeAPIs.BASE_V1 + cryptoBridgeAPIs.ESTIMATE_INPUT
 ) {
     return fetch(
         url +
@@ -189,7 +189,7 @@ export function estimateInput(
 }
 
 export function getActiveWallets(
-    url = cryptoBridgeAPIs.BASE + cryptoBridgeAPIs.ACTIVE_WALLETS
+    url = cryptoBridgeAPIs.BASE_V1 + cryptoBridgeAPIs.ACTIVE_WALLETS
 ) {
     const key = "getActiveWallets_" + url;
     let currentPromise = fetchInProgess[key];
@@ -230,7 +230,7 @@ export function getDepositAddress({coin, account, stateCallback}) {
 
     let body_string = JSON.stringify(body);
 
-    fetch(cryptoBridgeAPIs.BASE + "/simple-api/get-last-address", {
+    fetch(cryptoBridgeAPIs.BASE_V1 + "/simple-api/get-last-address", {
         method: "POST",
         headers: new Headers({
             Accept: "application/json",
@@ -391,7 +391,27 @@ export function getBackedCoins({allCoins, tradingPairs, backer}) {
                 symbol: inputCoin.walletSymbol,
                 supportsMemos: outputCoin.supportsOutputMemos,
                 depositAllowed: isDepositAllowed,
-                withdrawalAllowed: isWithdrawalAllowed
+                withdrawalAllowed: isWithdrawalAllowed,
+
+                /* CRYPTOBRIDGE */
+
+                requiredConfirmations: outputCoin.requiredConfirmations,
+                withdrawalPaymentIdEnabled:
+                    outputCoin.withdrawalPaymentIdEnabled,
+
+                depositAccount: outputCoin.depositAccount,
+                depositFee: outputCoin.depositFee,
+                depositFeeEnabled: outputCoin.depositFeeEnabled,
+                depositFeeTimeframe: outputCoin.depositFeeTimeframe,
+                depositFeePercentage: outputCoin.depositFeePercentage,
+                depositFeeMinimum: outputCoin.depositFeeMinimum,
+                depositFeePercentageLowAmounts:
+                    outputCoin.depositFeePercentageLowAmounts,
+
+                info: outputCoin.info,
+                scoring: outputCoin.scoring
+
+                /* /CRYPTOBRIDGE */
             });
         }
     });
@@ -399,7 +419,7 @@ export function getBackedCoins({allCoins, tradingPairs, backer}) {
 }
 
 export function validateAddress({
-    url = cryptoBridgeAPIs.BASE,
+    url = cryptoBridgeAPIs.BASE_V1,
     walletType,
     newAddress,
     output_coin_type = null,

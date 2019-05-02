@@ -111,13 +111,15 @@ class GatewayActions {
                 );
                 Promise.all([
                     fetchCoins(
-                        cryptoBridgeAPIs.BASE + cryptoBridgeAPIs.COINS_LIST
+                        cryptoBridgeAPIs.BASE_V1 + cryptoBridgeAPIs.COINS_LIST
                     ),
                     fetchTradingPairs(
-                        cryptoBridgeAPIs.BASE + cryptoBridgeAPIs.TRADING_PAIRS
+                        cryptoBridgeAPIs.BASE_V1 +
+                            cryptoBridgeAPIs.TRADING_PAIRS
                     ),
                     getActiveWallets(
-                        cryptoBridgeAPIs.BASE + cryptoBridgeAPIs.ACTIVE_WALLETS
+                        cryptoBridgeAPIs.BASE_V1 +
+                            cryptoBridgeAPIs.ACTIVE_WALLETS
                     )
                 ])
                     .then(result => {

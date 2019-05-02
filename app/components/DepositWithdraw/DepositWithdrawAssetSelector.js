@@ -4,6 +4,9 @@ import BindToChainState from "../Utility/BindToChainState";
 import GatewayStore from "stores/GatewayStore";
 import counterpart from "counterpart";
 import {Select} from "bitshares-ui-style-guide";
+/* CRYPTOBRIDGE */
+import AssetImage from "components/Utility/CryptoBridge/AssetImage";
+/* /CRYPTOBRIDGE */
 
 class DepositWithdrawAssetSelector extends React.Component {
     constructor(props) {
@@ -120,20 +123,20 @@ class DepositWithdrawAssetSelector extends React.Component {
                         : "gateway.asset_search_deposit"
                 )}
                 value={this.props.defaultValue}
-                optionLabelProp={"value"}
+                optionLabelProp={"children"}
                 showSearch
                 style={{width: "100%"}}
             >
-                {/* 
+                {/*
                     NOTE
-                    On Deposit, it would be useful to view Min Deposit 
+                    On Deposit, it would be useful to view Min Deposit
                     and Gateway Fee to the right of the selection so the
                     user doesn't have to select a specific gateway to view
                     this information.
                 */}
                 {coinItems.map(coin => (
                     <Select.Option key={coin.id} value={coin.label}>
-                        {coin.label}
+                        <AssetImage asset={coin.id} /> {coin.label}
                     </Select.Option>
                 ))}
             </Select>

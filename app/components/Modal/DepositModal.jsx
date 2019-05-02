@@ -20,6 +20,10 @@ import CryptoLinkFormatter from "../Utility/CryptoLinkFormatter";
 import counterpart from "counterpart";
 import {Modal, Button} from "bitshares-ui-style-guide";
 
+/* /CRYPTOBRIDGE */
+import AssetGatewayInfo from "components/Utility/CryptoBridge/AssetGatewayInfo";
+/* /CRYPTOBRIDGE */
+
 class DepositModalContent extends DecimalChecker {
     constructor() {
         super();
@@ -246,11 +250,21 @@ class DepositModalContent extends DecimalChecker {
             depositAddress = {address: account};
         }
 
+        console.log(backingAsset);
+
+        /* CRYPTOBRIDGE */
+        if (depositAddress && typeof depositAddress.address === "string") {
+            const address = depositAddress.address.split(":");
+            depositAddress.address = address[0];
+            depositAddress.tag = address[1] || null;
+        }
+        /* /CRYPTOBRIDGE */
+
         // Count available gateways
         let nAvailableGateways = _getNumberAvailableGateways.call(this);
         let isAddressValid =
             depositAddress &&
-            depositAddress !== "unknown" &&
+            depositAddress.address !== "unknown" &&
             !depositAddress.error;
 
         let minDeposit = 0;
@@ -302,7 +316,7 @@ class DepositModalContent extends DecimalChecker {
                         </div>
                     </div>
 
-                    {usingGateway && selectedAsset
+                    {false && usingGateway && selectedAsset
                         ? gatewaySelector.call(this, {
                               selectedGateway,
                               gatewayStatus,
@@ -339,14 +353,6 @@ class DepositModalContent extends DecimalChecker {
                     gatewayStatus[selectedGateway].options.enabled &&
                     isAddressValid ? (
                         <div className="container-row">
-                            <Translate
-                                className="grid-block container-row maxDeposit"
-                                style={{fontSize: "1rem"}}
-                                content="gateway.min_deposit_warning_amount"
-                                minDeposit={minDeposit || 0}
-                                coin={selectedAsset}
-                            />
-
                             <div className="grid-block container-row">
                                 <div style={{paddingRight: "1rem"}}>
                                     <CopyButton
@@ -381,6 +387,36 @@ class DepositModalContent extends DecimalChecker {
                                     </div>
                                 </div>
                             </div>
+                            {/* CRYPTOBRIDGE */}
+                            {depositAddress.tag && (
+                                <div className="grid-block container-row">
+                                    <div style={{paddingRight: "1rem"}}>
+                                        <CopyButton
+                                            text={depositAddress.tag}
+                                            className={"copyIcon"}
+                                        />
+                                    </div>
+                                    <div>
+                                        <Translate
+                                            component="div"
+                                            style={{
+                                                fontSize: "0.8rem",
+                                                fontWeight: "bold",
+                                                paddingBottom: "0.3rem"
+                                            }}
+                                            unsafe
+                                            content="cryptobridge.gateway.deposit_notice_tag"
+                                        />
+                                        <div
+                                            className="modal__highlight"
+                                            style={{wordBreak: "break-all"}}
+                                        >
+                                            {depositAddress.tag}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                            {/* /CRYPTOBRIDGE */}
                             {depositAddress.memo ? (
                                 <div className="grid-block container-row">
                                     <div style={{paddingRight: "1rem"}}>
@@ -409,12 +445,10 @@ class DepositModalContent extends DecimalChecker {
                                     </div>
                                 </div>
                             ) : null}
-                            <Translate
-                                component="span"
-                                style={{fontSize: "0.8rem"}}
-                                content="gateway.min_deposit_warning_asset"
-                                minDeposit={minDeposit || 0}
-                                coin={selectedAsset}
+                            <AssetGatewayInfo
+                                asset={backingAsset}
+                                filter={"deposit"}
+                                minDeposit={minDeposit}
                             />
                         </div>
                     ) : null}

@@ -1,0 +1,15 @@
+.asset-gateway-info {
+    list-style-type: none;
+    margin: 0;
+    font-size: 0.8rem;
+
+    > li {
+        + li {
+            margin-top: 0.5rem;
+        }
+    }
+
+    &__warn {
+        color: orange;
+    }
+}

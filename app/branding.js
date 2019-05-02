@@ -104,7 +104,14 @@ export function getMyMarketsQuotes() {
             "SILVER",
             "USD"
         ],
-        bridgeTokens: ["BRIDGE.BCO", "BRIDGE.BTC", "BRIDGE.MONA", "BRIDGE.ZNY"],
+        bridgeTokens: [
+            "BRIDGE.BCO",
+            "BRIDGE.BTC",
+            "BRIDGE.ETH",
+            "BRIDGE.LTC",
+            "BRIDGE.USDT",
+            "BRIDGE.RVN"
+        ],
         gdexTokens: ["GDEX.BTC", "GDEX.BTO", "GDEX.EOS", "GDEX.ETH"],
         openledgerTokens: [
             "OBITS",

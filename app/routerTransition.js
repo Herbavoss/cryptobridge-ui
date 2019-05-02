@@ -115,7 +115,7 @@ class RouterTransitioner {
             };
 
             /* CRYPTOBRIDGE fetch nodes */
-            fetch(cryptoBridgeAPIs.BASE + cryptoBridgeAPIs.GEO_NODES)
+            fetch(cryptoBridgeAPIs.BASE_V1 + cryptoBridgeAPIs.GEO_NODES)
                 .then(reply => reply.json())
                 .then(nodes => {
                     if (!__IS_LOCAL_CHAIN__) {

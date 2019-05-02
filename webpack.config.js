@@ -81,9 +81,9 @@ module.exports = function(env) {
         "92e31f3a1e262c773eb2d3d7741b0d7a75ff91ded998759fb1611014d9310378";
 
     const walletUrl = process.env.WALLET_URL || "http://localhost:8080";
-    const apiUrl = process.env.API_URL || "http://localhost:3000";
+    const apiUrl = process.env.API_URL || "http://localhost:5000";
     const apiSupportUrl =
-        process.env.API_SUPPORT_URL || "https://localhost:5000";
+        process.env.API_SUPPORT_URL || "https://localhost:3000";
     /* /CRYPTOBRIDGE */
 
     var plugins = [
@@ -130,7 +130,10 @@ module.exports = function(env) {
             __CRYPTOBRIDGE_PUB_KEY__: JSON.stringify(cryptoBridgePubKey),
             __RECAPTCHA_SITE_KEY__: JSON.stringify(recaptchaSiteKey),
 
-            __WALLET_URL: JSON.stringify(walletUrl),
+            __WALLET_URL__: JSON.stringify(walletUrl),
+            __WALLET_URL_PROD__: JSON.stringify(
+                "https://wallet.crypto-bridge.org"
+            ),
             __API_URL__: JSON.stringify(apiUrl),
             __API_SUPPORT_URL__: JSON.stringify(apiSupportUrl)
             /* /CRYPTOBRIDGE */
