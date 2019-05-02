@@ -106,6 +106,15 @@ export const availableGateways = {
     }
 };
 
+// CRYPTOBRIDGE */
+export const availableGatewaysAmount = Object.keys(availableGateways).reduce(
+    (memo, key) => {
+        return memo + (availableGateways[key].isEnabled ? 1 : 0);
+    },
+    0
+);
+// /CRYPTOBRIDGE */
+
 export const gatewayPrefixes = Object.keys(availableGateways);
 
 export function getPossibleGatewayPrefixes(bases) {

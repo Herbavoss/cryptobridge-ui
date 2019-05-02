@@ -18,34 +18,33 @@ export default class AssetGatewayInfo extends React.Component {
     render() {
         const {asset, filter, minDeposit} = this.props;
 
-        if (!asset || !asset.info || !asset.info.length > 0) {
-            return "";
-        }
-
         return (
             <ul className={"asset-gateway-info"}>
-                {asset.info.map((info, i) => {
-                    if (
-                        !info.section ||
-                        info.section === filter ||
-                        filter === "none"
-                    ) {
-                        return (
-                            <li
-                                key={`assetInfo${i}`}
-                                className={`asset-gateway-info__${info.type}`}
-                            >
-                                {info.text}
-                            </li>
-                        );
-                    }
-                })}
+                {asset.info &&
+                    asset.info.map((info, i) => {
+                        if (
+                            !info.section ||
+                            info.section === filter ||
+                            filter === "none"
+                        ) {
+                            return (
+                                <li
+                                    key={`assetInfo${i}`}
+                                    className={`asset-gateway-info__${
+                                        info.type
+                                    }`}
+                                >
+                                    {info.text}
+                                </li>
+                            );
+                        }
+                    })}
 
                 {asset.depositFeeEnabled ? (
                     <Translate
                         component="li"
                         className="asset-gateway-info__warn"
-                        content="cryptobridge.gateway.deposit_to_fee_warning"
+                        content="cryptobridge.gateway.deposit.fee_warning"
                         with={{
                             asset: asset.name,
                             fee_time_frame: asset.depositFeeTimeframe,
@@ -70,7 +69,7 @@ export default class AssetGatewayInfo extends React.Component {
                 {asset.requiredConfirmations > 0 && (
                     <Translate
                         component="li"
-                        content="cryptobridge.gateway.required_confirmations"
+                        content="cryptobridge.gateway.deposit.required_confirmations"
                         with={{
                             required_confirmations: asset.requiredConfirmations
                         }}

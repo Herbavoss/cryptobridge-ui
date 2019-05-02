@@ -14,7 +14,7 @@ import {
     _onAssetSelected,
     _getCoinToGatewayMapping
 } from "lib/common/assetGatewayMixin";
-import {availableGateways} from "common/gateways";
+import {availableGateways, availableGatewaysAmount} from "common/gateways";
 import {getGatewayStatusByAsset} from "common/gatewayUtils";
 import CryptoLinkFormatter from "../Utility/CryptoLinkFormatter";
 import counterpart from "counterpart";
@@ -250,8 +250,6 @@ class DepositModalContent extends DecimalChecker {
             depositAddress = {address: account};
         }
 
-        console.log(backingAsset);
-
         /* CRYPTOBRIDGE */
         if (depositAddress && typeof depositAddress.address === "string") {
             const address = depositAddress.address.split(":");
@@ -316,7 +314,9 @@ class DepositModalContent extends DecimalChecker {
                         </div>
                     </div>
 
-                    {false && usingGateway && selectedAsset
+                    {availableGatewaysAmount > 1 &&
+                    usingGateway &&
+                    selectedAsset // ONLY CB IS SELECTED
                         ? gatewaySelector.call(this, {
                               selectedGateway,
                               gatewayStatus,
@@ -405,7 +405,7 @@ class DepositModalContent extends DecimalChecker {
                                                 paddingBottom: "0.3rem"
                                             }}
                                             unsafe
-                                            content="cryptobridge.gateway.deposit_notice_tag"
+                                            content="cryptobridge.gateway.deposit.tag_notice"
                                         />
                                         <div
                                             className="modal__highlight"

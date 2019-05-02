@@ -2435,5 +2435,22 @@
         "wallet_model_3": "<li>Multiple accounts</li><li>Wallet file backup required</li><li>High security</li>",
         "wallet_move": "This backup file can also be used to move your local wallet to different computers or different browsers. In order to restore your local wallet using this backup <strong>you will also need your password!</strong>",
         "wallet_password": "Login anywhere using your password"
+    },
+    "cryptobridge": {
+        "gateway": {
+            "withdraw": {
+                "payment_id": {
+                    "tag": "Destination Tag (optional)",
+                    "tag_invalid": "Destination Tag is not valid",
+                    "hash": "Payment ID (optional)",
+                    "hash_invalid": "Payment ID is not valid"
+                }
+            },
+            "deposit": {
+                "tag_notice": "Tag <b>required</b> for proper routing to your account",
+                "fee_warning": "WARNING: Depositing %(asset)s more than once every %(fee_time_frame)s minutes will incur a %(fee_percentage)s% deposit fee (minimum %(fee_minimum)s %(asset)s). A deposit fee of %(fee_percentage_low_amounts)s% is charged when the deposit is below 1 %(asset)s.",
+                "required_confirmations": "Required confirmations: %(required_confirmations)s"
+            }
+        }
     }
 }

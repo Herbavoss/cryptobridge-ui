@@ -22,7 +22,7 @@ import ChainTypes from "../Utility/ChainTypes";
 import FormattedAsset from "../Utility/FormattedAsset";
 import BalanceComponent from "../Utility/BalanceComponent";
 import QRScanner from "../QRAddressScanner";
-import {Modal, Button, Select} from "bitshares-ui-style-guide";
+import {Modal, Button, Select, Input} from "bitshares-ui-style-guide";
 import counterpart from "counterpart";
 import {
     gatewaySelector,
@@ -31,7 +31,7 @@ import {
     _getCoinToGatewayMapping
 } from "lib/common/assetGatewayMixin";
 import {getGatewayStatusByAsset} from "common/gatewayUtils";
-import {availableGateways} from "common/gateways";
+import {availableGateways, availableGatewaysAmount} from "common/gateways";
 import {
     validateAddress as blocktradesValidateAddress,
     WithdrawAddresses
@@ -44,6 +44,14 @@ const gatewayBoolCheck = "withdrawalAllowed";
 
 import {getAssetAndGateway, getIntermediateAccount} from "common/gatewayUtils";
 import {isObject} from "util";
+
+/* CRYPTOBRIDGE */
+import {
+    getPaymentIdType,
+    getHasPaymentId,
+    getIsValidPaymentId
+} from "lib/cryptobridge/assetMethods";
+/* /CRYPTOBRIDGE */
 
 class WithdrawModalNew extends React.Component {
     constructor(props) {
@@ -78,7 +86,12 @@ class WithdrawModalNew extends React.Component {
             estimatedValue: "",
             options_is_valid: false,
             btsAccountName: "",
-            btsAccount: ""
+            btsAccount: "",
+
+            /* CRYPTOBRIDGE */
+            paymentId: "",
+            paymentIdIsError: false
+            /* CRYPTOBRIDGE */
         };
 
         this.handleQrScanSuccess = this.handleQrScanSuccess.bind(this);
@@ -689,6 +702,21 @@ class WithdrawModalNew extends React.Component {
         this.setState({address}, this._updateFee);
     }
 
+    /* CRYPTOBRIDGE */
+    onPaymentIdChange = (asset, e) => {
+        const paymentId = e.target.value.trim();
+        const paymentIdError =
+            paymentId && !getIsValidPaymentId(asset, paymentId);
+
+        console.log(asset);
+
+        this.setState({
+            paymentId,
+            paymentIdError
+        });
+    };
+    /* CRYPTOBRIDGE */
+
     onMemoChanged(e) {
         this.setState({memo: e.target.value}, this._updateFee);
     }
@@ -909,7 +937,10 @@ class WithdrawModalNew extends React.Component {
             quantity,
             address,
             btsAccount,
-            coinToGatewayMapping
+            coinToGatewayMapping,
+
+            paymentId,
+            paymentIdError
         } = this.state;
         let symbolsToInclude = [];
 
@@ -960,6 +991,7 @@ class WithdrawModalNew extends React.Component {
               !address ||
               !canCoverWithdrawal ||
               addressError ||
+              paymentIdError ||
               quantity < minWithdraw;
 
         let storedAddresses = WithdrawAddresses.get(
@@ -1025,7 +1057,7 @@ class WithdrawModalNew extends React.Component {
 
                         {/*GATEWAY SELECTION*/}
                         <div style={{marginBottom: "1em"}}>
-                            {selectedGateway
+                            {selectedGateway && availableGatewaysAmount > 1
                                 ? gatewaySelector.call(this, {
                                       selectedGateway,
                                       gatewayStatus,
@@ -1240,6 +1272,42 @@ class WithdrawModalNew extends React.Component {
                                         </span>
                                     </div>
                                 </div>
+                            </div>
+                        ) : null}
+
+                        {getHasPaymentId(backingAsset) ? (
+                            <div style={{marginBottom: "1em"}}>
+                                <label className="left-label">
+                                    <Translate
+                                        content={`cryptobridge.gateway.withdraw.payment_id.${getPaymentIdType(
+                                            backingAsset
+                                        )}`}
+                                    />
+                                </label>
+                                {paymentIdError ? (
+                                    <div
+                                        className="has-error"
+                                        style={{
+                                            position: "absolute",
+                                            right: "1em",
+                                            marginTop: "-30px"
+                                        }}
+                                    >
+                                        <Translate
+                                            content={`cryptobridge.gateway.withdraw.payment_id.${getPaymentIdType(
+                                                backingAsset
+                                            )}_invalid`}
+                                        />
+                                    </div>
+                                ) : null}
+                                <Input
+                                    type="text"
+                                    value={paymentId}
+                                    onChange={this.onPaymentIdChange.bind(
+                                        this,
+                                        backingAsset
+                                    )}
+                                />
                             </div>
                         ) : null}
 
