@@ -21,6 +21,10 @@ import {connect} from "alt-react";
 import {getWalletName} from "branding";
 import {Form, Modal, Button, Tooltip, Input} from "bitshares-ui-style-guide";
 
+/* CRYPTOBRIDGE */
+import SettingsStore from "stores/SettingsStore";
+/* /CRYPTOBRIDGE */
+
 const EqualWidthContainer = ({children}) => (
     <div
         style={{
@@ -664,6 +668,8 @@ class SendModal extends React.Component {
 
         let tabIndex = this.props.tabIndex; // Continue tabIndex on props count
 
+        const {showAdvancedFeatures} = this.props;
+
         return !this.state.open ? null : (
             <div
                 id="send_modal_wrapper"
@@ -674,6 +680,11 @@ class SendModal extends React.Component {
                     id={this.props.id}
                     overlay={true}
                     onCancel={this.hideModal}
+                    title={
+                        showAdvancedFeatures
+                            ? null
+                            : counterpart.translate("transfer.send")
+                    }
                     footer={[
                         <Button
                             key={"send"}
@@ -701,22 +712,24 @@ class SendModal extends React.Component {
                     ]}
                 >
                     <div className="grid-block vertical no-overflow">
-                        <div className="content-block">
-                            <EqualWidthContainer>
-                                <Button
-                                    type={propose ? "ghost" : "primary"}
-                                    onClick={this.onPropose}
-                                >
-                                    <Translate content="transfer.send" />
-                                </Button>
-                                <Button
-                                    type={propose ? "primary" : "ghost"}
-                                    onClick={this.onPropose}
-                                >
-                                    <Translate content="propose" />
-                                </Button>
-                            </EqualWidthContainer>
-                        </div>
+                        {showAdvancedFeatures ? (
+                            <div className="content-block">
+                                <EqualWidthContainer>
+                                    <Button
+                                        type={propose ? "ghost" : "primary"}
+                                        onClick={this.onPropose}
+                                    >
+                                        <Translate content="transfer.send" />
+                                    </Button>
+                                    <Button
+                                        type={propose ? "primary" : "ghost"}
+                                        onClick={this.onPropose}
+                                    >
+                                        <Translate content="propose" />
+                                    </Button>
+                                </EqualWidthContainer>
+                            </div>
+                        ) : null}
                         <div
                             className="content-block"
                             style={{textAlign: "center"}}
@@ -876,12 +889,16 @@ SendModalConnectWrapper = connect(
     SendModalConnectWrapper,
     {
         listenTo() {
-            return [AccountStore];
+            return [AccountStore, SettingsStore];
         },
         getProps(props) {
             return {
                 currentAccount: AccountStore.getState().currentAccount,
                 passwordAccount: AccountStore.getState().passwordAccount,
+                showAdvancedFeatures: SettingsStore.getState().settings.get(
+                    "showAdvancedFeatures",
+                    false
+                ),
                 tabIndex: props.tabIndex || 0
             };
         }

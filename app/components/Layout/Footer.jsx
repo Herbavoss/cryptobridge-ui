@@ -82,7 +82,8 @@ class Footer extends React.Component {
     componentDidMount() {
         this.checkNewVersionAvailable.call(this);
 
-        this.downloadLink = "https://bitshares.org/download";
+        this.downloadLink =
+            "https://github.com/CryptoBridge/cryptobridge-ui/releases/latest";
 
         let ensure = this._ensureConnectivity.bind(this);
         ifvisible.on("wakeup", function() {
@@ -111,7 +112,7 @@ class Footer extends React.Component {
     checkNewVersionAvailable() {
         if (__ELECTRON__) {
             fetch(
-                "https://api.github.com/repos/bitshares/bitshares-ui/releases/latest"
+                "https://api.github.com/repos/cryptobridge/cryptobridge-ui/releases/latest"
             )
                 .then(res => {
                     return res.json();
@@ -387,7 +388,6 @@ class Footer extends React.Component {
             : ` ${APP_VERSION}`;
         let rc_match = APP_VERSION.match(/-rc[0-9]$/);
         if (rc_match) version += rc_match[0];
-        let updateStyles = {display: "inline-block", verticalAlign: "top"};
         let logoProps = {};
 
         this._ensureConnectivity();
@@ -445,51 +445,34 @@ class Footer extends React.Component {
                 </ChoiceModal>
                 <div className="show-for-medium grid-block shrink footer">
                     <div className="align-justify grid-block">
-                        <div className="grid-block">
-                            <div
-                                className="logo"
-                                style={{
-                                    fontSize: state.newVersion
-                                        ? "0.9em"
-                                        : "1em",
-                                    cursor: state.newVersion
-                                        ? "pointer"
-                                        : "normal",
-                                    marginTop: state.newVersion
-                                        ? "-5px"
-                                        : "0px",
-                                    overflow: "hidden"
-                                }}
-                                onClick={
-                                    state.newVersion
-                                        ? this.downloadVersion.bind(this)
-                                        : null
-                                }
-                                {...logoProps}
-                            >
-                                {state.newVersion && (
-                                    <Icon
-                                        name="download"
-                                        title={counterpart.translate(
-                                            "icons.download",
-                                            {wallet_name: getWalletName()}
-                                        )}
-                                        style={{
-                                            marginRight: "20px",
-                                            marginTop: "10px",
-                                            fontSize: "1.35em",
-                                            display: "inline-block"
-                                        }}
-                                    />
-                                )}
-                                <span style={updateStyles}>
+                        <div
+                            className={`grid-block shrink ${
+                                state.newVersion ? "newVersion" : ""
+                            }`}
+                            onClick={
+                                state.newVersion
+                                    ? this.downloadVersion.bind(this)
+                                    : null
+                            }
+                        >
+                            <div className="logo" {...logoProps}>
+                                <span>
+                                    {state.newVersion && (
+                                        <Icon
+                                            name="download"
+                                            title={counterpart.translate(
+                                                "icons.download",
+                                                {wallet_name: getWalletName()}
+                                            )}
+                                        />
+                                    )}
                                     <Translate
                                         content="footer.title"
                                         wallet_name={getWalletName()}
-                                    />
+                                    />{" "}
                                     {__GIT_BRANCH__ === "staging" ? (
                                         <a
-                                            href={`https://github.com/bitshares/bitshares-ui/commit/${version.trim()}`}
+                                            href={`https://github.com/cryptobridge/cryptobridge-ui/commit/${version.trim()}`}
                                             className="version"
                                             target="_blank"
                                             rel="noopener noreferrer"
@@ -497,23 +480,38 @@ class Footer extends React.Component {
                                             {version}
                                         </a>
                                     ) : (
-                                        <span className="version">
-                                            {version}
+                                        <span className={"version"}>
+                                            BETA {version}
                                         </span>
                                     )}
                                 </span>
-
-                                {state.newVersion && (
-                                    <Translate
-                                        content="footer.update_available"
-                                        style={{
-                                            color: "#FCAB53",
-                                            position: "absolute",
-                                            top: "8px",
-                                            left: "36px"
-                                        }}
-                                    />
-                                )}
+                                <ul className="imprint">
+                                    {state.newVersion && (
+                                        <li>
+                                            <Translate content="footer.update_available" />
+                                        </li>
+                                    )}
+                                    {!state.newVersion && (
+                                        <li>
+                                            <a
+                                                href="https://crypto-bridge.org/imprint/"
+                                                target="_blank"
+                                            >
+                                                Imprint
+                                            </a>
+                                        </li>
+                                    )}
+                                    {!state.newVersion && (
+                                        <li>
+                                            <a
+                                                href="https://crypto-bridge.org/terms-and-conditions/"
+                                                target="_blank"
+                                            >
+                                                Terms and Conditions
+                                            </a>
+                                        </li>
+                                    )}
+                                </ul>
                             </div>
                         </div>
                         {!!routerTransitioner &&

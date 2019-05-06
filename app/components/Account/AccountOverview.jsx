@@ -461,6 +461,11 @@ class AccountOverview extends React.Component {
         // horizontally
         const hiddenSubText = "\u00a0";
 
+        const showAdvancedFeatures = settings.get(
+            "showAdvancedFeatures",
+            false
+        );
+
         return (
             <div className="grid-content app-tables no-padding" ref="appTables">
                 <div className="content-block small-12">
@@ -641,7 +646,8 @@ class AccountOverview extends React.Component {
                                 />
                             </Tab>
 
-                            {account.get("proposals") &&
+                            {showAdvancedFeatures &&
+                            account.get("proposals") &&
                             account.get("proposals").size ? (
                                 <Tab
                                     title="explorer.proposals.title"

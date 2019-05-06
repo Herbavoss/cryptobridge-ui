@@ -107,6 +107,7 @@ class SettingsStore {
             walletLockTimeout: 60 * 10,
             themes: getDefaultTheme(),
             passwordLogin: getDefaultLogin() == "password",
+            showAdvancedFeatures: false,
             browser_notifications: {
                 allow: true,
                 additional: {
@@ -153,6 +154,7 @@ class SettingsStore {
                 {translate: "cloud_login"},
                 {translate: "local_wallet"}
             ],
+            showAdvancedFeatures: [{translate: "yes"}, {translate: "no"}],
             browser_notifications: {
                 allow: [true, false],
                 additional: {

@@ -35,7 +35,8 @@ export default class DropDownMenu extends React.Component {
             tradeUrl,
             enableDepositWithdraw,
             currentAccount,
-            contacts
+            contacts,
+            showAdvancedFeatures
         } = this.props;
 
         let isContact = contacts.has(currentAccount);
@@ -167,25 +168,31 @@ export default class DropDownMenu extends React.Component {
                     </div>
                 </li>
 
-                <li
-                    className={cnames(
-                        {
-                            active: active.indexOf("/explorer") !== -1
-                        },
-                        "column-show-small"
-                    )}
-                    onClick={this.props.onNavigate.bind(
-                        this,
-                        "/explorer/blocks"
-                    )}
-                >
-                    <div className="table-cell">
-                        <Icon size="2x" name="server" title="icons.server" />
-                    </div>
-                    <div className="table-cell">
-                        <Translate content="header.explorer" />
-                    </div>
-                </li>
+                {showAdvancedFeatures ? (
+                    <li
+                        className={cnames(
+                            {
+                                active: active.indexOf("/explorer") !== -1
+                            },
+                            "column-show-small"
+                        )}
+                        onClick={this.props.onNavigate.bind(
+                            this,
+                            "/explorer/blocks"
+                        )}
+                    >
+                        <div className="table-cell">
+                            <Icon
+                                size="2x"
+                                name="server"
+                                title="icons.server"
+                            />
+                        </div>
+                        <div className="table-cell">
+                            <Translate content="header.explorer" />
+                        </div>
+                    </li>
+                ) : null}
 
                 {[
                     {
@@ -300,26 +307,28 @@ export default class DropDownMenu extends React.Component {
                     </div>
                 </li>
 
-                <li
-                    className={cnames(
-                        {
-                            active: active.indexOf("/spotlight") !== -1
-                        },
-                        "divider"
-                    )}
-                    onClick={this.props.onNavigate.bind(this, "/spotlight")}
-                >
-                    <div className="table-cell">
-                        <Icon
-                            size="2x"
-                            name="showcases"
-                            title="icons.showcases"
-                        />
-                    </div>
-                    <div className="table-cell">
-                        <Translate content="header.showcases" />
-                    </div>
-                </li>
+                {showAdvancedFeatures ? (
+                    <li
+                        className={cnames(
+                            {
+                                active: active.indexOf("/spotlight") !== -1
+                            },
+                            "divider"
+                        )}
+                        onClick={this.props.onNavigate.bind(this, "/spotlight")}
+                    >
+                        <div className="table-cell">
+                            <Icon
+                                size="2x"
+                                name="showcases"
+                                title="icons.showcases"
+                            />
+                        </div>
+                        <div className="table-cell">
+                            <Translate content="header.showcases" />
+                        </div>
+                    </li>
+                ) : null}
 
                 <li
                     className={cnames(
@@ -381,93 +390,105 @@ export default class DropDownMenu extends React.Component {
                     </div>
                 </li>
 
-                <li
-                    className={cnames({
-                        active: active.indexOf("/voting") !== -1,
-                        disabled: !showAccountLinks
-                    })}
-                    onClick={this.props.onNavigate.bind(
-                        this,
-                        `/account/${currentAccount}/voting`
-                    )}
-                >
-                    <div className="table-cell">
-                        <Icon
-                            size="2x"
-                            name="thumbs-up"
-                            title="icons.thumbs_up"
-                        />
-                    </div>
-                    <div className="table-cell">
-                        <Translate content="account.voting" />
-                    </div>
-                </li>
+                {showAdvancedFeatures ? (
+                    <li
+                        className={cnames({
+                            active: active.indexOf("/voting") !== -1,
+                            disabled: !showAccountLinks
+                        })}
+                        onClick={this.props.onNavigate.bind(
+                            this,
+                            `/account/${currentAccount}/voting`
+                        )}
+                    >
+                        <div className="table-cell">
+                            <Icon
+                                size="2x"
+                                name="thumbs-up"
+                                title="icons.thumbs_up"
+                            />
+                        </div>
+                        <div className="table-cell">
+                            <Translate content="account.voting" />
+                        </div>
+                    </li>
+                ) : null}
 
-                <li
-                    className={cnames({
-                        active:
-                            active.indexOf("/assets") !== -1 &&
-                            active.indexOf("/account/") !== -1,
-                        disabled: !showAccountLinks
-                    })}
-                    onClick={this.props.onNavigate.bind(
-                        this,
-                        `/account/${currentAccount}/assets`
-                    )}
-                >
-                    <div className="table-cell">
-                        <Icon size="2x" name="assets" title="icons.assets" />
-                    </div>
-                    <div className="table-cell">
-                        <Translate content="explorer.assets.title" />
-                    </div>
-                </li>
+                {showAdvancedFeatures ? (
+                    <li
+                        className={cnames({
+                            active:
+                                active.indexOf("/assets") !== -1 &&
+                                active.indexOf("/account/") !== -1,
+                            disabled: !showAccountLinks
+                        })}
+                        onClick={this.props.onNavigate.bind(
+                            this,
+                            `/account/${currentAccount}/assets`
+                        )}
+                    >
+                        <div className="table-cell">
+                            <Icon
+                                size="2x"
+                                name="assets"
+                                title="icons.assets"
+                            />
+                        </div>
+                        <div className="table-cell">
+                            <Translate content="explorer.assets.title" />
+                        </div>
+                    </li>
+                ) : null}
 
-                <li
-                    className={cnames({
-                        active: active.indexOf("/signedmessages") !== -1,
-                        disabled: !showAccountLinks
-                    })}
-                    onClick={this.props.onNavigate.bind(
-                        this,
-                        `/account/${currentAccount}/signedmessages`
-                    )}
-                >
-                    <div className="table-cell">
-                        <Icon
-                            size="2x"
-                            name="text"
-                            title="icons.text.signed_messages"
-                        />
-                    </div>
-                    <div className="table-cell">
-                        <Translate content="account.signedmessages.menuitem" />
-                    </div>
-                </li>
+                {showAdvancedFeatures ? (
+                    <li
+                        className={cnames({
+                            active: active.indexOf("/signedmessages") !== -1,
+                            disabled: !showAccountLinks
+                        })}
+                        onClick={this.props.onNavigate.bind(
+                            this,
+                            `/account/${currentAccount}/signedmessages`
+                        )}
+                    >
+                        <div className="table-cell">
+                            <Icon
+                                size="2x"
+                                name="text"
+                                title="icons.text.signed_messages"
+                            />
+                        </div>
+                        <div className="table-cell">
+                            <Translate content="account.signedmessages.menuitem" />
+                        </div>
+                    </li>
+                ) : null}
 
-                <li
-                    className={cnames({
-                        active: active.indexOf("/member-stats") !== -1,
-                        disabled: !showAccountLinks
-                    })}
-                    onClick={this.props.onNavigate.bind(
-                        this,
-                        `/account/${currentAccount}/member-stats`
-                    )}
-                >
-                    <div className="table-cell">
-                        <Icon
-                            size="2x"
-                            name="text"
-                            title="icons.text.membership_stats"
-                        />
-                    </div>
-                    <div className="table-cell">
-                        <Translate content="account.member.stats" />
-                    </div>
-                </li>
+                {showAdvancedFeatures ? (
+                    <li
+                        className={cnames({
+                            active: active.indexOf("/member-stats") !== -1,
+                            disabled: !showAccountLinks
+                        })}
+                        onClick={this.props.onNavigate.bind(
+                            this,
+                            `/account/${currentAccount}/member-stats`
+                        )}
+                    >
+                        <div className="table-cell">
+                            <Icon
+                                size="2x"
+                                name="text"
+                                title="icons.text.membership_stats"
+                            />
+                        </div>
+                        <div className="table-cell">
+                            <Translate content="account.member.stats" />
+                        </div>
+                    </li>
+                ) : null}
 
-                {isMyAccount ? (
+                {isMyAccount && showAdvancedFeatures ? (
                     <li
                         className={cnames({
                             active: active.indexOf("/vesting") !== -1
@@ -490,43 +511,51 @@ export default class DropDownMenu extends React.Component {
                     </li>
                 ) : null}
 
-                <li
-                    className={cnames({
-                        active: active.indexOf("/whitelist") !== -1,
-                        disabled: !showAccountLinks
-                    })}
-                    onClick={this.props.onNavigate.bind(
-                        this,
-                        `/account/${currentAccount}/whitelist`
-                    )}
-                >
-                    <div className="table-cell">
-                        <Icon size="2x" name="list" title="icons.list" />
-                    </div>
-                    <div className="table-cell">
-                        <Translate content="account.whitelist.title" />
-                    </div>
-                </li>
+                {showAdvancedFeatures ? (
+                    <li
+                        className={cnames({
+                            active: active.indexOf("/whitelist") !== -1,
+                            disabled: !showAccountLinks
+                        })}
+                        onClick={this.props.onNavigate.bind(
+                            this,
+                            `/account/${currentAccount}/whitelist`
+                        )}
+                    >
+                        <div className="table-cell">
+                            <Icon size="2x" name="list" title="icons.list" />
+                        </div>
+                        <div className="table-cell">
+                            <Translate content="account.whitelist.title" />
+                        </div>
+                    </li>
+                ) : null}
 
-                <li
-                    className={cnames("divider", {
-                        active: active.indexOf("/permissions") !== -1,
-                        disabled: !showAccountLinks
-                    })}
-                    onClick={this.props.onNavigate.bind(
-                        this,
-                        `/account/${currentAccount}/permissions`
-                    )}
-                >
-                    <div className="table-cell">
-                        <Icon size="2x" name="warning" title="icons.warning" />
-                    </div>
-                    <div className="table-cell">
-                        <Translate content="account.permissions" />
-                    </div>
-                </li>
+                {showAdvancedFeatures ? (
+                    <li
+                        className={cnames("divider", {
+                            active: active.indexOf("/permissions") !== -1,
+                            disabled: !showAccountLinks
+                        })}
+                        onClick={this.props.onNavigate.bind(
+                            this,
+                            `/account/${currentAccount}/permissions`
+                        )}
+                    >
+                        <div className="table-cell">
+                            <Icon
+                                size="2x"
+                                name="warning"
+                                title="icons.warning"
+                            />
+                        </div>
+                        <div className="table-cell">
+                            <Translate content="account.permissions" />
+                        </div>
+                    </li>
+                ) : null}
 
-                {showAccountLinks ? (
+                {showAdvancedFeatures && showAccountLinks ? (
                     <li
                         className={cnames(
                             {

@@ -48,7 +48,7 @@
     line-height: 36px;
     vertical-align: middle;
     color: #fff;
-    padding-left: 1.75rem;
+    padding-left: 0.5rem;
     padding-right: 1.75rem;
     a {
         text-decoration: underline;
@@ -56,8 +56,9 @@
 
     .logo {
         padding-right: 0.5rem;
-        border-right: 1px solid $border-color;
-        line-height: 2rem;
+        //border-right: 1px solid $border-color;
+        overflow: hidden;
+        line-height: 1;
         .version {
             font-size: 75%;
             vertical-align: baseline;
@@ -66,12 +67,7 @@
 
     > div > div:last-of-type {
         padding-left: 1rem;
-        border-left: 1px solid $border-color;
+        //border-left: 1px solid $border-color;
         overflow: hidden;
     }
-}
-
-.logo svg {
-    width: 1.75rem !important;
-    height: 1.75rem !important;
 }
