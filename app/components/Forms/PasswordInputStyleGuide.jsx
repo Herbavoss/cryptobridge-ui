@@ -17,7 +17,6 @@ class PasswordInput extends Component {
         checkStrength: PropTypes.bool,
         value: PropTypes.string,
         copy: PropTypes.bool,
-        visible: PropTypes.bool,
         readonly: PropTypes.bool
     };
 
@@ -30,7 +29,6 @@ class PasswordInput extends Component {
         checkStrength: false,
         value: "",
         copy: false,
-        visible: false,
         readonly: false
     };
 
@@ -180,7 +178,7 @@ class PasswordInput extends Component {
     render() {
         let {score} = this.state;
 
-        let {readonly, visible} = this.props;
+        let {readonly} = this.props;
 
         let passwordErrorMessage = this.getPasswordErrorMessage();
 
@@ -232,11 +230,10 @@ class PasswordInput extends Component {
                 help={getPasswordHelp()}
                 validateStatus={getPasswordValidateStatus()}
             >
-                <Input
+                <Input.Password
                     id="current-password"
                     onBlur={this.handlePasswordBlur}
                     onFocus={this.handlePasswordFocus}
-                    type={visible ? "text" : "password"}
                     name="password"
                     placeholder={counterpart.translate("wallet.enter_password")}
                     ref="password"
@@ -253,11 +250,10 @@ class PasswordInput extends Component {
                 help={getConfirmPasswordHelp()}
                 validateStatus={getConfirmPasswordValidateStatus()}
             >
-                <Input
+                <Input.Password
                     id="confirm-password"
                     onBlur={this.handleConfirmPasswordBlur}
                     onFocus={this.handleConfirmPasswordFocus}
-                    type={visible ? "text" : "password"}
                     name="confirmPassword"
                     placeholder={counterpart.translate("wallet.enter_password")}
                     ref="confirmPassword"

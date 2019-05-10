@@ -69,6 +69,37 @@ span.icon-10x {
     fill: black;
 }
 
+/* CRYPTOBRIDGE */
+.icon {
+    &.benchmark > svg > path {
+        &.cls-1 {
+            fill: #ffffff;
+        }
+        &.cls-2 {
+            fill: #9e9e9e;
+        }
+        &.cls-3 {
+            fill: #676766;
+        }
+        &.cls-4 {
+            fill: #7e7f7f;
+        }
+        &.cls-5 {
+            fill: #50504f;
+        }
+        &.cls-6 {
+            fill: #3f3f40;
+        }
+    }
+    &.title {
+        float: left;
+        margin-right: 0.5rem;
+        margin-top: -3px;
+        vertical-align: middle;
+    }
+}
+/* /CRYPTOBRIDGE */
+
 .icon.rotate45 > svg {
     transform: rotate(45deg);
 }

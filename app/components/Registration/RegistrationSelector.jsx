@@ -27,7 +27,7 @@ export default class RegistrationSelector extends React.Component {
     }
 
     onSelect(route) {
-        this.props.history.push(`/registration/${route}`);
+        this.props.history.push(`/create-account/${route}`);
     }
 
     changeActiveModel(isActiveWallet) {
@@ -62,7 +62,7 @@ export default class RegistrationSelector extends React.Component {
             <div className="grid-block align-center registration-layout">
                 <div className="grid-block shrink vertical text-center registration-selector">
                     <Translate
-                        content="registration.title"
+                        content="header.create_account"
                         component="p"
                         className="registration-title"
                     />

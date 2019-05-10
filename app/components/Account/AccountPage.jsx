@@ -18,6 +18,7 @@ import {AccountAssetCreate} from "./AccountAssetCreate";
 import AccountAssetUpdate from "./AccountAssetUpdate";
 import AccountMembership from "./AccountMembership";
 import AccountVesting from "./AccountVesting";
+import AccountStaking from "components/CryptoBridge/Account/AccountStaking";
 import AccountPermissions from "./AccountPermissions";
 import AccountSignedMessages from "./AccountSignedMessages";
 import AccountWhitelist from "./AccountWhitelist";
@@ -156,6 +157,13 @@ class AccountPage extends React.Component {
                                 <AccountSignedMessages {...passOnProps} />
                             )}
                         />
+                        {/* CRYPTOBRIDGE */}
+                        <Route
+                            path={`/account/${account_name}/staking`}
+                            exact
+                            render={() => <AccountStaking {...passOnProps} />}
+                        />
+                        {/* /CRYPTOBRIDGE */}
                     </Switch>
                     {/* {React.cloneElement(
                         React.Children.only(this.props.children),

@@ -10,7 +10,6 @@ import AccountStore from "stores/AccountStore";
 import WalletDb from "stores/WalletDb";
 import TransactionConfirmStore from "stores/TransactionConfirmStore";
 import utils from "common/utils";
-import AccountSelect from "../Forms/AccountSelect";
 import AccountNameInput from "./../Forms/AccountNameInputStyleGuide";
 import PasswordInput from "./../Forms/PasswordInputStyleGuide";
 import Icon from "../Icon/Icon";
@@ -23,6 +22,10 @@ import {
     Alert,
     Tooltip
 } from "bitshares-ui-style-guide";
+
+/* CRYPTOBRIDGE */
+import RegistrationFormItems from "components/CryptoBridge/Registration/FormItems";
+/* /CRYPTOBRIDGE */
 
 class WalletRegistrationForm extends React.Component {
     static propTypes = {
@@ -106,6 +109,12 @@ class WalletRegistrationForm extends React.Component {
     onRegistrarAccountChange(registrarAccount) {
         this.setState({registrarAccount});
     }
+
+    /* CRYPTOBRIDGE */
+    onFormChange = data => {
+        this.setState(data);
+    };
+    /* /CRYPTOBRIDGE */
 
     onSubmit(e) {
         e.preventDefault();
@@ -199,6 +208,17 @@ class WalletRegistrationForm extends React.Component {
     }
 
     isValid() {
+        /* CRYPTOBRIDGE */
+        if (
+            this.state.usCitizen !== true ||
+            this.state.confirmedTermsAndConditions !== true ||
+            this.state.confirmedDisclaimer !== true ||
+            !this.state.reCaptchaToken
+        ) {
+            return false;
+        }
+        /* /CRYPTOBRIDGE */
+
         const firstAccount = AccountStore.getMyAccounts().length === 0;
         let valid = this.state.validAccountName;
         if (!WalletDb.getWallet()) {
@@ -317,6 +337,14 @@ class WalletRegistrationForm extends React.Component {
                 {hasWallet ? null : this.renderPasswordInput()}
 
                 {firstAccount ? null : this.renderDropdown(myAccounts, isLTM)}
+
+                {/* CRYPTOBRIDGE */}
+                <RegistrationFormItems
+                    citizenship={true}
+                    onChange={this.onFormChange}
+                    recaptchaPayload={{user: this.props.accountName}}
+                />
+                {/*/ CRYPTOBRIDGE */}
 
                 {registrar && !isLTM ? (
                     <Form.Item>

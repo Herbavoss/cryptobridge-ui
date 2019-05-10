@@ -25,6 +25,11 @@ import Borrow from "./components/Showcases/Borrow";
 import Barter from "./components/Showcases/Barter";
 import DirectDebit from "./components/Showcases/DirectDebit";
 
+/* CRYPTOBRIDGE */
+import CryptoBridgeAccount from "components/CryptoBridge/Account";
+import CryptoBridgeMessages from "components/Layout/CryptoBridge/Messages";
+/* /CRYPTOBRIDGE */
+
 import {Route, Switch, Redirect} from "react-router-dom";
 
 // Nested route components
@@ -106,7 +111,20 @@ const CreateWorker = Loadable({
     loading: LoadingIndicator
 });
 
-import LoginSelector from "./components/LoginSelector";
+/* CRYPTOBRIDGE */
+const Benchmark = Loadable({
+    loader: () =>
+        import(/* webpackChunkName: "create-worker" */ "./components/CryptoBridge/Benchmark"),
+    loading: LoadingIndicator
+});
+const Support = Loadable({
+    loader: () =>
+        import(/* webpackChunkName: "create-worker" */ "./components/CryptoBridge/Support/Support"),
+    loading: LoadingIndicator
+});
+
+/* /CRYPTOBRIDGE */
+
 import Login from "./components/Login/Login";
 import RegistrationSelector from "./components/Registration/RegistrationSelector";
 import WalletRegistration from "./components/Registration/WalletRegistration";
@@ -378,23 +396,19 @@ class App extends React.Component {
                                 />
                                 <Route path="/settings" component={Settings} />
 
-                                <Route
-                                    path="/create-account"
-                                    component={LoginSelector}
-                                />
                                 <Route path="/login" component={Login} />
                                 <Route
-                                    path="/registration"
+                                    path="/create-account"
                                     exact
                                     component={RegistrationSelector}
                                 />
                                 <Route
-                                    path="/registration/local"
+                                    path="/create-account/local"
                                     exact
                                     component={WalletRegistration}
                                 />
                                 <Route
-                                    path="/registration/cloud"
+                                    path="/create-account/cloud"
                                     exact
                                     component={AccountRegistration}
                                 />
@@ -405,6 +419,16 @@ class App extends React.Component {
                                         pathname: `/account/${accountName}/voting`
                                     }}
                                 />
+
+                                {/* CRYPTOBRIDGE*/}
+                                <Route
+                                    path="/benchmark"
+                                    component={Benchmark}
+                                />
+                                <Route path="/support" component={Support} />
+
+                                {/* /CRYPTOBRIDGE*/}
+
                                 {/* Explorer routes */}
                                 <Route
                                     path="/explorer/:tab"
@@ -505,6 +529,7 @@ class App extends React.Component {
                             )}
                         />
                     ) : null}
+                    <CryptoBridgeMessages />
                     <div id="content-wrapper">
                         {content}
                         <NotificationSystem
@@ -527,6 +552,9 @@ class App extends React.Component {
                             hideModal={this.hideBrowserSupportModal}
                             showModal={this.showBrowserSupportModal}
                         />
+                        {/* CRYPTOBRIDGE*/}
+                        <CryptoBridgeAccount />
+                        {/* /CRYPTOBRIDGE*/}
                     </div>
                 </BodyClassName>
             </div>

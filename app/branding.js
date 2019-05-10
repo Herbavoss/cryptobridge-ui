@@ -27,7 +27,7 @@ export function getWalletURL() {
  */
 export function getFaucet() {
     return {
-        url: "https://faucet.bitshares.eu/onboarding", // 2017-12-infrastructure worker proposal
+        url: __FAUCET_URL__, // CRYPTOBRIDGE FAUCET
         show: true,
         editable: false
     };

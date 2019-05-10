@@ -4,28 +4,12 @@ import counterpart from "counterpart";
 import AccountStore from "stores/AccountStore";
 import {Link} from "react-router-dom";
 import Translate from "react-translate-component";
-import TranslateWithLinks from "./Utility/TranslateWithLinks";
 import {isIncognito} from "feature_detect";
-import SettingsActions from "actions/SettingsActions";
-import WalletUnlockActions from "actions/WalletUnlockActions";
 import SettingsStore from "stores/SettingsStore";
 import IntlActions from "actions/IntlActions";
-import CreateAccount from "./Account/CreateAccount";
-import CreateAccountPassword from "./Account/CreateAccountPassword";
-import {Route} from "react-router-dom";
 import {getWalletName, getLogo} from "branding";
 import {Select, Row, Col, Icon} from "bitshares-ui-style-guide";
 var logo = getLogo();
-
-const FlagImage = ({flag, width = 50, height = 50}) => {
-    return (
-        <img
-            height={height}
-            width={width}
-            src={`${__BASE_URL__}language-dropdown/${flag.toUpperCase()}.png`}
-        />
-    );
-};
 
 class LoginSelector extends React.Component {
     constructor(props) {
@@ -162,8 +146,8 @@ class LoginSelector extends React.Component {
 
                         <div className="grid-block account-login-options">
                             <Link
-                                id="account_login_button"
-                                to="/create-account/password"
+                                id="account_register_button"
+                                to="/create-account"
                                 className="button primary"
                                 data-intro={translator.translate(
                                     "walkthrough.create_cloud_wallet"
@@ -172,62 +156,17 @@ class LoginSelector extends React.Component {
                                 <Translate content="header.create_account" />
                             </Link>
 
-                            <span
+                            <Link
+                                id="account_login_button"
+                                to="/login"
                                 className="button hollow primary"
-                                onClick={() => {
-                                    SettingsActions.changeSetting.defer({
-                                        setting: "passwordLogin",
-                                        value: true
-                                    });
-                                    WalletUnlockActions.unlock().catch(
-                                        () => {}
-                                    );
-                                }}
+                                data-intro={translator.translate(
+                                    "walkthrough.create_cloud_wallet"
+                                )}
                             >
                                 <Translate content="header.unlock_short" />
-                            </span>
+                            </Link>
                         </div>
-
-                        <div className="additional-account-options">
-                            <h5 style={{textAlign: "center"}}>
-                                <TranslateWithLinks
-                                    string="account.optional.formatter"
-                                    keys={[
-                                        {
-                                            type: "link",
-                                            value: "/wallet/backup/restore",
-                                            translation:
-                                                "account.optional.restore_link",
-                                            dataIntro: translator.translate(
-                                                "walkthrough.restore_account"
-                                            ),
-                                            arg: "restore_link"
-                                        },
-                                        {
-                                            type: "link",
-                                            value: "/create-account/wallet",
-                                            translation:
-                                                "account.optional.restore_form",
-                                            dataIntro: translator.translate(
-                                                "walkthrough.create_local_wallet"
-                                            ),
-                                            arg: "restore_form"
-                                        }
-                                    ]}
-                                />
-                            </h5>
-                        </div>
-
-                        <Route
-                            path="/create-account/wallet"
-                            exact
-                            component={CreateAccount}
-                        />
-                        <Route
-                            path="/create-account/password"
-                            exact
-                            component={CreateAccountPassword}
-                        />
                     </div>
                 </div>
             </div>

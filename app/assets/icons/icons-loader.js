@@ -5,7 +5,9 @@ let icons = [
     "assets",
     "autolock",
     "barter",
+    "benchmark", //CRYPTOBRIDGE
     "borrow",
+    "bridgecoin", //CRYPTOBRIDGE
     "checkmark-circle",
     "chevron-down",
     "clippy",
@@ -45,6 +47,7 @@ let icons = [
     "share",
     "showcases",
     "shuffle",
+    "support", //CRYPTOBRIDGE
     "text",
     "thumb-tack",
     "thumb-untack",

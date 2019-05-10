@@ -69,18 +69,11 @@ export default class DropDownMenu extends React.Component {
                 {locked ? (
                     <li
                         className={cnames({
-                            active:
-                                active.indexOf(
-                                    `/create-account/${
-                                        !passwordLogin ? "wallet" : "password"
-                                    }`
-                                ) !== -1
+                            active: active.indexOf("/create-account") !== -1
                         })}
                         onClick={this.props.onNavigate.bind(
                             this,
-                            `/create-account/${
-                                !passwordLogin ? "wallet" : "password"
-                            }`
+                            "/create-account"
                         )}
                     >
                         <div className="table-cell">
@@ -306,6 +299,78 @@ export default class DropDownMenu extends React.Component {
                         <Translate content="header.settings" />
                     </div>
                 </li>
+
+                {/* CRYPTOBRIDGE */}
+
+                {isMyAccount ? (
+                    <li
+                        className={cnames(
+                            {
+                                active: active.indexOf("/staking") !== -1
+                            },
+                            "divider"
+                        )}
+                        onClick={this.props.onNavigate.bind(
+                            this,
+                            `/account/${currentAccount}/staking`
+                        )}
+                    >
+                        <div className="table-cell">
+                            <Icon
+                                size="2x"
+                                name="bridgecoin"
+                                title="cryptobridge.icons.bridgecoin"
+                            />
+                        </div>
+                        <div className="table-cell">
+                            <Translate content="cryptobridge.staking.title" />
+                        </div>
+                    </li>
+                ) : null}
+
+                <li
+                    className={cnames(
+                        {
+                            active: active.indexOf("/benchmark") !== -1
+                        },
+                        "divider"
+                    )}
+                    onClick={this.props.onNavigate.bind(this, "/benchmark")}
+                >
+                    <div className="table-cell">
+                        <Icon
+                            size="2x"
+                            name="benchmark"
+                            title="cryptobridge.icons.benchmark"
+                        />
+                    </div>
+                    <div className="table-cell">
+                        <Translate content="cryptobridge.benchmark.title" />
+                    </div>
+                </li>
+
+                <li
+                    className={cnames(
+                        {
+                            active: active.indexOf("/support") !== -1
+                        },
+                        "divider"
+                    )}
+                    onClick={this.props.onNavigate.bind(this, "/support")}
+                >
+                    <div className="table-cell">
+                        <Icon
+                            size="2x"
+                            name="support"
+                            title="cryptobridge.icons.support"
+                        />
+                    </div>
+                    <div className="table-cell">
+                        <Translate content="cryptobridge.support.title" />
+                    </div>
+                </li>
+
+                {/* /CRYPTOBRIDGE */}
 
                 {showAdvancedFeatures ? (
                     <li

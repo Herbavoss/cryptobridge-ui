@@ -38,9 +38,9 @@ export const bitsparkAPIs = {
 };
 
 export const cryptoBridgeAPIs = {
-    BASE: `${__API_URL__}/api/v1`,
-    BASE_V1: `${__API_URL__}/api/v1`,
-    BASE_V2: `${__API_URL__}/api/v2`,
+    BASE: `${__API_URL__}/v1`,
+    BASE_V1: `${__API_URL__}/v1`,
+    BASE_V2: `${__API_URL__}/v2`,
     COINS_LIST: "/coins",
     ACTIVE_WALLETS: "/wallets",
     MARKETS: "/markets",
@@ -512,5 +512,5 @@ export const settingsAPIs = {
         }
     ],
     DEFAULT_FAUCET: getFaucet().url,
-    TESTNET_FAUCET: "https://faucet.testnet.bitshares.eu"
+    TESTNET_FAUCET: getFaucet().url
 };

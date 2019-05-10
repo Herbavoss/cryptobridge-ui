@@ -80,6 +80,10 @@ module.exports = function(env) {
         process.env.CHAIN_ID ||
         "92e31f3a1e262c773eb2d3d7741b0d7a75ff91ded998759fb1611014d9310378";
 
+    const isLocalChain =
+        chainId ===
+        "92e31f3a1e262c773eb2d3d7741b0d7a75ff91ded998759fb1611014d9310378";
+
     const walletUrl = process.env.WALLET_URL || "http://localhost:8080";
     const apiUrl = process.env.API_URL || "http://localhost:5000";
     const apiSupportUrl =
@@ -110,9 +114,7 @@ module.exports = function(env) {
             __PERFORMANCE_DEVTOOL__: !!env.perf_dev,
 
             /* CRYPTOBRIDGE */
-            __IS_LOCAL_CHAIN__:
-                chainId ===
-                "92e31f3a1e262c773eb2d3d7741b0d7a75ff91ded998759fb1611014d9310378",
+            __IS_LOCAL_CHAIN__: isLocalChain,
 
             __CHAIN_ID_LOCAL__: JSON.stringify(
                 "92e31f3a1e262c773eb2d3d7741b0d7a75ff91ded998759fb1611014d9310378"
@@ -135,7 +137,15 @@ module.exports = function(env) {
                 "https://wallet.crypto-bridge.org"
             ),
             __API_URL__: JSON.stringify(apiUrl),
-            __API_SUPPORT_URL__: JSON.stringify(apiSupportUrl)
+            __API_SUPPORT_URL__: JSON.stringify(apiSupportUrl),
+
+            __FAUCET_URL__: JSON.stringify(apiUrl),
+
+            __BCO_ASSET_ID__: JSON.stringify(
+                isLocalChain ? "1.3.2" : "1.3.1564"
+            ),
+            __BCO_ASSET_PRECISION__: 7
+
             /* /CRYPTOBRIDGE */
         }),
         new webpack.ContextReplacementPlugin(

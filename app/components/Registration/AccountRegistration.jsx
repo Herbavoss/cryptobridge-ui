@@ -10,10 +10,10 @@ class AccountRegistration extends React.Component {
     constructor() {
         super();
         this.state = {
-            accountName: ""
+            accountName: "",
+            confirmed: false
         };
         this.continue = this.continue.bind(this);
-        this.toggleConfirmed = this.toggleConfirmed.bind(this);
     }
 
     componentWillMount() {
@@ -31,20 +31,20 @@ class AccountRegistration extends React.Component {
         return !utils.are_equal_shallow(nextState, this.state);
     }
 
-    continue({accountName, password}) {
+    continue({accountName, password, usCitizen}) {
         this.setState({
             accountName,
             password,
+            usCitizen,
             confirmationStep: true
         });
     }
 
-    toggleConfirmed() {
-        const {active} = this.state;
+    onConfirmChange = confirmed => {
         this.setState({
-            active: !active
+            confirmed
         });
-    }
+    };
 
     render() {
         return (
@@ -53,7 +53,7 @@ class AccountRegistration extends React.Component {
                     <div>
                         <img
                             className={`model-img ${
-                                this.state.active ? "confirmed" : ""
+                                this.state.confirmed ? "confirmed" : ""
                             }`}
                             src="/model-type-images/account.svg"
                             alt="account"
@@ -71,7 +71,8 @@ class AccountRegistration extends React.Component {
                             <AccountRegistrationConfirm
                                 accountName={this.state.accountName}
                                 password={this.state.password}
-                                toggleConfirmed={this.toggleConfirmed}
+                                usCitizen={this.state.usCitizen}
+                                onChange={this.onConfirmChange}
                                 history={this.props.history}
                             />
                         )}

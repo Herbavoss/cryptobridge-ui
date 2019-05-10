@@ -25,7 +25,7 @@ class AccountLogin extends React.Component {
         super();
         this.state = this.getInitialState(props);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
-        this.onPasswordEnter = this.onPasswordEnter.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
         this.accountChanged = this.accountChanged.bind(this);
         this.onAccountChanged = this.onAccountChanged.bind(this);
     }
@@ -35,8 +35,7 @@ class AccountLogin extends React.Component {
             password: "",
             passwordError: null,
             accountName: props.passwordAccount,
-            account: null,
-            passwordVisible: false
+            account: null
         };
     }
 
@@ -48,7 +47,7 @@ class AccountLogin extends React.Component {
             this.props.active &&
             this.state.accountName
         ) {
-            this.refs.password.focus();
+            // this.refs.password.focus();
         }
     }
 
@@ -73,7 +72,7 @@ class AccountLogin extends React.Component {
         });
     }
 
-    onPasswordEnter(e) {
+    onSubmit(e) {
         e && e.preventDefault();
         const password = this.state.password;
         const account = this.state.accountName;
@@ -145,7 +144,7 @@ class AccountLogin extends React.Component {
         return (
             <Form.Item style={{textAlign: "center"}}>
                 {this.props.active ? (
-                    <Button onClick={this.onPasswordEnter} type="primary">
+                    <Button type="primary" htmlType="submit">
                         {counterpart.translate("login.loginButton")}
                     </Button>
                 ) : (
@@ -200,7 +199,7 @@ class AccountLogin extends React.Component {
     }
 
     renderPasswordInput() {
-        const {passwordError, passwordVisible} = this.state;
+        const {passwordError} = this.state;
 
         const getValidateStatus = () => {
             return passwordError !== null ? "error" : "";
@@ -225,16 +224,11 @@ class AccountLogin extends React.Component {
                 help={getHelp()}
                 validateStatus={getValidateStatus()}
             >
-                <Input
-                    ref={"password"}
+                <Input.Password
                     placeholder={counterpart.translate("wallet.enter_password")}
                     style={{width: "100%"}}
                     value={this.state.password}
                     onChange={this.handlePasswordChange}
-                    type={!passwordVisible ? "password" : "text"}
-                    className={`${
-                        passwordError ? "input-warning" : ""
-                    } input create-account-input`}
                 />
             </Form.Item>
         );
@@ -251,6 +245,7 @@ class AccountLogin extends React.Component {
                     layout="vertical"
                     className={!this.props.active ? "display-none" : ""}
                     style={{textAlign: "left"}}
+                    onSubmit={this.onSubmit}
                 >
                     {this.renderNameInput()}
 

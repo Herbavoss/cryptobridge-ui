@@ -2438,6 +2438,15 @@
         "wallet_password": "Login anywhere using your password"
     },
     "cryptobridge": {
+        "benchmark": {
+            "title": "Benchmark",
+            "intro_text_1": "Benchmarking is available to projects which meet common quality criteria determined by CryptoBridge and DARC. Through this joint effort, we bring greater attention to quality projects to provide additional recognition in the crowded digital asset space. Toward this end, DARC offers in-depth project evaluations while CryptoBridge seeks to use its visibility and position to support that service to reinforce a shared, forward-leaning perspective.",
+            "intro_text_2": "Our collaborative purpose with benchmarking is to recognize projects which meet or exceed a baseline of fundamental quality. Citing the importance of rigorous and objective assessment, we will work to foster an environment which supports maturity from within the digital asset landscape. Such an endeavor will benefit project communities, currency and token users, investors and associated enterprises.",
+            "intro_text_3": "A fee-based but unbiased evaluation is available and conducted by DARC to determine projects which sufficiently demonstrate that they are worthy of benchmark status. Following its completion, a supplemental report and other information then becomes available on the evaluator’s website. A smaller subset of common criteria will be confirmed by CryptoBridge shortly after publication to validate the results. Once the agreement is finalized, the project’s status will recognized by each member of the partnership on their websites and associated social media outlets.",
+            "intro_text_4": "Upon benchmarking, projects will enjoy a range of benefits: higher visibility on the trading interface, a summary of their achievement (publicized on social media and blogs) and increased consumer and investor confidence. These projects will be required to maintain or improve upon these criteria in follow-up evaluations conducted periodically to maintain benchmark status. This process is designed to ensure objectivity and transparency and all results will be communicated as such.",
+            "intro_text_5": "We believe strongly that for the emergent cryptocurrency and blockchain economies to be taken as a serious and legitimate enterprise, all participants must take action now to help guide it in a positive direction. With our partnership we wish to model perspectives, behaviors and methods consistent with an increasing level of sophistication and maturity. These improvements are intended to be systemic in nature. We’re excited to see what positive developments this endeavor will kick-start, and we hope you’ll share our enthusiasm in doing so.",
+            "": ""
+        },
         "gateway": {
             "withdraw": {
                 "payment_id": {
@@ -2452,6 +2461,54 @@
                 "fee_warning": "WARNING: Depositing %(asset)s more than once every %(fee_time_frame)s minutes will incur a %(fee_percentage)s% deposit fee (minimum %(fee_minimum)s %(asset)s). A deposit fee of %(fee_percentage_low_amounts)s% is charged when the deposit is below 1 %(asset)s.",
                 "required_confirmations": "Required confirmations: %(required_confirmations)s"
             }
+        },
+        "icons": {
+            "support": "Support",
+            "bridgecoin": "BridgeCoin",
+            "benchmark": "Benchmark"
+        },
+        "registration": {
+            "us_citizen": {
+                "label": "Are you a U.S. citizen?",
+                "yes": "Yes, I am",
+                "no": "No, I am not",
+                "help": "U.S. citizens must submit verification of their identity."
+            },
+            "terms_and_conditions": {
+                "title": "CryptoBridge terms and conditions",
+                "accept": "I have read and agree to the %(cryptobridge_terms_and_conditions)s.",
+                "disclaimer": "I hereby renounce to my consumer right of revocation and acknowledge I can terminate the use of the service at anytime as described in §5.9 of CryptoBridge's Terms of Service."
+            }
+        },
+        "staking": {
+            "title": "BCO Staking",
+            "intro_text_1": "Everyone who stakes their BCO is entitled to %(percent)s of the trading profits from the <b>CryptoBridge decentralized exchange</b>. Staking will lock your coins for the time you specify below. During the staking period you automatically take part in the payout distributions. Payouts happen bi-weekly.",
+            "intro_text_2": "A longer staking duration results in a bigger payout factor. After the staking period has been reached, you can reclaim your staked BCO balance with the <b>'Claim Now'</b> button. The blockchain fee to start a new staking position is currently set at <b>%(fee)s BCO</b>. The blockchain fee to reclaim your staked BCO is currently set at <b>%(reclaimFee)s BCO.</b>",
+            "intro_text_3": "You can only stake BCO that you have deposited into the <b>CryptoBridge decentralized exchange</b>. You can find more information about the advantages of the <b>CryptoBridge decentralized exchange</b> and its profit sharing at <a target=\"_new\" href=\"https://crypto-bridge.org\">crypto-bridge.org</a>. More details on how payouts happen and how bonuses are applied are also available on the <a target=\"_new\" href=\"https://crypto-bridge.org/bridgecoin/\">BridgeCoin staking page</a>. ",
+
+            "amount_bco": "Amount of BCO to stake",
+            "bco_not_available": "No BCO available",
+            "bco_available": "Available %(bco)s",
+
+            "understand": "I hereby agree that by staking %(amount)s BCO, I fully understand that they will be locked away for %(month)s and that there is no way of claiming the funds before the staking term is over. I also accept the share in the profits of CryptoBridge platform which is attributed to my staked funds.",
+
+            "create": "Create a new BCO staking position",
+
+            "no_balances": "You have no open BridgeCoin staking positions.",
+
+            "duration": "Staking duration",
+
+            "month_1": "1 Month (%(bonus)s bonus)",
+            "month_3": "3 Month (%(bonus)s bonus)",
+            "month_6": "6 Month (%(bonus)s bonus)",
+            "month_12": "12 Month (%(bonus)s bonus)",
+            "month_1_plural": "1 Month",
+            "month_3_plural": "3 Months",
+            "month_6_plural": "6 Months",
+            "month_12_plural": "12 Months"
+        },
+        "support": {
+            "title": "Support"
         }
     }
 }

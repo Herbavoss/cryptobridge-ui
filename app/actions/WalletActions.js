@@ -4,6 +4,7 @@ import CachedPropertyActions from "actions/CachedPropertyActions";
 import ApplicationApi from "api/ApplicationApi";
 import {TransactionBuilder, FetchChain} from "bitsharesjs";
 import {Apis} from "bitsharesjs-ws";
+import {getBasicHeaders} from "api/cryptobridge/apiHelpers";
 import alt from "alt-instance";
 import SettingsStore from "stores/SettingsStore";
 
@@ -51,7 +52,11 @@ class WalletActions {
         registrar,
         referrer,
         referrer_percent,
-        refcode
+        refcode,
+        /* CRYPTOBRIDGE */
+        reCaptchaToken,
+        accountInfo
+        /* /CRYPTOBRIDGE */
     ) {
         let {privKey: owner_private} = WalletDb.generateKeyFromPassword(
             account_name,
@@ -117,50 +122,35 @@ class WalletActions {
                 }
 
                 let create_account_promise = fetch(
-                    faucetAddress + "/api/v1/accounts",
+                    faucetAddress + "/v2/accounts",
                     {
                         method: "post",
                         mode: "cors",
-                        headers: {
-                            Accept: "application/json",
-                            "Content-type": "application/json"
-                        },
+                        headers: getBasicHeaders({}, {reCaptchaToken}),
                         body: JSON.stringify({
-                            account: {
-                                name: account_name,
-                                owner_key: owner_private
-                                    .toPublicKey()
-                                    .toPublicKeyString(),
-                                active_key: active_private
-                                    .toPublicKey()
-                                    .toPublicKeyString(),
-                                memo_key: memo_private
-                                    .toPublicKey()
-                                    .toPublicKeyString(),
-                                refcode: refcode,
-                                referrer: referrer
-                            }
+                            name: account_name,
+                            owner_key: owner_private
+                                .toPublicKey()
+                                .toPublicKeyString(),
+                            active_key: active_private
+                                .toPublicKey()
+                                .toPublicKeyString(),
+                            memo_key: memo_private
+                                .toPublicKey()
+                                .toPublicKeyString(),
+                            refcode: refcode,
+                            referrer: referrer,
+
+                            ...accountInfo
                         })
                     }
                 )
-                    .then(r =>
-                        r.json().then(res => {
-                            if (!res || (res && res.error)) {
-                                reject(res.error);
-                            } else {
-                                resolve(res);
-                            }
-                        })
-                    )
+                    .then(result => result.ok)
                     .catch(reject);
 
                 return create_account_promise
                     .then(result => {
-                        if (result && result.error) {
-                            reject(result.error);
-                        } else {
-                            resolve(result);
-                        }
+                        resolve(result);
                     })
                     .catch(error => {
                         reject(error);
@@ -174,7 +164,11 @@ class WalletActions {
         registrar,
         referrer,
         referrer_percent,
-        refcode
+        refcode,
+        /* CRYPTOBRIDGE */
+        reCaptchaToken,
+        accountInfo
+        /* /CRYPTOBRIDGE */
     ) {
         if (WalletDb.isLocked()) {
             let error = "wallet locked";
@@ -222,34 +216,30 @@ class WalletActions {
                 faucetAddress = faucetAddress.replace(/http:\/\//, "https://");
             }
 
-            let create_account_promise = fetch(
-                faucetAddress + "/api/v1/accounts",
-                {
-                    method: "post",
-                    mode: "cors",
-                    headers: {
-                        Accept: "application/json",
-                        "Content-type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        account: {
-                            name: account_name,
-                            owner_key: owner_private.private_key
-                                .toPublicKey()
-                                .toPublicKeyString(),
-                            active_key: active_private.private_key
-                                .toPublicKey()
-                                .toPublicKeyString(),
-                            memo_key: active_private.private_key
-                                .toPublicKey()
-                                .toPublicKeyString(),
-                            //"memo_key": memo_private.private_key.toPublicKey().toPublicKeyString(),
-                            refcode: refcode,
-                            referrer: referrer
-                        }
-                    })
-                }
-            ).then(r => r.json());
+            let create_account_promise = fetch(faucetAddress + "/v2/accounts", {
+                method: "post",
+                mode: "cors",
+                headers: getBasicHeaders({}, {reCaptchaToken}),
+                body: JSON.stringify({
+                    account: {
+                        name: account_name,
+                        owner_key: owner_private.private_key
+                            .toPublicKey()
+                            .toPublicKeyString(),
+                        active_key: active_private.private_key
+                            .toPublicKey()
+                            .toPublicKeyString(),
+                        memo_key: active_private.private_key
+                            .toPublicKey()
+                            .toPublicKeyString(),
+                        //"memo_key": memo_private.private_key.toPublicKey().toPublicKeyString(),
+                        refcode: refcode,
+                        referrer: referrer,
+
+                        ...accountInfo // CRYPTOBRIDGE
+                    }
+                })
+            }).then(r => r.json());
 
             return create_account_promise
                 .then(result => {

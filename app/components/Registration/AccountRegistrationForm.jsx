@@ -5,7 +5,6 @@ import AccountStore from "stores/AccountStore";
 import Translate from "react-translate-component";
 import counterpart from "counterpart";
 import {ChainStore, key} from "bitsharesjs/es";
-import ReactTooltip from "react-tooltip";
 import utils from "common/utils";
 import SettingsActions from "actions/SettingsActions";
 import WalletDb from "stores/WalletDb";
@@ -15,6 +14,10 @@ import LoadingIndicator from "../LoadingIndicator";
 import Icon from "../Icon/Icon";
 import CopyButton from "../Utility/CopyButton";
 import {Form, Input, Button, Tooltip} from "bitshares-ui-style-guide";
+
+/* CRYPTOBRIDGE */
+import {Citizenship} from "components/CryptoBridge/Registration/FormItems";
+/* /CRYPTOBRIDGE */
 
 class AccountRegistrationForm extends React.Component {
     static propTypes = {
@@ -29,7 +32,8 @@ class AccountRegistrationForm extends React.Component {
             registrarAccount: null,
             loading: false,
             generatedPassword: `P${key.get_random_key().toWif()}`,
-            confirmPassword: ""
+            confirmPassword: "",
+            usCitizen: null // CRYPTOBRIDGE
         };
         this.onSubmit = this.onSubmit.bind(this);
         this.onRegistrarAccountChange = this.onRegistrarAccountChange.bind(
@@ -70,12 +74,21 @@ class AccountRegistrationForm extends React.Component {
         this.setState({registrarAccount});
     }
 
+    /* CRYPTOBRIDGE */
+    onUsCitizenChange = e => {
+        this.setState({
+            usCitizen: e.target.value === "us"
+        });
+    };
+    /* /CRYPTOBRIDGE */
+
     onSubmit(e) {
         e.preventDefault();
         if (this.isValid()) {
             this.props.continue({
                 accountName: this.state.accountName,
-                password: this.state.generatedPassword
+                password: this.state.generatedPassword,
+                usCitizen: this.state.usCitizen // CRYPTOBRIDGE
             });
         }
     }
@@ -89,6 +102,11 @@ class AccountRegistrationForm extends React.Component {
     }
 
     isValid() {
+        /* CRYPTOBRIDGE */
+        if (this.state.usCitizen !== true) {
+            return false;
+        }
+        /* /CRYPTOBRIDGE */
         const firstAccount = AccountStore.getMyAccounts().length === 0;
         let valid = this.state.validAccountName;
         if (!WalletDb.getWallet()) {
@@ -158,21 +176,24 @@ class AccountRegistrationForm extends React.Component {
                         }
                         noLabel
                     />
+
                     <Form.Item
                         label={counterpart.translate("wallet.generated")}
+                        className="clipboard"
                     >
-                        <Input.TextArea
+                        <Input.Password
+                            className={"clipboard"}
                             disabled={true}
-                            style={{paddingRight: "50px"}}
-                            rows={2}
                             id="password"
                             value={this.state.generatedPassword}
-                        />
-                        <CopyButton
-                            text={this.state.generatedPassword}
-                            tip="tooltip.copy_password"
-                            dataPlace="top"
-                            className="button registration-layout--copy-password-btn"
+                            addonBefore={
+                                <CopyButton
+                                    text={this.state.generatedPassword}
+                                    tip="tooltip.copy_password"
+                                    dataPlace="top"
+                                    className="button"
+                                />
+                            }
                         />
                     </Form.Item>
                     {/*<span className="inline-label generated-password-field">*/}
@@ -197,17 +218,21 @@ class AccountRegistrationForm extends React.Component {
                         help={getConfirmationPasswordHelp()}
                         validateStatus={getConfirmationPasswordValidateStatus()}
                     >
-                        <Input
+                        <Input.Password
                             placeholder={counterpart.translate(
                                 "wallet.confirm_password"
                             )}
-                            type="password"
                             name="password"
                             id="confirmPassword"
                             value={this.state.confirmPassword}
                             onChange={this.onConfirmation}
                         />
                     </Form.Item>
+
+                    {/* CRYPTOBRIDGE */}
+                    <Citizenship onChange={this.onUsCitizenChange} />
+                    {/* /CRYPTOBRIDGE */}
+
                     {/*<span className="inline-label">*/}
                     {/*<input*/}
                     {/*type="password"*/}

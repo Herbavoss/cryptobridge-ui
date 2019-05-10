@@ -835,6 +835,31 @@ class Header extends React.Component {
             );
         }
 
+        /* CRYPTOBRIDGE */
+        if (active.indexOf("/staking") !== -1) {
+            dynamicMenuItem = (
+                <a
+                    style={{flexFlow: "row"}}
+                    className={cnames({
+                        active: active.indexOf("staking") !== -1
+                    })}
+                >
+                    <Icon
+                        size="1_5x"
+                        style={{position: "relative", top: 0, left: -8}}
+                        name="bridgecoin"
+                        title="cryptobridge.icons.bridgecoin"
+                    />
+                    <Translate
+                        className="column-hide-small"
+                        component="span"
+                        content="cryptobridge.staking.title"
+                    />
+                </a>
+            );
+        }
+        /* /CRYPTOBRIDGE */
+
         const submenus = {
             [SUBMENUS.SETTINGS]: (
                 <ul
@@ -1054,6 +1079,8 @@ class Header extends React.Component {
                                                 ) === -1 &&
                                                 active.indexOf("/vesting") ===
                                                     -1 &&
+                                                active.indexOf("/staking") ===
+                                                    -1 &&
                                                 active.indexOf("/whitelist") ===
                                                     -1 &&
                                                 active.indexOf(
@@ -1165,6 +1192,14 @@ class Header extends React.Component {
                         <div className="text account-name">
                             <span onClick={this._toggleAccountDropdownMenu}>
                                 {currentAccount}
+                                {this.props.currentAccount == null ||
+                                this.props.locked ? null : (
+                                    <Icon
+                                        name="checkmark"
+                                        className="icon-14px"
+                                        style={{marginLeft: "5px"}}
+                                    />
+                                )}
                             </span>
                             <AccountBrowsingMode
                                 location={this.props.location}
@@ -1214,25 +1249,6 @@ class Header extends React.Component {
                             </li>
                             {accountsList}
                         </ul>
-                    )}
-                </div>
-                <div>
-                    {this.props.currentAccount == null ? null : (
-                        <span
-                            onClick={this._toggleLock.bind(this)}
-                            style={{cursor: "pointer"}}
-                        >
-                            <Icon
-                                className="lock-unlock"
-                                size="2x"
-                                name={this.props.locked ? "locked" : "unlocked"}
-                                title={
-                                    this.props.locked
-                                        ? "icons.locked.common"
-                                        : "icons.unlocked.common"
-                                }
-                            />
-                        </span>
                     )}
                 </div>
                 <div className="app-menu">

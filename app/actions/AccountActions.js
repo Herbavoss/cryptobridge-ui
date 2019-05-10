@@ -117,7 +117,11 @@ class AccountActions {
         registrar,
         referrer,
         referrer_percent,
-        refcode
+        refcode,
+        /* CRYPTOBRIDGE */
+        reCaptchaToken,
+        accountInfo
+        /* /CRYPTOBRIDGE */
     ) {
         return dispatch => {
             return WalletActions.createAccount(
@@ -125,7 +129,12 @@ class AccountActions {
                 registrar,
                 referrer,
                 referrer_percent,
-                refcode
+                refcode,
+
+                /* CRYPTOBRIDGE */
+                reCaptchaToken,
+                accountInfo
+                /* /CRYPTOBRIDGE */
             ).then(() => {
                 dispatch(account_name);
                 return account_name;
@@ -139,7 +148,11 @@ class AccountActions {
         registrar,
         referrer,
         referrer_percent,
-        refcode
+        refcode,
+        /* CRYPTOBRIDGE */
+        reCaptchaToken,
+        accountInfo
+        /* /CRYPTOBRIDGE */
     ) {
         return dispatch => {
             return WalletActions.createAccountWithPassword(
@@ -148,7 +161,12 @@ class AccountActions {
                 registrar,
                 referrer,
                 referrer_percent,
-                refcode
+                refcode,
+
+                /* CRYPTOBRIDGE */
+                reCaptchaToken,
+                accountInfo
+                /* /CRYPTOBRIDGE */
             ).then(() => {
                 dispatch(account_name);
                 return account_name;

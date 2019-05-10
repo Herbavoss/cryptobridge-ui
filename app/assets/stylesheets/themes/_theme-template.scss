@@ -486,7 +486,7 @@
         @include color($secondary-text-color, $bg-color);
     }
     .page-layout {
-        background-color: lighten($account-header, 4%);
+        background-color: inherit; // CRYPTOBRIDGE
         .column-header {
             > ul {
                 border-bottom: 1px solid $panel-bg-color;
