@@ -14,14 +14,15 @@ class AssetImage extends React.Component {
         const {asset} = this.props;
 
         const style = {
-            maxHeight: "1rem",
             verticalAlign: "middle"
         };
+
+        const assetName = asset.replace(/^bridge\./i, "").toLowerCase();
 
         return (
             <img
                 className={"asset-image"}
-                src={`${__WALLET_URL_PROD__}/assets/${asset.toLowerCase()}.png`}
+                src={`${__WALLET_URL_PROD__}/assets/${assetName}.png`}
                 style={style}
             />
         );

@@ -18,8 +18,7 @@ import BalanceComponent from "../Utility/BalanceComponent";
 import utils from "common/utils";
 import counterpart from "counterpart";
 import {connect} from "alt-react";
-import {Modal, Button, Tooltip} from "bitshares-ui-style-guide";
-import {DatePicker} from "antd";
+import {Modal, Button, Tooltip, DatePicker} from "bitshares-ui-style-guide";
 import ApplicationApi from "../../api/ApplicationApi";
 import moment from "moment";
 

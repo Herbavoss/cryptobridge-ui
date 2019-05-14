@@ -287,7 +287,6 @@ export default class DropDownMenu extends React.Component {
                         {
                             active: active.indexOf("/settings") !== -1
                         },
-                        "divider",
                         "desktop-only"
                     )}
                     onClick={this.props.onNavigate.bind(this, "/settings")}
@@ -304,12 +303,9 @@ export default class DropDownMenu extends React.Component {
 
                 {isMyAccount ? (
                     <li
-                        className={cnames(
-                            {
-                                active: active.indexOf("/staking") !== -1
-                            },
-                            "divider"
-                        )}
+                        className={cnames({
+                            active: active.indexOf("/staking") !== -1
+                        })}
                         onClick={this.props.onNavigate.bind(
                             this,
                             `/account/${currentAccount}/staking`
@@ -329,12 +325,9 @@ export default class DropDownMenu extends React.Component {
                 ) : null}
 
                 <li
-                    className={cnames(
-                        {
-                            active: active.indexOf("/benchmark") !== -1
-                        },
-                        "divider"
-                    )}
+                    className={cnames({
+                        active: active.indexOf("/benchmark") !== -1
+                    })}
                     onClick={this.props.onNavigate.bind(this, "/benchmark")}
                 >
                     <div className="table-cell">
@@ -350,12 +343,9 @@ export default class DropDownMenu extends React.Component {
                 </li>
 
                 <li
-                    className={cnames(
-                        {
-                            active: active.indexOf("/support") !== -1
-                        },
-                        "divider"
-                    )}
+                    className={cnames({
+                        active: active.indexOf("/support") !== -1
+                    })}
                     onClick={this.props.onNavigate.bind(this, "/support")}
                 >
                     <div className="table-cell">

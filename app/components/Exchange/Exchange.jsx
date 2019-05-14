@@ -2088,10 +2088,10 @@ class Exchange extends React.Component {
                     flipBuySell
                         ? `order-${buySellTop ? 2 : 3} large-order-${
                               buySellTop ? 2 : 5
-                          } sell-form`
+                          } sell-form antNegative`
                         : `order-${buySellTop ? 1 : 2} large-order-${
                               buySellTop ? 1 : 4
-                          } buy-form`
+                          } buy-form antPositive`
                 )}
             >
                 <Tabs.TabPane
@@ -2254,10 +2254,10 @@ class Exchange extends React.Component {
                     flipBuySell
                         ? `order-${buySellTop ? 1 : 2} large-order-${
                               buySellTop ? 1 : 4
-                          } buy-form`
+                          } buy-form antPositive`
                         : `order-${buySellTop ? 2 : 3} large-order-${
                               buySellTop ? 2 : 5
-                          } sell-form`
+                          } sell-form antNegative`
                 )}
             >
                 <Tabs.TabPane
@@ -3187,10 +3187,10 @@ class Exchange extends React.Component {
                                 )}
                                 key="my-market"
                             />
-                            <Tabs.TabPane
-                                tab={translator.translate("exchange.more")}
-                                key="find-market"
-                            />
+                            {/*<Tabs.TabPane*/}
+                            {/*tab={translator.translate("exchange.more")}*/}
+                            {/*key="find-market"*/}
+                            {/*/>*/}
                         </Tabs>
                         {myMarkets}
                     </Collapse.Panel>
@@ -3262,10 +3262,10 @@ class Exchange extends React.Component {
                                 )}
                                 key="my-market"
                             />
-                            <Tabs.TabPane
-                                tab={translator.translate("exchange.more")}
-                                key="find-market"
-                            />
+                            {/*<Tabs.TabPane*/}
+                            {/*tab={translator.translate("exchange.more")}*/}
+                            {/*key="find-market"*/}
+                            {/*/>*/}
                         </Tabs>
                     </div>
                     {myMarkets}

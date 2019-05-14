@@ -6,9 +6,15 @@ import LoginSelector from "../LoginSelector";
 import AccountStore from "stores/AccountStore";
 import SettingsStore from "stores/SettingsStore";
 
-import {Tabs, Tab} from "../Utility/Tabs";
+import {Tabs} from "bitshares-ui-style-guide";
 import {StarredMarkets, FeaturedMarkets} from "./Markets";
 import {getPossibleGatewayPrefixes} from "common/gateways";
+
+/* CRYPTOBRIDGE */
+import Translate from "react-translate-component";
+import AssetImage from "../Utility/CryptoBridge/AssetImage";
+import Icon from "components/Icon/Icon";
+/* /CRYPTOBRIDGE */
 
 class DashboardPage extends React.Component {
     render() {
@@ -41,38 +47,34 @@ class DashboardPage extends React.Component {
                         <div className="content-block small-12">
                             <div className="tabs-container generic-bordered-box">
                                 <Tabs
-                                    defaultActiveTab={1}
-                                    segmented={false}
-                                    setting="dashboardTab"
+                                    defaultActiveTab={"btc"}
                                     className="account-tabs"
-                                    tabsClass="account-overview no-padding bordered-header content-block"
                                 >
-                                    <Tab title="dashboard.starred_markets">
+                                    <Tabs.TabPane
+                                        key={"starred_markets"}
+                                        tab={
+                                            <span>
+                                                <Icon
+                                                    name="fi-star"
+                                                    size="1_5x"
+                                                    className="gold-star"
+                                                />
+                                                <Translate content="dashboard.starred_markets" />
+                                            </span>
+                                        }
+                                    >
                                         <StarredMarkets />
-                                    </Tab>
+                                    </Tabs.TabPane>
                                     {preferredBases.sort().map(q => {
                                         let title = (
                                             <span>
-                                                <img
-                                                    className="column-hide-small"
-                                                    style={{
-                                                        maxWidth: 30,
-                                                        marginRight: 5
-                                                    }}
-                                                    src={`${__BASE_URL__}asset-symbols/${q
-                                                        .replace(
-                                                            /^BTC/,
-                                                            "OPEN.BTC"
-                                                        )
-                                                        .toLowerCase()}.png`}
-                                                />
-                                                &nbsp;
+                                                <AssetImage asset={q} />
                                                 {q}
                                             </span>
                                         );
 
                                         return (
-                                            <Tab key={q} title={title}>
+                                            <Tabs.TabPane key={q} tab={title}>
                                                 <FeaturedMarkets
                                                     quotes={[q].concat(
                                                         getPossibleGatewayPrefixes(
@@ -80,7 +82,7 @@ class DashboardPage extends React.Component {
                                                         )
                                                     )}
                                                 />
-                                            </Tab>
+                                            </Tabs.TabPane>
                                         );
                                     })}
                                 </Tabs>

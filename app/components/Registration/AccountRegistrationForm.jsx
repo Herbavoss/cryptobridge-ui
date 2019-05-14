@@ -5,6 +5,7 @@ import AccountStore from "stores/AccountStore";
 import Translate from "react-translate-component";
 import counterpart from "counterpart";
 import {ChainStore, key} from "bitsharesjs/es";
+import ReactTooltip from "react-tooltip";
 import utils from "common/utils";
 import SettingsActions from "actions/SettingsActions";
 import WalletDb from "stores/WalletDb";

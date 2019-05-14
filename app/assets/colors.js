@@ -25,15 +25,15 @@ module.exports = {
         textColor: "#e0e0e0"
     },
     darkTheme: {
-        bidColor: "#6BA583",
-        bidFillColor: "rgba(80, 210, 194, 0.5)",
-        askColor: "#E3745B",
-        askFillColor: "rgba(227, 116, 91, 0.5)",
+        bidColor: "#00ffd5",
+        bidFillColor: "rgba(0, 255, 213, 0.5)",
+        askColor: "#ff0044",
+        askFillColor: "rgba(255, 0, 68, 0.5)",
         callColor: "#BBBF2B",
         settleColor: "rgba(125, 134, 214, 1)",
         settleFillColor: "rgba(125, 134, 214, 0.5)",
-        positiveColor: "#258A14",
-        negativeColor: "#DB0000",
+        positiveColor: "#00ffd5",
+        negativeColor: "#ff0044",
         strokeColor: "#FFFF00",
         primaryText: "#e0e0e0",
         volumeColor: "#848484",
@@ -46,7 +46,7 @@ module.exports = {
         axisLabelsColor: "#fff",
         axisLineColor: "rgba(200, 200, 200, 0.3)",
         indicatorLineColor: "#FFFFFF",
-        bgColor: "#2a2a2a",
+        bgColor: "#16151b",
         textColor: "#ffffff"
     },
     lightTheme: {

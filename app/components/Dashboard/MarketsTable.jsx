@@ -9,7 +9,7 @@ import SettingsStore from "stores/SettingsStore";
 import utils from "common/utils";
 import PaginatedList from "../Utility/PaginatedList";
 import MarketsRow from "./MarketsRow";
-import {Input, Icon} from "bitshares-ui-style-guide";
+import {Input, Icon, Checkbox} from "bitshares-ui-style-guide";
 
 class MarketsTable extends React.Component {
     constructor() {
@@ -274,24 +274,16 @@ class MarketsTable extends React.Component {
                     </div>
 
                     <div style={{paddingTop: "0.5rem"}}>
-                        <label
-                            style={{margin: "3px 0 0", width: "fit-content"}}
+                        <Checkbox
+                            checked={this.props.onlyLiquid}
+                            onChange={() => {
+                                SettingsActions.changeViewSetting({
+                                    onlyLiquid: !this.props.onlyLiquid
+                                });
+                            }}
                         >
-                            <input
-                                style={{position: "relative", top: 3}}
-                                className="no-margin"
-                                type="checkbox"
-                                checked={this.props.onlyLiquid}
-                                onChange={() => {
-                                    SettingsActions.changeViewSetting({
-                                        onlyLiquid: !this.props.onlyLiquid
-                                    });
-                                }}
-                            />
-                            <span style={{paddingLeft: "0.4rem"}}>
-                                <Translate content="exchange.show_only_liquid" />
-                            </span>
-                        </label>
+                            <Translate content="exchange.show_only_liquid" />
+                        </Checkbox>
                     </div>
                 </div>
                 <PaginatedList

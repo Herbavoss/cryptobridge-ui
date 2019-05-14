@@ -25,3 +25,7 @@ export function getIsValidPaymentId(asset, paymentId) {
             (getPaymentIdType(asset) === "tag" && /^([0-9]+)$/.test(paymentId)))
     );
 }
+
+export function getIsBridgeCoinAsset(asset) {
+    return asset && asset.get("symbol").indexOf("BRIDGE.") === 0;
+}

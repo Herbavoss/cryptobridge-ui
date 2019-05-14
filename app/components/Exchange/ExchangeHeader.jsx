@@ -12,6 +12,10 @@ import ExchangeHeaderCollateral from "./ExchangeHeaderCollateral";
 import {Icon as AntIcon} from "bitshares-ui-style-guide";
 import {Asset, Price} from "common/MarketClasses";
 
+/* CRYPTOBRIDGE */
+import AssetImage from "../Utility/CryptoBridge/AssetImage";
+/* /CRYPTOBRIDGE */
+
 export default class ExchangeHeader extends React.Component {
     constructor(props) {
         super();
@@ -103,11 +107,6 @@ export default class ExchangeHeader extends React.Component {
             : dayChange > 0
                 ? "+" + dayChange
                 : dayChange;
-
-        const volume24h = this.state.volumeShowQuote ? volumeQuote : volumeBase;
-        const volume24hAsset = this.state.volumeShowQuote
-            ? quoteAsset
-            : baseAsset;
 
         let showCollateralRatio = false;
 
@@ -247,6 +246,7 @@ export default class ExchangeHeader extends React.Component {
                                                 : ""
                                         }}
                                     >
+                                        <AssetImage asset={quoteSymbol} />
                                         <AssetName
                                             name={quoteSymbol}
                                             replace={true}
@@ -267,6 +267,7 @@ export default class ExchangeHeader extends React.Component {
                                                 : ""
                                         }}
                                     >
+                                        <AssetImage asset={baseSymbol} />
                                         <AssetName
                                             name={baseSymbol}
                                             replace={true}
@@ -373,10 +374,18 @@ export default class ExchangeHeader extends React.Component {
                                         )}
                                         ready={marketReady}
                                         decimals={0}
-                                        volume={true}
-                                        price={volume24h}
+                                        volume={{
+                                            base: {
+                                                volume: volumeBase,
+                                                asset: baseAsset
+                                            },
+                                            quote: {
+                                                volume: volumeQuote,
+                                                asset: quoteAsset
+                                            },
+                                            swap: this.state.volumeShowQuote
+                                        }}
                                         className="hide-order-2 clickable"
-                                        base={volume24hAsset}
                                         market={marketID}
                                         content="exchange.volume_24"
                                     />

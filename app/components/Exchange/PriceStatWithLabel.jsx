@@ -22,7 +22,8 @@ export default class PriceStatWithLabel extends React.Component {
         }
         return (
             nextProps.price !== this.props.price ||
-            nextProps.ready !== this.props.ready
+            nextProps.ready !== this.props.ready ||
+            nextProps.volume !== this.props.volume
         );
     }
 
@@ -75,9 +76,35 @@ export default class PriceStatWithLabel extends React.Component {
             changeClasses = change > 0 ? "pulsate green" : "pulsate red";
         }
 
-        let value = !volume
-            ? utils.price_text(price, quote, base)
-            : utils.format_volume(price);
+        let value = "";
+
+        if (volume) {
+            const baseVolume = (
+                <span>
+                    {utils.format_volume(volume.base.volume) + " "}
+                    <AssetName name={volume.base.asset.get("symbol")} />
+                </span>
+            );
+
+            const quoteVolume = (
+                <span>
+                    {utils.format_volume(volume.quote.volume) + " "}
+                    <AssetName name={volume.quote.asset.get("symbol")} />
+                </span>
+            );
+
+            value = (
+                <span>
+                    {volume.swap ? quoteVolume : baseVolume}
+                    <span className="column-hide-small">
+                        {" / "}
+                        {volume.swap ? baseVolume : quoteVolume}
+                    </span>
+                </span>
+            );
+        } else {
+            value = utils.price_text(price, quote, base);
+        }
 
         return (
             <li
@@ -95,7 +122,7 @@ export default class PriceStatWithLabel extends React.Component {
                             &nbsp;
                         </span>
                         <span className="symbol-text">
-                            <AssetName name={base.get("symbol")} />
+                            {!!base && <AssetName name={base.get("symbol")} />}
                         </span>
                     </span>
                     {content ? (

@@ -21,7 +21,8 @@ class CryptoBridgeAccountStore extends BaseStore {
             "getBearerToken",
             "getIsAuthenticated",
             "getRequiresUserIdentification",
-            "getRequiresTermsAndConditions"
+            "getRequiresTermsAndConditions",
+            "getUserIdentificationIsPending"
         );
     }
 

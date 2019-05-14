@@ -9,6 +9,10 @@ import utils from "common/utils";
 import SettingsActions from "actions/SettingsActions";
 import cnames from "classnames";
 
+/* CRYPTOBRIDGE */
+import AssetImage from "../Utility/CryptoBridge/AssetImage";
+/* /CRYPTOBRIDGE */
+
 class MarketsRow extends React.Component {
     static propTypes = {
         quote: ChainTypes.ChainAsset.isRequired,
@@ -99,18 +103,6 @@ class MarketsRow extends React.Component {
             handleFlip
         } = this.props;
 
-        function getImageName(asset) {
-            let symbol = asset.get("symbol");
-            if (
-                symbol === "OPEN.BTC" ||
-                symbol === "GDEX.BTC" ||
-                symbol === "RUDEX.BTC"
-            )
-                return symbol;
-            let imgName = asset.get("symbol").split(".");
-            return imgName.length === 2 ? imgName[1] : imgName[0];
-        }
-        let imgName = getImageName(quote);
         let changeClass = !marketStats
             ? ""
             : parseFloat(marketStats.change) > 0
@@ -149,13 +141,7 @@ class MarketsRow extends React.Component {
                             "symbol"
                         )}_${this.props.base.get("symbol")}`}
                     >
-                        <img
-                            ref={imgName.toLowerCase()}
-                            className="column-hide-small"
-                            onError={this._onError.bind(this, imgName)}
-                            style={{maxWidth: 20, marginRight: 10}}
-                            src={`${__BASE_URL__}asset-symbols/${imgName.toLowerCase()}.png`}
-                        />
+                        <AssetImage asset={quote.get("symbol")} />
                         <AssetName dataPlace="top" name={quote.get("symbol")} />
                         &nbsp;
                         {this.props.isFavorite ? (
@@ -171,6 +157,7 @@ class MarketsRow extends React.Component {
                 </td>
                 {this.props.isFavorite ? null : (
                     <td style={{textAlign: "right"}}>
+                        <AssetImage asset={base.get("symbol")} />
                         <AssetName noTip name={base.get("symbol")} />
                     </td>
                 )}

@@ -1,5 +1,5 @@
 import React from "react";
-import {Pagination} from "antd";
+import {Pagination} from "bitshares-ui-style-guide";
 import counterpart from "counterpart";
 import TransitionWrapper from "../Utility/TransitionWrapper";
 

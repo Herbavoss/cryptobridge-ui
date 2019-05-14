@@ -31,6 +31,10 @@ import PaginatedList from "../Utility/PaginatedList";
 import MarketUtils from "common/market_utils";
 import {Tooltip, Icon as AntIcon} from "bitshares-ui-style-guide";
 
+/* CRYPTOBRIDGE */
+import AssetImage from "../Utility/CryptoBridge/AssetImage";
+/* /CRYPTOBRIDGE */
+
 class AccountPortfolioList extends React.Component {
     constructor() {
         super();
@@ -654,6 +658,7 @@ class AccountPortfolioList extends React.Component {
             balances.push(
                 <tr key={asset.get("symbol")} style={{maxWidth: "100rem"}}>
                     <td style={{textAlign: "left"}}>
+                        <AssetImage asset={asset.get("symbol")} />
                         <LinkToAssetById asset={asset.get("id")} />
                     </td>
                     <td style={{textAlign: "right"}}>

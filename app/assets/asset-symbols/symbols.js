@@ -79,3 +79,6 @@ require("file-loader?name=asset-symbols/[name].png!./post.png");
 require("file-loader?name=asset-symbols/[name].png!./bch.png");
 require("file-loader?name=asset-symbols/[name].png!./btg.png");
 require("file-loader?name=asset-symbols/[name].png!./mdl.png");
+/* CRYPTOBRIDGE */
+require("file-loader?name=asset-symbols/[name].png!./rvn.png");
+/* /CRYPTOBRIDGE */

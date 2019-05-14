@@ -135,12 +135,25 @@ class AccountStaking extends React.Component {
     }
 
     componentWillMount() {
-        this.retrieveVestingBalances.call(this, this.props.account.get("id"));
+        if (this.props.account) {
+            this.retrieveVestingBalances.call(
+                this,
+                this.props.account.get("id")
+            );
+        }
     }
 
     componentWillUpdate(nextProps) {
-        let newId = nextProps.account.get("id");
-        let oldId = this.props.account.get("id");
+        let newId = null;
+        let oldId = null;
+
+        if (nextProps.account) {
+            newId = nextProps.account.get("id");
+        }
+
+        if (this.props.account) {
+            oldId = this.props.account.get("id");
+        }
 
         if (newId !== oldId) {
             this.retrieveVestingBalances.call(this, newId);

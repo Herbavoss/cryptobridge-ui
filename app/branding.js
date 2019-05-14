@@ -38,7 +38,7 @@ export function getFaucet() {
  * @returns {*}
  */
 export function getLogo() {
-    return require("assets/cryptobridge/logo-cryptobridge.png");
+    return "cryptobridge/cryptobridge-logo.svg";
 }
 
 /**

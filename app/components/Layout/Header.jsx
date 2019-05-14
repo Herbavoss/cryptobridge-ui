@@ -30,12 +30,7 @@ import {Notification} from "bitshares-ui-style-guide";
 import AccountBrowsingMode from "../Account/AccountBrowsingMode";
 import {setLocalStorageType, isPersistantType} from "lib/common/localStorage";
 
-import {getLogo} from "branding";
-var logo = getLogo();
-
-// const FlagImage = ({flag, width = 20, height = 20}) => {
-//     return <img height={height} width={width} src={`${__BASE_URL__}language-dropdown/${flag.toUpperCase()}.png`} />;
-// };
+import Logo from "components/CryptoBridge/Logo";
 
 const SUBMENUS = {
     SETTINGS: "SETTINGS"
@@ -417,7 +412,7 @@ class Header extends React.Component {
                 })}
                 onClick={this._onNavigate.bind(this, "/")}
             >
-                <img style={{margin: 0, height: 40}} src={logo} />
+                <Logo />
             </a>
         );
 
@@ -1097,6 +1092,7 @@ class Header extends React.Component {
                                             }}
                                             name="dashboard"
                                             title="icons.dashboard"
+                                            className="column-show-small"
                                         />
                                         <Translate
                                             className="column-hide-small"
@@ -1131,11 +1127,12 @@ class Header extends React.Component {
                                         }}
                                         name="trade"
                                         title="icons.trade.exchange"
+                                        className="column-show-small"
                                     />
                                     <Translate
                                         className="column-hide-small"
                                         component="span"
-                                        content="header.exchange"
+                                        content="cryptobridge.header.trade"
                                     />
                                 </a>
                             </li>
@@ -1168,6 +1165,7 @@ class Header extends React.Component {
                                             }}
                                             name="server"
                                             title="icons.server"
+                                            className="column-show-small"
                                         />
                                         <Translate
                                             className="column-hide-small"

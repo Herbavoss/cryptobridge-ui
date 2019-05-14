@@ -1201,11 +1201,7 @@ class BuySell extends React.Component {
                                             }
                                         >
                                             <Button
-                                                className={
-                                                    disabled
-                                                        ? null
-                                                        : buttonClass
-                                                }
+                                                className={buttonClass}
                                                 disabled={disabled}
                                                 onClick={onSubmit.bind(
                                                     this,

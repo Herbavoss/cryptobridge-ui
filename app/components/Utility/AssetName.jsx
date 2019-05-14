@@ -6,6 +6,10 @@ import counterpart from "counterpart";
 import PropTypes from "prop-types";
 import {Popover} from "bitshares-ui-style-guide";
 
+/* CRYPTOBRIDGE */
+import {getIsBridgeCoinAsset} from "lib/cryptobridge/assetMethods";
+/* /CRYPTOBRIDGE */
+
 class AssetName extends React.Component {
     static propTypes = {
         replace: PropTypes.bool.isRequired,
@@ -32,6 +36,12 @@ class AssetName extends React.Component {
     render() {
         let {replace, asset, noPrefix, customClass, noTip} = this.props;
         if (!asset) return null;
+
+        /* CRYPTOBRIDGE */
+        const isBridgeCoinAsset = getIsBridgeCoinAsset(asset);
+        if (isBridgeCoinAsset) noPrefix = true;
+        /* CRYPTOBRIDGE */
+
         const name = asset.get("symbol");
         const isBitAsset = asset.has("bitasset");
         const isPredMarket =
@@ -93,7 +103,9 @@ class AssetName extends React.Component {
                         (customClass ? " " + customClass : "")
                     }
                 >
-                    <span className="asset-prefix-replaced">{prefix}</span>
+                    <span className="asset-prefix-replaced">
+                        {!noPrefix ? prefix : null}
+                    </span>
                     <span>{replacedName}</span>
                 </div>
             );

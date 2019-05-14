@@ -44,10 +44,7 @@ export const cryptoBridgeAPIs = {
     COINS_LIST: "/coins",
     ACTIVE_WALLETS: "/wallets",
     MARKETS: "/markets",
-    TRADING_PAIRS: "/trading-pairs",
-
-    /* CRYPTOBRIDGE */
-    GEO_NODES: "/geo-nodes"
+    TRADING_PAIRS: "/trading-pairs"
 };
 
 export const citadelAPIs = {

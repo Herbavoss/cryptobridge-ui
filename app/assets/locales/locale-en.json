@@ -2438,6 +2438,9 @@
         "wallet_password": "Login anywhere using your password"
     },
     "cryptobridge": {
+        "header": {
+            "trade": "Trade"
+        },
         "benchmark": {
             "title": "Benchmark",
             "intro_text_1": "Benchmarking is available to projects which meet common quality criteria determined by CryptoBridge and DARC. Through this joint effort, we bring greater attention to quality projects to provide additional recognition in the crowded digital asset space. Toward this end, DARC offers in-depth project evaluations while CryptoBridge seeks to use its visibility and position to support that service to reinforce a shared, forward-leaning perspective.",

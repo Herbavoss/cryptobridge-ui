@@ -9,3 +9,6 @@ require("file-loader?name=bin-file/[name].svg!./bin-file/downloaded.svg");
 require("file-loader?name=bin-file/[name].svg!./bin-file/error.svg");
 require("file-loader?name=bin-file/[name].svg!./bin-file/hover.svg");
 require("file-loader?name=bin-file/[name].svg!./bin-file/rounded-arrow.svg");
+/* CRYPTOBRIDGE */
+require("file-loader?name=cryptobridge/[name].svg!./cryptobridge/cryptobridge-logo.svg");
+/* /CRYPTOBRIDGE */

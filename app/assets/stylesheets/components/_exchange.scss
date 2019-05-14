@@ -7,6 +7,10 @@ div#CenterContent {
 }
 
 .exchange--price-alert {
+    &--show-modal {
+        margin-right: 0.25rem;
+    }
+
     .exchange--price-alert--description {
     }
 
@@ -218,18 +222,6 @@ form.order-form {
         float: left !important;
         padding: 0 15px;
         margin-right: 12px;
-    }
-}
-
-.buy-form {
-    > div.ant-tabs-bar {
-        border-bottom: 1px solid #6ba583 !important;
-    }
-}
-
-.sell-form {
-    > div.ant-tabs-bar {
-        border-bottom: 1px solid #e3745b !important;
     }
 }
 
@@ -613,14 +605,6 @@ input[type="number"]::-webkit-outer-spin-button {
 .exchange-content-header.bid,
 .exchange-content-header.ask {
     padding: 10px;
-}
-
-.exchange-content-header.bid {
-    border-bottom: 1px solid #6ba583 !important;
-}
-
-.exchange-content-header.ask {
-    border-bottom: 1px solid #e3745b !important;
 }
 
 .exchange-padded {

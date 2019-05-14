@@ -126,6 +126,7 @@ class DepositWithdrawAssetSelector extends React.Component {
                 optionLabelProp={"children"}
                 showSearch
                 style={{width: "100%"}}
+                className="asset-selector"
             >
                 {/*
                     NOTE

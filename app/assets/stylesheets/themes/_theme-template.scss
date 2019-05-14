@@ -1389,14 +1389,24 @@
         li {
             > a {
                 color: $account-dimmed;
+                > span:last-child {
+                    border-bottom: 3px solid transparent;
+                    padding: 0 8px;
+                }
                 .icon > svg > path {
                     fill: $account-dimmed;
                 }
             }
-            > a:hover,
+            > a:hover {
+                background-color: $bg-color;
+                color: $link-text-color;
+            }
             > a.active {
-                background-color: $bg-color !important;
-                color: $primary-text-color;
+                background-color: $bg-color;
+                color: $link-text-color;
+                > span:last-child {
+                    border-bottom-color: $link-text-color;
+                }
                 .icon > svg > path {
                     fill: $primary-text-color;
                 }
@@ -1483,11 +1493,23 @@
             opacity: 1;
         }
     }
-    .bid {
-        background-color: $bid-color !important;
+    .bid,
+    .bid > button[disabled] {
+        border-color: $bid-color !important;
+        color: $bid-color !important;
+        background-color: transparent !important;
     }
-    .ask {
-        background-color: $ask-color !important;
+    .ask,
+    .ask > button[disabled] {
+        border-color: $ask-color !important;
+        color: $ask-color !important;
+        background-color: transparent !important;
+    }
+    .ask,
+    .bid {
+        > button[disabled] {
+            opacity: 0.4;
+        }
     }
     .orderbook-latest-price {
         > div {
@@ -2454,6 +2476,54 @@
     .modal--transaction-confirm {
         zindex: 10000; // make transaction confirm modal above another modals
     }
+
+    /* CRYPTOBRIDGE */
+
+    .antPositive {
+        .ant-tabs-bar {
+            border-bottom: 1px solid $bid-color !important;
+
+            .ant-tabs-nav .ant-tabs-tab-active {
+                color: $bid-color;
+            }
+
+            .ant-tabs-tab:hover {
+                color: $bid-color;
+            }
+
+            .ant-tabs-ink-bar {
+                background-color: $bid-color;
+            }
+        }
+    }
+
+    .antNegative {
+        .ant-tabs-bar {
+            border-bottom: 1px solid $ask-color !important;
+
+            .ant-tabs-nav {
+                .ant-tabs-tab-active {
+                    color: $ask-color;
+                }
+                .ant-tabs-tab:hover {
+                    color: $ask-color;
+                }
+                .ant-tabs-ink-bar {
+                    background-color: $ask-color;
+                }
+            }
+        }
+    }
+
+    .exchange-content-header.bid {
+        border-bottom: 1px solid $bid-color !important;
+    }
+
+    .exchange-content-header.ask {
+        border-bottom: 1px solid $ask-color !important;
+    }
+
+    /* /CRYPTOBRIDGE */
 }
 .rc-time-picker-panel {
     z-index: 9999 !important;

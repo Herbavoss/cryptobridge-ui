@@ -9,7 +9,7 @@ import Proposals from "components/Account/Proposals";
 import {ChainStore} from "bitsharesjs";
 import SettingsActions from "actions/SettingsActions";
 import utils from "common/utils";
-import {Tabs, Tab} from "../Utility/Tabs";
+import {Tabs} from "bitshares-ui-style-guide";
 import AccountOrders from "./AccountOrders";
 import cnames from "classnames";
 import TranslateWithLinks from "../Utility/TranslateWithLinks";
@@ -471,14 +471,15 @@ class AccountOverview extends React.Component {
                 <div className="content-block small-12">
                     <div className="tabs-container generic-bordered-box">
                         <Tabs
-                            defaultActiveTab={0}
+                            defaultActiveKey={"portfolio"}
                             segmented={false}
                             setting="overviewTab"
                             className="account-tabs"
                             tabsClass="account-overview no-padding bordered-header content-block"
                         >
-                            <Tab
-                                title="account.portfolio"
+                            <Tabs.TabPane
+                                key={"portfolio"}
+                                tab={<Translate content="account.portfolio" />}
                                 subText={portfolioActiveAssetsBalance}
                             >
                                 <div className="header-selector">
@@ -566,11 +567,13 @@ class AccountOverview extends React.Component {
                                         balanceObjects={includedBalancesList}
                                     />
                                 )}
-                            </Tab>
+                            </Tabs.TabPane>
 
-                            <Tab
-                                title="account.open_orders"
-                                subText={ordersValue}
+                            <Tabs.TabPane
+                                key={"open_orders"}
+                                tab={
+                                    <Translate content="account.open_orders" />
+                                }
                             >
                                 <AccountOrders {...this.props}>
                                     <tr className="total-value">
@@ -589,48 +592,45 @@ class AccountOverview extends React.Component {
                                         {this.props.isMyAccount ? <td /> : null}
                                     </tr>
                                 </AccountOrders>
-                            </Tab>
+                            </Tabs.TabPane>
 
-                            <Tab
-                                title="account.collaterals"
-                                subText={
-                                    <span
-                                        className={
-                                            this.state.globalMarginStatus
-                                        }
-                                    >
-                                        {marginValue}
-                                    </span>
-                                }
-                            >
-                                <div className="content-block">
-                                    <div className="generic-bordered-box">
-                                        <MarginPositionsTable
-                                            preferredUnit={preferredUnit}
-                                            className="dashboard-table"
-                                            callOrders={call_orders}
-                                            account={account}
-                                        >
-                                            <tr className="total-value">
-                                                <td>{totalValueText}</td>
-                                                <td />
-                                                <td>{debtValue}</td>
-                                                <td className="column-hide-medium">
-                                                    {collateralValue}
-                                                </td>
-                                                <td />
-                                                <td>{marginValue}</td>
-                                                <td className="column-hide-small" />
-                                                <td className="column-hide-small" />
-                                                <td colSpan="4" />
-                                            </tr>
-                                        </MarginPositionsTable>
+                            {showAdvancedFeatures ? (
+                                <Tabs.TabPane
+                                    key={"collaterals"}
+                                    tab={
+                                        <Translate content="account.collaterals" />
+                                    }
+                                >
+                                    <div className="content-block">
+                                        <div className="generic-bordered-box">
+                                            <MarginPositionsTable
+                                                preferredUnit={preferredUnit}
+                                                className="dashboard-table"
+                                                callOrders={call_orders}
+                                                account={account}
+                                            >
+                                                <tr className="total-value">
+                                                    <td>{totalValueText}</td>
+                                                    <td />
+                                                    <td>{debtValue}</td>
+                                                    <td className="column-hide-medium">
+                                                        {collateralValue}
+                                                    </td>
+                                                    <td />
+                                                    <td>{marginValue}</td>
+                                                    <td className="column-hide-small" />
+                                                    <td className="column-hide-small" />
+                                                    <td colSpan="4" />
+                                                </tr>
+                                            </MarginPositionsTable>
+                                        </div>
                                     </div>
-                                </div>
-                            </Tab>
+                                </Tabs.TabPane>
+                            ) : null}
 
-                            <Tab
-                                title="account.activity"
+                            <Tabs.TabPane
+                                key={"activity"}
+                                tab={<Translate content="account.activity" />}
                                 subText={hiddenSubText}
                             >
                                 <RecentTransactions
@@ -644,13 +644,16 @@ class AccountOverview extends React.Component {
                                     showFilters={true}
                                     dashboard
                                 />
-                            </Tab>
+                            </Tabs.TabPane>
 
                             {showAdvancedFeatures &&
                             account.get("proposals") &&
                             account.get("proposals").size ? (
-                                <Tab
-                                    title="explorer.proposals.title"
+                                <Tabs.TabPane
+                                    key={"proposals"}
+                                    tab={
+                                        <Translate content="explorer.proposals.title" />
+                                    }
                                     subText={String(
                                         account.get("proposals")
                                             ? account.get("proposals").size
@@ -681,7 +684,7 @@ class AccountOverview extends React.Component {
                                             this.state.hideFishingProposals
                                         }
                                     />
-                                </Tab>
+                                </Tabs.TabPane>
                             ) : null}
                         </Tabs>
                     </div>

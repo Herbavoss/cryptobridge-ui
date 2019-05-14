@@ -8,7 +8,7 @@ import {isIncognito} from "feature_detect";
 import SettingsStore from "stores/SettingsStore";
 import IntlActions from "actions/IntlActions";
 import {getWalletName, getLogo} from "branding";
-import {Select, Row, Col, Icon} from "bitshares-ui-style-guide";
+import {Select, Row, Col, Icon, Button} from "bitshares-ui-style-guide";
 var logo = getLogo();
 
 class LoginSelector extends React.Component {
@@ -99,7 +99,7 @@ class LoginSelector extends React.Component {
                 <div className="grid-block shrink vertical">
                     <div className="grid-content shrink text-center account-creation">
                         <div>
-                            <img src={logo} />
+                            <img src={logo} className="logo" />
                         </div>
 
                         <div>
@@ -166,6 +166,23 @@ class LoginSelector extends React.Component {
                             >
                                 <Translate content="header.unlock_short" />
                             </Link>
+
+                            {/*<Button*/}
+                            {/*type={"primary"}*/}
+                            {/*data-intro={translator.translate(*/}
+                            {/*"walkthrough.create_cloud_wallet"*/}
+                            {/*)}*/}
+                            {/*>*/}
+                            {/*<Translate content="header.create_account" />*/}
+                            {/*</Button>*/}
+
+                            {/*<Button*/}
+                            {/*data-intro={translator.translate(*/}
+                            {/*"walkthrough.create_cloud_wallet"*/}
+                            {/*)}*/}
+                            {/*>*/}
+                            {/*<Translate content="header.unlock_short" />*/}
+                            {/*</Button>*/}
                         </div>
                     </div>
                 </div>

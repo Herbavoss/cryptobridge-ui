@@ -20,10 +20,13 @@ import counterpart from "counterpart";
 import LoadingIndicator from "../LoadingIndicator";
 import {ChainValidation, ChainStore} from "bitsharesjs";
 import debounceRender from "react-debounce-render";
-import ZfApi from "react-foundation-apps/src/utils/foundation-api";
 import {getPossibleGatewayPrefixes, gatewayPrefixes} from "common/gateways";
 import QuoteSelectionModal from "./QuoteSelectionModal";
-import {Input, Icon} from "bitshares-ui-style-guide";
+import {Input, Icon, Checkbox, Form, Tabs} from "bitshares-ui-style-guide";
+
+/* CRYPTOBRIDGE */
+import AssetImage from "../Utility/CryptoBridge/AssetImage";
+/* CRYPTOBRIDGE */
 
 class MarketGroup extends React.Component {
     static defaultProps = {
@@ -225,10 +228,13 @@ class MarketGroup extends React.Component {
                                     <AssetName name={market.base} />
                                 </span>
                             ) : (
-                                <AssetName
-                                    dataPlace="left"
-                                    name={market.quote}
-                                />
+                                <span>
+                                    <AssetImage asset={market.quote} />
+                                    <AssetName
+                                        dataPlace="left"
+                                        name={market.quote}
+                                    />
+                                </span>
                             )
                         }
                         quote={market.quote}
@@ -550,7 +556,7 @@ class MyMarkets extends React.Component {
         this.getAssetList(quote, 50, gatewayAssets);
     }
 
-    toggleActiveMarketTab(index) {
+    setActiveMarketTab(index) {
         SettingsActions.changeViewSetting({
             activeMarketTab: index
         });
@@ -924,34 +930,26 @@ class MyMarkets extends React.Component {
                             padding: "0 0.5rem 0.75rem 0.5rem"
                         }}
                     >
-                        <div>
-                            <label style={{margin: "3px 0 0"}}>
-                                <input
-                                    style={{position: "relative", top: 3}}
-                                    className="no-margin"
-                                    type="checkbox"
+                        <Form>
+                            <Form.Item>
+                                <Checkbox
                                     checked={this.props.onlyLiquid}
                                     onChange={() => {
                                         SettingsActions.changeViewSetting({
                                             onlyLiquid: !this.props.onlyLiquid
                                         });
                                     }}
-                                />
-                                <span style={{paddingLeft: "0.4rem"}}>
+                                >
                                     <Translate content="exchange.show_only_liquid" />
-                                </span>
-                            </label>
-                            <label style={{margin: "3px 0 0"}}>
-                                <input
-                                    style={{position: "relative", top: 3}}
-                                    className="no-margin"
-                                    type="checkbox"
+                                </Checkbox>
+                            </Form.Item>
+                            <Form.Item>
+                                <Checkbox
                                     checked={this.props.onlyStars}
                                     onChange={() => {
                                         MarketsActions.toggleStars();
                                     }}
-                                />
-                                <span style={{paddingLeft: "0.4rem"}}>
+                                >
                                     <TranslateWithLinks
                                         string="exchange.show_only_star_formatter"
                                         keys={[
@@ -963,35 +961,30 @@ class MyMarkets extends React.Component {
                                             }
                                         ]}
                                     />
-                                </span>
-                            </label>
-                            <br />
-                        </div>
-                        <div className="search-wrapper">
-                            <form>
-                                <div className="filter inline-block">
-                                    <Input
-                                        autoComplete="off"
-                                        style={{
-                                            fontSize: "0.9rem",
-                                            height: "inherit",
-                                            position: "relative"
-                                        }}
-                                        type="text"
-                                        className="no-margin market-filter-input"
-                                        placeholder={counterpart.translate(
-                                            "exchange.filter"
-                                        )}
-                                        maxLength={16}
-                                        name="focus"
-                                        required="required"
-                                        value={this.state.myMarketFilter}
-                                        onChange={this.handleSearchUpdate}
-                                        addonAfter={<Icon type="search" />}
-                                    />
-                                </div>
-                            </form>
-                        </div>
+                                </Checkbox>
+                            </Form.Item>
+                            <Form.Item>
+                                <Input
+                                    autoComplete="off"
+                                    style={{
+                                        fontSize: "0.9rem",
+                                        height: "inherit",
+                                        position: "relative"
+                                    }}
+                                    type="text"
+                                    className="no-margin market-filter-input"
+                                    placeholder={counterpart.translate(
+                                        "exchange.filter"
+                                    )}
+                                    maxLength={16}
+                                    name="focus"
+                                    required="required"
+                                    value={this.state.myMarketFilter}
+                                    onChange={this.handleSearchUpdate}
+                                    addonAfter={<Icon type="search" />}
+                                />
+                            </Form.Item>
+                        </Form>
                     </div>
                 ) : (
                     <div
@@ -1083,54 +1076,17 @@ class MyMarkets extends React.Component {
                     </div>
                 )}
 
-                <ul className="mymarkets-tabs" style={{marginBottom: 0}}>
-                    {/* Quote edit tab */}
-                    {myMarketTab && (
-                        <li
-                            key="quote_edit"
-                            style={{textTransform: "uppercase"}}
-                            onClick={this.showQuoteModal}
-                            className="mymarkets-tab"
-                        >
-                            &nbsp;+&nbsp;
-                        </li>
-                    )}
-                    {!myMarketTab && !this.state.inputValue
-                        ? null
-                        : preferredBases.map((base, index) => {
-                              if (!base) return null;
-                              return (
-                                  <li
-                                      key={base}
-                                      onClick={this.toggleActiveMarketTab.bind(
-                                          this,
-                                          index
-                                      )}
-                                      className={cnames("mymarkets-tab", {
-                                          active: activeMarketTab === index
-                                      })}
-                                  >
-                                      {base}
-                                  </li>
-                              );
-                          })}
-                    {myMarketTab && hasOthers ? (
-                        <li
-                            key={"others"}
-                            style={{textTransform: "uppercase"}}
-                            onClick={this.toggleActiveMarketTab.bind(
-                                this,
-                                preferredBases.size + 1
-                            )}
-                            className={cnames("mymarkets-tab", {
-                                active:
-                                    activeMarketTab === preferredBases.size + 1
-                            })}
-                        >
-                            <Translate content="exchange.others" />
-                        </li>
-                    ) : null}
-                </ul>
+                <Tabs
+                    defaultActiveKey="0"
+                    size="small"
+                    onChange={index => {
+                        this.setActiveMarketTab(index);
+                    }}
+                >
+                    {preferredBases.map((base, index) => {
+                        return <Tabs.TabPane tab={base} key={index} />;
+                    })}
+                </Tabs>
 
                 <div
                     style={listStyle}
