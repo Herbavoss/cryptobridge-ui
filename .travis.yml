@@ -1,55 +1,88 @@
 language: node_js
-node_js: 10
-matrix:
-    include:
-        - os: linux
-          dist: trusty
-        - os: osx
-          osx_image: xcode8.3
-env:
-    global:
-        - GITHUB_REPO: bitshares/bitshares-ui
-        - WALLET_REPO: bitshares/wallet.bitshares.org
-        - STAGING_REPO: bitshares/bitshares-ui-staging
-        - DEVELOP_REPO: bitshares/develop.bitshares.org
-        - CXX=g++-4.8
-        - secure:
-              deD+B8xDM7cguX+PbeOSLh30mi6gHAdlqQphP63ZSCuFbL6hQU7MMb8nmBdBpIuaG2rX5GejSqPWTKt+/MSgQNHMTvRnzG1l1JtDTEAky8ssMyxI+HWiRe7Ic+1pFR0qUBAcPVN3MgPtW3Za47v1IyDyaR/0GdSREdy2KvmwBOWMoT23ubA1QlEhFO7uOlium4gJ6trxNPwfXkNHiMzanpVFyRQljY1PNGEPRzRzyWPNvZ4Pq5yNKnFFcW+afhvsTtK8AoeMFDeKhDF2yva8U0IMCZzrSKWwCIhkhJPii7pPT2LNlpjwVKXn16dRRVKO2tImmWtMpgbJjiNTRzVC4Y30+F7XPc97SpTKfGvoaH/iSZpTT1la0gHgoeBB32y6buPKnF7M2UNwTt2eGXpg/JHyperyQ25ey9EQBk/vHNxS9M3jcfkoXneBOnwICHgrzfamHxmMsiXnNDDriyPqIY9kFGQubqEF74cvBxhPLmfxJCPyHx7BY9ioiAlcgzWqJDOp/ADLjpoh44rUCpQH26Zg0N9efOuLUhuTAa54/9rboWZLxjxEvJ5qfTe+eHMW1r2RzoMJqWOhkbMs4f/qqGY42nqWhiibdSAZzIBuPYt/m9kdQ33930dKWoIkJwqZ2Il+T3FWJtzaguuoxKKYzsok9c/6FY7MbSSPaPw+fjg=
-addons:
-    apt:
-        sources:
-            - ubuntu-toolchain-r-test
-        packages:
-            - gcc-4.8
-            - g++-4.8
-            - icnsutils
-            - graphicsmagick
-            - xz-utils
+node_js:
+    - "10"
+
+env: PATH=$PATH:$HOME/.local/bin
+
+cache:
+    directories:
+        - "node_modules"
+        - "build"
+
 install:
-    - npm ci
-script:
-    - "./build.sh"
-after_success: "./deploy.sh"
-deploy:
-    - provider: releases
-      tag_name: "$TRAVIS_TAG"
-      name: "$TRAVIS_TAG"
-      body:
-          "Automated release from Travis CI with added files from AppVeyor build"
-      api_key:
-          secure:
-              HV4BRj0Nn4+3AGC5U2LxFQ3qr6bbwcs2SR7BIEKXdHcIAshvL52Qn9R2pXFjeJhj/FqGMRc6o1E54q4+QpzzlnoZquZkJoSv4x4EW306KVXNxaBQmwjNLs6gO09/s8j3IlZ0pudANmH2WQvT264ldGCqq0mC1vCMpHfxetdGsskfqdboFgyaUSDtRBER9FH23cM22Ro3oPJmRxn/dzZSctiB05e1i8CD6VZm8HeGuWKXyKOuhzBFzEgaSkSQWa6u5YsvAKkQ4c6rAAxUWJOH9+8WoqUVN/Pem56mnA0HYtqAoX/cShLuZfsHRJUVdE5Wt9YfEOBRQy954QmZgPhQbp7OKcIBAQyAkMSR1AEKCYd2QjPBBM5ek44Pbz0AsDSd1qsSgKUJs4urpOTLbFi2KfDmaXiO+ciaIDvyh0QiUPykVdRtDKacdrHCWUUuJajc465KRE8LGheOGThj+s9vPmy9Eubn7Zzsdzy1q0Xjwjd57bz8G5aTbBWpJJ4sk096trJqGX1iQMKEpnEU/KwmRS9XX65s6gBjuO8/2ZhoE8HQCDBS0whiJi+eHggu6wch6SfTvATkQ9ivex6T/T/eYHGF+sbShkXrzmUs0sbsq1TrjgFyIA/x23y+0k59mZ8xfkRLHT3L1EjgW6MahwPCPESumomq3PDJrKPVpd7n/04=
-      file_glob: true
-      file:
-          - build/binaries/BitShares*
-          - build/release-checksums-*
-      skip_cleanup: true
-      draft: true
-      on:
-          repo: bitshares/bitshares-ui
-          tags: true
-before_install:
-    - openssl aes-256-cbc -K $encrypted_844f3e8bd137_key -iv $encrypted_844f3e8bd137_iv
-      -in set_snap_token.sh.enc -out set_snap_token.sh -d
-    - chmod +x set_snap_token.sh
-    - source ./set_snap_token.sh
+    - pip install --user awscli
+
+stages:
+    - name: build-testnet
+      if: branch = develop
+    - name: deploy-testnet
+      if: branch = develop
+
+    - name: build-stage
+      if: branch = feature/cb-1648-upstream
+    - name: deploy-stage
+      if: branch = feature/cb-1648-upstream
+
+    - name: build-prod
+      if: tag =~ /^v\d+\.\d+(\.\d+)?$/
+    - name: deploy-prod
+      if: tag =~ /^v\d+\.\d+(\.\d+)?$/
+
+jobs:
+    include:
+        - stage: build-testnet
+          script:
+              - export RECAPTCHA_SITE_KEY=$TEST_RECAPTCHA_SITE_KEY
+              - export CRYPTOBRIDGE_PUB_KEY=$TEST_CRYPTOBRIDGE_PUB_KEY
+              - export TESTNET=true
+              - export WALLET_URL=$TEST_WALLET_URL
+              - export API_URL=$TEST_API_URL
+              - export API_SUPPORT_URL=$TEST_API_SUPPORT_URL
+              - npm install
+              - npm run build
+        - stage: deploy-testnet
+          script:
+              - ls -la ./build/dist/
+              - cat ./build/dist/index.html
+              - export AWS_ACCESS_KEY_ID=$TEST_AWS_ACCESS_KEY_ID
+              - export AWS_SECRET_ACCESS_KEY=$TEST_AWS_SECRET_ACCESS_KEY
+              - aws s3 rm s3://wallet.testnet.crypto-bridge.org/index.html
+              - aws s3 sync ./build/dist/ s3://wallet.testnet.crypto-bridge.org/ --delete --exclude "assets/*"
+
+        - stage: build-stage
+          script:
+              - export RECAPTCHA_SITE_KEY=$STAGE_RECAPTCHA_SITE_KEY
+              - export CRYPTOBRIDGE_PUB_KEY=$STAGE_CRYPTOBRIDGE_PUB_KEY
+              - export CHAIN_ID=$STAGE_CHAIN_ID
+              - export WALLET_URL=$STAGE_WALLET_URL
+              - export API_URL=$STAGE_API_URL
+              - export API_SUPPORT_URL=$STAGE_API_SUPPORT_URL
+              - npm install
+              - npm run build
+        - stage: deploy-stage
+          script:
+              - ls -la ./build/dist/
+              - cat ./build/dist/index.html
+              - export AWS_ACCESS_KEY_ID=$STAGE_AWS_ACCESS_KEY_ID
+              - export AWS_SECRET_ACCESS_KEY=$STAGE_AWS_SECRET_ACCESS_KEY
+              - aws s3 rm s3://wallet.stage.crypto-bridge.org/index.html
+              - aws s3 sync ./build/dist/ s3://wallet.stage.crypto-bridge.org/ --delete --exclude "assets/*"
+
+        - stage: build-prod
+          script:
+              - export RECAPTCHA_SITE_KEY=$PROD_RECAPTCHA_SITE_KEY
+              - export CRYPTOBRIDGE_PUB_KEY=$PROD_CRYPTOBRIDGE_PUB_KEY
+              - export CHAIN_ID=$PROD_CHAIN_ID
+              - export WALLET_URL=$PROD_WALLET_URL
+              - export API_URL=$PROD_API_URL
+              - export API_SUPPORT_URL=$PROD_API_SUPPORT_URL
+              - npm install
+              - npm run build
+        - stage: deploy-prod
+          script:
+              - ls -la ./build/dist/
+              - cat ./build/dist/index.html
+              - export AWS_ACCESS_KEY_ID=$PROD_AWS_ACCESS_KEY_ID
+              - export AWS_SECRET_ACCESS_KEY=$PROD_AWS_SECRET_ACCESS_KEY
+              - aws s3 rm s3://wallet.crypto-bridge.org/index.html
+              - aws s3 sync ./build/dist/ s3://wallet.crypto-bridge.org/ --delete --exclude "assets/*"
