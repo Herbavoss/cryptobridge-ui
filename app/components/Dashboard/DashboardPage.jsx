@@ -69,7 +69,7 @@ class DashboardPage extends React.Component {
                                         let title = (
                                             <span>
                                                 <AssetImage asset={q} />
-                                                {q}
+                                                {q.replace(/bridge\./i, "")}
                                             </span>
                                         );
 

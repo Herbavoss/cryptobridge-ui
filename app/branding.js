@@ -83,7 +83,14 @@ export function getUnits(chainId = __CHAIN_ID_SHORT__) {
  */
 
 export function getMyMarketsBases() {
-    return ["BTC", "USDT", "ETH", "LTC", "RVN", "BTS"];
+    return [
+        "BRIDGE.BTC",
+        "BRIDGE.USDT",
+        "BRIDGE.ETH",
+        "BRIDGE.LTC",
+        "BRIDGE.RVN",
+        "BTS"
+    ];
 }
 
 /**
@@ -93,108 +100,24 @@ export function getMyMarketsBases() {
  */
 export function getMyMarketsQuotes() {
     let tokens = {
-        nativeTokens: [
-            "BTC",
-            "BTS",
-            "CNY",
-            "EUR",
-            "GOLD",
-            "KRW",
-            "RUBLE",
-            "SILVER",
-            "USD"
-        ],
+        nativeTokens: ["BTS"],
         bridgeTokens: [
             "BRIDGE.BCO",
             "BRIDGE.BTC",
             "BRIDGE.ETH",
             "BRIDGE.LTC",
             "BRIDGE.USDT",
-            "BRIDGE.RVN"
-        ],
-        gdexTokens: ["GDEX.BTC", "GDEX.BTO", "GDEX.EOS", "GDEX.ETH"],
-        openledgerTokens: [
-            "OBITS",
-            "OPEN.BTC",
-            "OPEN.DASH",
-            "OPEN.DGD",
-            "OPEN.DOGE",
-            "OPEN.EOS",
-            "OPEN.EOSDAC",
-            "OPEN.ETH",
-            "OPEN.EURT",
-            "OPEN.GAME",
-            "OPEN.GRC",
-            "OPEN.INCNT",
-            "OPEN.KRM",
-            "OPEN.LISK",
-            "OPEN.LTC",
-            "OPEN.MAID",
-            "OPEN.MKR",
-            "OPEN.NEO",
-            "OPEN.OMG",
-            "OPEN.SBD",
-            "OPEN.STEEM",
-            "OPEN.TUSD",
-            "OPEN.USDT",
-            "OPEN.WAVES",
-            "OPEN.XMR",
-            "OPEN.ZEC",
-            "OPEN.ZRX"
-        ],
-        rudexTokens: [
-            "PPY",
-            "RUDEX.DCT",
-            "RUDEX.DGB",
-            "RUDEX.GBG",
-            "RUDEX.GOLOS",
-            "RUDEX.KRM",
-            "RUDEX.MUSE",
-            "RUDEX.SBD",
-            "RUDEX.STEEM",
-            "RUDEX.TT"
-        ],
-        sparkTokens: ["ZEPH", "SPARKDEX.ETH", "SPARKDEX.BTC"],
-        xbtsxTokens: [
-            "XBTSX.STH",
-            "XBTSX.POST",
-            "XBTSX.DOGE",
-            "XBTSX.BTC",
-            "XBTSX.LTC",
-            "XBTSX.DASH",
-            "XBTSX.KEC",
-            "XBTSX.BTG",
-            "XBTSX.XSPEC",
-            "XBTSX.NVC",
-            "XBTSX.UNI",
-            "XBTSX.NMC",
-            "XBTSX.WAVES",
-            "XBTSX.COF",
-            "XBTSX.XRUP",
-            "XBTSX.P2P",
-            "XBTSX.STEEP",
-            "XBTSX.MDL",
-            "XBTSX.ETH"
-        ],
-        otherTokens: [
-            "BKT",
-            "BLOCKPAY",
-            "BTWTY",
-            "TWENTIX",
-            "BTSR",
-            "CADASTRAL",
-            "CVCOIN",
-            "HEMPSWEET",
-            "HERO",
-            "HERTZ",
-            "ICOO",
-            "IOU.CNY",
-            "KAPITAL",
-            "KEXCOIN",
-            "OCT",
-            "SMOKE",
-            "STEALTH",
-            "YOYOW"
+            "BRIDGE.RVN",
+            "BRIDGE.XRP",
+            "BRIDGE.BCH",
+            "BRIDGE.XMR",
+            "BRIDGE.ZEC",
+            "BRIDGE.MONA",
+            "BRIDGE.SMART",
+            "BRIDGE.ZNY",
+            "BRIDGE.XP",
+            "BRIDGE.DOGE",
+            "BRIDGE.SHND"
         ]
     };
 
@@ -221,85 +144,7 @@ export function getMyCoreAsset() {
  * @returns {list of string tuples}
  */
 export function getFeaturedMarkets(quotes = []) {
-    return [
-        ["USD", "BTS"],
-        ["USD", "OPEN.BTC"],
-        ["USD", "OPEN.USDT"],
-        ["USD", "OPEN.ETH"],
-        ["USD", "OPEN.DASH"],
-        ["USD", "GOLD"],
-        ["USD", "HERO"],
-        ["USD", "GDEX.BTC"],
-        ["USD", "GDEX.ETH"],
-        ["USD", "GDEX.EOS"],
-        ["USD", "GDEX.BTO"],
-        ["USD", "OPEN.EOSDAC"],
-        ["CNY", "BTS"],
-        ["CNY", "OPEN.BTC"],
-        ["CNY", "USD"],
-        ["CNY", "OPEN.ETH"],
-        ["CNY", "YOYOW"],
-        ["CNY", "OCT"],
-        ["CNY", "GDEX.BTC"],
-        ["CNY", "GDEX.ETH"],
-        ["CNY", "GDEX.EOS"],
-        ["CNY", "GDEX.BTO"],
-        ["CNY", "GDEX.BTM"],
-        ["OPEN.BTC", "BTS"],
-        ["OPEN.BTC", "OPEN.ETH"],
-        ["OPEN.BTC", "OPEN.DASH"],
-        ["OPEN.BTC", "BLOCKPAY"],
-        ["OPEN.BTC", "OPEN.DGD"],
-        ["OPEN.BTC", "OPEN.STEEM"],
-        ["BTS", "OPEN.ETH"],
-        ["BTS", "OPEN.EOS"],
-        ["BTS", "PPY"],
-        ["BTS", "OPEN.STEEM"],
-        ["BTS", "OBITS"],
-        ["BTS", "RUBLE"],
-        ["BTS", "HERO"],
-        ["BTS", "OCT"],
-        ["BTS", "SILVER"],
-        ["BTS", "GOLD"],
-        ["BTS", "BLOCKPAY"],
-        ["BTS", "BTWTY"],
-        ["BTS", "SMOKE"],
-        ["BTS", "GDEX.BTC"],
-        ["BTS", "GDEX.ETH"],
-        ["BTS", "GDEX.EOS"],
-        ["BTS", "GDEX.BTO"],
-        ["BTS", "OPEN.EOSDAC"],
-        ["KAPITAL", "OPEN.BTC"],
-        ["USD", "OPEN.STEEM"],
-        ["USD", "OPEN.MAID"],
-        ["OPEN.USDT", "OPEN.BTC"],
-        ["OPEN.BTC", "OPEN.MAID"],
-        ["BTS", "OPEN.MAID"],
-        ["BTS", "OPEN.HEAT"],
-        ["BTS", "OPEN.INCENT"],
-        ["HEMPSWEET", "OPEN.BTC"],
-        ["KAPITAL", "BTS"],
-        ["BTS", "RUDEX.STEEM"],
-        ["USD", "RUDEX.STEEM"],
-        ["BTS", "RUDEX.SBD"],
-        ["BTS", "RUDEX.KRM"],
-        ["USD", "RUDEX.KRM"],
-        ["RUBLE", "RUDEX.GOLOS"],
-        ["CNY", "RUDEX.GOLOS"],
-        ["RUBLE", "RUDEX.GBG"],
-        ["CNY", "RUDEX.GBG"],
-        ["BTS", "RUDEX.MUSE"],
-        ["BTS", "RUDEX.TT"],
-        ["BTS", "RUDEX.SCR"],
-        ["BTS", "RUDEX.ETH"],
-        ["BTS", "RUDEX.DGB"],
-        ["BTS", "XBTSX.STH"],
-        ["BTS", "XBTSX.WAVES"],
-        ["BTS", "ZEPH"],
-        ["BTS", "HERTZ"],
-        ["BTS", "SPARKDEX.BTC"],
-        ["BTS", "SPARKDEX.ETH"]
-    ].filter(a => {
+    return [["BRIDGE.BTC", "BRIDGE.BCO"]].filter(a => {
         if (!quotes.length) return true;
         return quotes.indexOf(a[0]) !== -1;
     });
@@ -311,15 +156,7 @@ export function getFeaturedMarkets(quotes = []) {
  * @returns {[string,string,string,string,string,string,string]}
  */
 export function getAssetNamespaces() {
-    return [
-        "OPEN.",
-        "RUDEX.",
-        "BRIDGE.",
-        "GDEX.",
-        "XBTSX.",
-        "SPARKDEX.",
-        "CITADEL."
-    ];
+    return ["BRIDGE."];
 }
 
 /**
@@ -337,17 +174,7 @@ export function getAssetHideNamespaces() {
  * @returns {boolean}
  */
 export function allowedGateway(gateway) {
-    return (
-        [
-            // "OPEN",
-            // "RUDEX",
-            "BRIDGE"
-            // "GDEX",
-            // "XBTSX",
-            // "SPARKDEX",
-            // "CITADEL"
-        ].indexOf(gateway) >= 0
-    );
+    return ["BRIDGE"].indexOf(gateway) >= 0;
 }
 
 export function getSupportedLanguages() {

@@ -328,21 +328,24 @@ class AccountStakingCreate extends React.Component {
                     component="p"
                     content="cryptobridge.staking.intro_text_1"
                     with={{percent: "50%"}}
-                    unsafe
                 />
                 <Translate
                     component="p"
                     content="cryptobridge.staking.intro_text_2"
-                    with={{
-                        fee,
-                        reclaimFee
-                    }}
-                    unsafe
                 />
                 <Translate
                     component="p"
                     content="cryptobridge.staking.intro_text_3"
+                    with={{url: "https://crypto-bridge.org/bridgecoin/"}}
                     unsafe
+                />
+                <Translate
+                    component="p"
+                    content="cryptobridge.staking.intro_text_4"
+                    with={{
+                        fee,
+                        reclaimFee
+                    }}
                 />
 
                 <div className="grid-block small-12 medium-6">

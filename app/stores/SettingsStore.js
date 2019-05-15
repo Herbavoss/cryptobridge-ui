@@ -1,5 +1,6 @@
 import alt from "alt-instance";
 import SettingsActions from "actions/SettingsActions";
+import GatewayActions from "actions/GatewayActions";
 import IntlActions from "actions/IntlActions";
 import Immutable, {fromJS} from "immutable";
 import ls from "common/localStorage";
@@ -34,6 +35,7 @@ class SettingsStore {
 
         // bind actions to store
         this.bindListeners({
+            onFetchCoins: GatewayActions.fetchCoins,
             onSetPriceAlert: SettingsActions.setPriceAlert,
             onSetExchangeLastExpiration:
                 SettingsActions.setExchangeLastExpiration,
@@ -480,11 +482,19 @@ class SettingsStore {
         });
     }
 
-    _getDefaultMarkets() {
+    _getDefaultMarkets(additionalMarkets = []) {
         let markets = [];
 
         this.preferredBases.forEach(base => {
             addMarkets(markets, base, this.chainMarkets);
+        });
+
+        this.chainMarkets.forEach(base => {
+            addMarkets(markets, base, this.chainMarkets);
+        });
+
+        additionalMarkets.forEach(base => {
+            addMarkets(markets, base, additionalMarkets);
         });
 
         function addMarkets(target, base, markets) {
@@ -548,6 +558,15 @@ class SettingsStore {
         //             "), consider refactoring to avoid this"
         //     );
         // }
+    }
+
+    onFetchCoins({backedCoins} = {}) {
+        if (backedCoins) {
+            const defaultMarkets = this._getDefaultMarkets(
+                backedCoins.map(coin => coin.symbol)
+            );
+            this.defaultMarkets = Immutable.Map(defaultMarkets);
+        }
     }
 
     onChangeViewSetting(payload) {

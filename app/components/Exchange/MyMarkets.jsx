@@ -65,7 +65,8 @@ class MarketGroup extends React.Component {
             !utils.are_equal_shallow(nextProps.markets, this.props.markets) ||
             nextProps.starredMarkets !== this.props.starredMarkets ||
             nextProps.marketStats !== this.props.marketStats ||
-            nextProps.userMarkets !== this.props.userMarkets
+            nextProps.userMarkets !== this.props.userMarkets ||
+            nextProps.onlyLiquid !== this.props.onlyLiquid
         );
     }
 
@@ -213,8 +214,8 @@ class MarketGroup extends React.Component {
             .map(market => {
                 if (
                     this.props.onlyLiquid &&
-                    marketStats.get(market.id) &&
-                    marketStats.get(market.id).volumeBase == 0
+                    (!marketStats.get(market.id) ||
+                        marketStats.get(market.id).volumeBase < 0.01)
                 ) {
                     return null;
                 }
@@ -558,11 +559,11 @@ class MyMarkets extends React.Component {
 
     setActiveMarketTab(index) {
         SettingsActions.changeViewSetting({
-            activeMarketTab: index
+            activeMarketTab: parseInt(index)
         });
 
         this.setState({
-            activeMarketTab: index
+            activeMarketTab: parseInt(index)
         });
     }
 
@@ -596,7 +597,8 @@ class MyMarkets extends React.Component {
             onlyStars,
             userMarkets,
             preferredBases,
-            starredMarkets
+            starredMarkets,
+            chainMarkets
         } = this.props;
         const {
             activeTab,
@@ -712,7 +714,9 @@ class MyMarkets extends React.Component {
                         return null;
                     } else if (
                         !preferredBases.includes(market.base) &&
-                        possibleGatewayAssets.indexOf(market.base) === -1
+                        possibleGatewayAssets.indexOf(market.base) === -1 &&
+                        chainMarkets.indexOf(market.base) !== -1 &&
+                        chainMarkets.indexOf(market.quote) !== -1
                     ) {
                         // console.log("Adding to other markets:", base, market.base, preferredBases.toJS())
                         return {
@@ -934,9 +938,9 @@ class MyMarkets extends React.Component {
                             <Form.Item>
                                 <Checkbox
                                     checked={this.props.onlyLiquid}
-                                    onChange={() => {
+                                    onChange={e => {
                                         SettingsActions.changeViewSetting({
-                                            onlyLiquid: !this.props.onlyLiquid
+                                            onlyLiquid: e.target.checked
                                         });
                                     }}
                                 >
@@ -1082,10 +1086,22 @@ class MyMarkets extends React.Component {
                     onChange={index => {
                         this.setActiveMarketTab(index);
                     }}
+                    animated={false}
                 >
                     {preferredBases.map((base, index) => {
-                        return <Tabs.TabPane tab={base} key={index} />;
+                        return (
+                            <Tabs.TabPane
+                                tab={base.replace(/bridge\./i, "")}
+                                key={index}
+                            />
+                        );
                     })}
+                    {myMarketTab && hasOthers ? (
+                        <Tabs.TabPane
+                            key={preferredBases.size}
+                            tab={<Translate content="exchange.others" />}
+                        />
+                    ) : null}
                 </Tabs>
 
                 <div
@@ -1138,7 +1154,7 @@ class MyMarkets extends React.Component {
                                 />
                             );
                         })}
-                    {activeMarketTab === preferredBases.size + 1 &&
+                    {parseInt(activeMarketTab) === preferredBases.size &&
                     myMarketTab &&
                     hasOthers ? (
                         <MarketGroup
@@ -1155,6 +1171,7 @@ class MyMarkets extends React.Component {
                             findMarketTab={!myMarketTab}
                             location={this.props.location}
                             history={this.props.history}
+                            onlyLiquid={this.props.onlyLiquid && myMarketTab}
                         />
                     ) : null}
                 </div>
@@ -1190,6 +1207,7 @@ export default connect(
                     "onlyLiquid",
                     true
                 ),
+                chainMarkets: SettingsStore.getState().chainMarkets,
                 defaultMarkets: SettingsStore.getState().defaultMarkets,
                 viewSettings: SettingsStore.getState().viewSettings,
                 preferredBases: SettingsStore.getState().preferredBases,

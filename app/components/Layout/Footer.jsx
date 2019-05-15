@@ -143,8 +143,6 @@ class Footer extends React.Component {
     }
 
     launchIntroJS() {
-        const translator = require("counterpart");
-
         var hintData = document.querySelectorAll("[data-intro]");
         var theme = SettingsStore.getState().settings.get("themes");
 
@@ -159,10 +157,10 @@ class Footer extends React.Component {
                     showBullets: false,
                     hideNext: true,
                     hidePrev: true,
-                    nextLabel: translator.translate("walkthrough.next_label"),
-                    prevLabel: translator.translate("walkthrough.prev_label"),
-                    skipLabel: translator.translate("walkthrough.skip_label"),
-                    doneLabel: translator.translate("walkthrough.done_label")
+                    nextLabel: counterpart.translate("walkthrough.next_label"),
+                    prevLabel: counterpart.translate("walkthrough.prev_label"),
+                    skipLabel: counterpart.translate("walkthrough.skip_label"),
+                    doneLabel: counterpart.translate("walkthrough.done_label")
                 })
                 .start();
         }

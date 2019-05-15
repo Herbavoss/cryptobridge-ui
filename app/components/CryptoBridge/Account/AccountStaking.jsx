@@ -7,13 +7,13 @@ import utils from "common/utils";
 import CryptoBridgeWalletActions from "actions/cryptobridge/CryptoBridgeWalletActions";
 import {Apis} from "bitsharesjs-ws";
 import AccountStakingCreate from "./AccountStakingCreate";
+import {Button} from "bitshares-ui-style-guide";
 
-class VestingBalance extends React.Component {
-    static defaultProps = {};
+class StakingBalance extends React.Component {
     _onClaim(claimAll, e) {
         e.preventDefault();
-        CryptoBridgeWalletActions.claimVestingBalance(
-            this.props.account.id,
+        CryptoBridgeWalletActions.claimStakingBalance(
+            this.props.account.get("id"),
             this.props.vb,
             claimAll
         ).then(() => {
@@ -63,64 +63,60 @@ class VestingBalance extends React.Component {
         }
 
         return (
-            <div>
-                <Translate
-                    component="h5"
-                    content="cryptobridge.staking.account_id"
-                    id={vb.id}
-                />
-
-                <table className="table key-value-table">
-                    <tbody>
-                        <tr>
-                            <td>
-                                <Translate content="cryptobridge.staking.amount" />
-                            </td>
-                            <td>
-                                <FormattedAsset
-                                    amount={vb.balance.amount}
-                                    asset={vb.balance.asset_id}
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
+            <table className="table key-value-table">
+                <tbody>
+                    <tr>
+                        <td>
+                            <Translate content="cryptobridge.staking.amount" />
+                        </td>
+                        <td>
+                            <FormattedAsset
+                                amount={vb.balance.amount}
+                                asset={vb.balance.asset_id}
+                            />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {!available ? (
                                 <Translate content="cryptobridge.staking.remaining" />
-                            </td>
-                            <td>
-                                {daysLeft > 0 ? (
-                                    <Translate
-                                        days={daysLeft}
-                                        content="cryptobridge.staking.days"
-                                    />
-                                ) : (
-                                    <Translate
-                                        className="green"
-                                        content="cryptobridge.staking.available"
-                                    />
-                                )}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
+                            ) : null}
+                        </td>
+                        <td>
+                            {daysLeft > 0 ? (
+                                <Translate
+                                    days={daysLeft}
+                                    content="cryptobridge.staking.days"
+                                />
+                            ) : (
+                                <Translate
+                                    className="green"
+                                    content="cryptobridge.staking.available"
+                                />
+                            )}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {!available ? (
                                 <Translate content="cryptobridge.staking.status" />
-                            </td>
-                            <td style={{textAlign: "right"}}>
-                                {available ? (
-                                    <button
-                                        onClick={this._onClaim.bind(this, true)}
-                                        className="button"
-                                    >
-                                        <Translate content="account.member.claim" />
-                                    </button>
-                                ) : (
-                                    <Translate content="cryptobridge.staking.staking" />
-                                )}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                            ) : null}
+                        </td>
+                        <td style={{textAlign: "right"}}>
+                            {available ? (
+                                <Button
+                                    onClick={this._onClaim.bind(this, true)}
+                                    type="primary"
+                                >
+                                    <Translate content="account.member.claim" />
+                                </Button>
+                            ) : (
+                                <Translate content="cryptobridge.staking.staking" />
+                            )}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         );
     }
 }
@@ -136,7 +132,7 @@ class AccountStaking extends React.Component {
 
     componentWillMount() {
         if (this.props.account) {
-            this.retrieveVestingBalances.call(
+            this.retrieveStakingBalances.call(
                 this,
                 this.props.account.get("id")
             );
@@ -156,7 +152,7 @@ class AccountStaking extends React.Component {
         }
 
         if (newId !== oldId) {
-            this.retrieveVestingBalances.call(this, newId);
+            this.retrieveStakingBalances.call(this, newId);
         }
     }
 
@@ -164,7 +160,7 @@ class AccountStaking extends React.Component {
         this.unmounted = true;
     }
 
-    retrieveVestingBalances(accountId) {
+    retrieveStakingBalances(accountId) {
         accountId = accountId || this.props.account.get("id");
         Apis.instance()
             .db_api()
@@ -180,7 +176,8 @@ class AccountStaking extends React.Component {
     }
 
     render() {
-        let {vbs} = this.state;
+        const {vbs} = this.state;
+        const {account} = this.props;
         if (
             !vbs ||
             !this.props.account ||
@@ -216,11 +213,11 @@ class AccountStaking extends React.Component {
                         ) : (
                             vestingBalances.map(vb => {
                                 return (
-                                    <VestingBalance
+                                    <StakingBalance
                                         key={vb.id}
                                         vb={vb}
                                         account={account}
-                                        handleChanged={this.retrieveVestingBalances.bind(
+                                        handleChanged={this.retrieveStakingBalances.bind(
                                             this
                                         )}
                                     />

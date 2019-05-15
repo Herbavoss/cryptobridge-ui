@@ -41,6 +41,7 @@ class DepositWithdrawAssetSelector extends React.Component {
                             return {
                                 id: backedCoin,
                                 label: backedCoin,
+                                name: item.name,
                                 gateway: gateway,
                                 gateFee: item.gateFee,
                                 issuer: item.issuerId || "1.2.96397" //Fall back to open ledger
@@ -79,7 +80,7 @@ class DepositWithdrawAssetSelector extends React.Component {
         let asset;
 
         assets.map(a => {
-            if (a.id == selectedAsset) {
+            if (a.id == selectedAsset.split(".").shift()) {
                 asset = a;
             }
         });
@@ -136,8 +137,14 @@ class DepositWithdrawAssetSelector extends React.Component {
                     this information.
                 */}
                 {coinItems.map(coin => (
-                    <Select.Option key={coin.id} value={coin.label}>
-                        <AssetImage asset={coin.id} /> {coin.label}
+                    <Select.Option
+                        key={coin.label}
+                        className="asset-selector--option"
+                    >
+                        <AssetImage asset={coin.label} /> {coin.label}{" "}
+                        <span className="asset-selector--asset-name">
+                            ({coin.name})
+                        </span>
                     </Select.Option>
                 ))}
             </Select>

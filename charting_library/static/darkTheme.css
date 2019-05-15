@@ -1,10 +1,10 @@
 body.chart-page, .loading-indicator {
-  background: #16151b;
+  background: #0d182a;
 }
 
 .chart-page .chart-container {
   border: none;
-  background: #16151b;
+  background: #0d182a;
 }
 
 .header-chart-panel .group {
@@ -42,8 +42,8 @@ input.symbol-edit,
 
 .tv-close-panel.top {
   bottom: -15px;
-  background: #16151b;
-  border-color: #16151b;
+  background: #0d182a;
+  border-color: #0d182a;
   margin-left: -5px;
   height: 8px;
 }
@@ -80,14 +80,14 @@ input.symbol-edit,
 }
 .layout__area--top .header-chart-panel-sizer .header-chart-panel-content {
   padding: 5px !important;
-  background: #16151b;
+  background: #0d182a;
 }
 .layout__area--top .header-chart-panel-sizer .header-chart-panel-content .button, .layout__area--top .header-chart-panel-sizer .header-chart-panel-content .apply-common-tooltip {
-  border: 1px solid #16151b !important;
+  border: 1px solid #0d182a !important;
   background-color: #262626;
 }
 .layout__area--top .header-chart-panel-sizer .header-chart-panel-content .favored-list-container .submenu {
-  border-color: #16151b;
+  border-color: #0d182a;
 }
 .layout__area--top .apply-common-tooltip {
   cursor: pointer;
@@ -138,7 +138,7 @@ input.symbol-edit,
 
 .charts-popup-list {
   border: none;
-  background-color: #16151b;
+  background-color: #0d182a;
 }
 .charts-popup-list .special {
   color: #059cce !important;
@@ -187,7 +187,7 @@ input.symbol-edit,
 
 /* dialogs */
 .tv-dialog {
-  background-color: #16151b;
+  background-color: #0d182a;
   color: #bababa;
 }
 .tv-dialog .js-reset-button svg, .tv-dialog .js-dialog__close svg {
@@ -203,7 +203,7 @@ input.symbol-edit,
   border-color: #535353;
 }
 .tv-dialog .tv-search-row input {
-  background-color: #16151b;
+  background-color: #0d182a;
   color: #bababa;
 }
 .tv-dialog .tv-insert-study-item:hover {
@@ -218,14 +218,14 @@ input.symbol-edit,
 }
 .tv-dialog .tv-control-input {
   color: #bababa;
-  background-color: #16151b;
+  background-color: #0d182a;
 }
 .tv-dialog .tv-dropdown__body {
-  background-color: #16151b !important;
+  background-color: #0d182a !important;
 }
 .tv-dialog .tv-autocomplete__dropdown-item {
   color: #bababa;
-  background-color: #16151b !important;
+  background-color: #0d182a !important;
 }
 .tv-dialog .tv-autocomplete__dropdown-item:hover {
   color: #059cce;
@@ -233,7 +233,7 @@ input.symbol-edit,
 
 ._tv-dialog {
   border-color: #535353;
-  background-color: #16151b;
+  background-color: #0d182a;
   /* buttons */
   /* select  */
   /* input number */
@@ -250,7 +250,7 @@ input.symbol-edit,
 }
 ._tv-dialog input {
   border-color: #535353 !important;
-  background-color: #16151b;
+  background-color: #0d182a;
   color: #bababa !important;
 }
 ._tv-dialog a {
@@ -294,12 +294,12 @@ input.symbol-edit,
 }
 ._tv-dialog .tv-select-container.dialog {
   cursor: pointer;
-  background-color: #16151b !important;
+  background-color: #0d182a !important;
   color: #bababa !important;
   border-color: #535353 !important;
 }
 ._tv-dialog .tv-select-container.dialog .sbOptions li, ._tv-dialog .tv-select-container.dialog .sbOptions a {
-  background-color: #16151b;
+  background-color: #0d182a;
   color: #bababa;
 }
 ._tv-dialog .tv-select-container.dialog .sbOptions li:hover, ._tv-dialog .tv-select-container.dialog .sbOptions a:hover {
@@ -310,16 +310,16 @@ input.symbol-edit,
   cursor: pointer;
 }
 ._tv-dialog .ticker.tv-text-input.inset.dialog {
-  background-color: #16151b;
+  background-color: #0d182a;
   color: #bababa;
   border-color: #535353;
 }
 ._tv-dialog .tv-ticker {
-  background-color: #16151b;
+  background-color: #0d182a;
   color: #bababa;
 }
 ._tv-dialog .tv-ticker .tv-ticker__btn {
-  background-color: #16151b;
+  background-color: #0d182a;
   border-color: #535353;
 }
 ._tv-dialog .tv-ticker .tv-ticker__btn svg {
@@ -330,7 +330,7 @@ input.symbol-edit,
 }
 ._tv-dialog .custom-select .switcher {
   cursor: pointer;
-  background-color: #16151b !important;
+  background-color: #0d182a !important;
   border-color: #535353 !important;
 }
 ._tv-dialog .custom-select .switcher:hover {
@@ -340,11 +340,11 @@ input.symbol-edit,
   border-color: #535353 !important;
 }
 ._tv-dialog .custom-select .items {
-  background-color: #16151b !important;
+  background-color: #0d182a !important;
   border-color: #535353 !important;
 }
 ._tv-dialog .custom-select .items .item {
-  background-color: #16151b !important;
+  background-color: #0d182a !important;
 }
 ._tv-dialog .custom-select .items .item.selected {
   background-color: #535353 !important;
@@ -371,7 +371,7 @@ input.symbol-edit,
 
 /* go to dialog */
 [class|=dialog] {
-  background-color: #16151b;
+  background-color: #0d182a;
 }
 [class|=dialog] [class|=header] {
   color: #bababa;
@@ -385,7 +385,7 @@ input.symbol-edit,
 }
 [class|=dialog] [class|=body] input {
   color: #bababa !important;
-  background-color: #16151b !important;
+  background-color: #0d182a !important;
   border-color: #535353 !important;
 }
 
@@ -393,7 +393,7 @@ input.symbol-edit,
   background-color: #535353;
 }
 .layout__area--left [class|=inner] {
-  background: #16151b;
+  background: #0d182a;
 }
 .layout__area--left [class|=inner] [class|=buttonIcon] {
   color: #bababa;
@@ -410,38 +410,38 @@ input.symbol-edit,
 
 .tv-floating-toolbar {
   border-color: #535353;
-  background-color: #16151b;
+  background-color: #0d182a;
 }
 .tv-floating-toolbar .tv-grouped-floating-toolbar__sub-widget {
   transition: none;
   border-color: #535353;
-  background-color: #16151b;
+  background-color: #0d182a;
 }
 .tv-floating-toolbar .tv-grouped-floating-toolbar__sub-widget:hover {
   border-color: #535353 !important;
-  background-color: #16151b !important;
+  background-color: #0d182a !important;
 }
 .tv-floating-toolbar .tv-floating-toolbar__content {
-  background-color: #16151b !important;
+  background-color: #0d182a !important;
 }
 .tv-floating-toolbar .tv-floating-toolbar__content .tv-floating-toolbar__widget {
-  background-color: #16151b !important;
+  background-color: #0d182a !important;
   border-color: #535353;
 }
 .tv-floating-toolbar .tv-floating-toolbar__content .tv-floating-toolbar__widget .apply-common-tooltip {
-  background-color: #16151b !important;
+  background-color: #0d182a !important;
 }
 .tv-floating-toolbar.tv-linetool-properties-toolbar .tv-linetool-properties-toolbar__color-picker svg {
-  fill: #16151b;
+  fill: #0d182a;
 }
 .tv-floating-toolbar.tv-linetool-properties-toolbar .tv-linetool-properties-toolbar__color-picker svg .bg {
-  fill: #16151b;
+  fill: #0d182a;
 }
 .tv-floating-toolbar.tv-linetool-properties-toolbar .tv-linetool-properties-toolbar__color-picker svg .icon {
   fill: #bababa;
 }
 .tv-floating-toolbar.tv-linetool-properties-toolbar .tv-linetool-properties-toolbar__color-picker svg:hover .bg {
-  fill: #16151b;
+  fill: #0d182a;
 }
 .tv-floating-toolbar.tv-linetool-properties-toolbar .tv-linetool-properties-toolbar__icon svg path {
   fill: #bababa !important;
@@ -451,12 +451,12 @@ input.symbol-edit,
    on left side menu
 */
 [class|=menuWrap] [class|=menu] {
-  background-color: #16151b !important;
+  background-color: #0d182a !important;
 }
 [class|=menuWrap] [class|=menu] [class|=item] {
   cursor: pointer;
   color: #bababa;
-  background-color: #16151b !important;
+  background-color: #0d182a !important;
 }
 [class|=menuWrap] [class|=menu] [class|=item] [class|=labelRow] {
   color: #bababa !important;
