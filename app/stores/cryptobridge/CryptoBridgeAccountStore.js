@@ -11,7 +11,8 @@ class CryptoBridgeAccountStore extends BaseStore {
         this.bindListeners({
             onLogin: CryptoBridgeAccountActions.login,
             onLogout: CryptoBridgeAccountActions.logout,
-            onMe: CryptoBridgeAccountActions.me
+            onFetchMe: CryptoBridgeAccountActions.fetchMe,
+            onUpdateMe: CryptoBridgeAccountActions.updateMe
         });
 
         this._export(
@@ -19,10 +20,7 @@ class CryptoBridgeAccountStore extends BaseStore {
             "getAccess",
             "getMe",
             "getBearerToken",
-            "getIsAuthenticated",
-            "getRequiresUserIdentification",
-            "getRequiresTermsAndConditions",
-            "getUserIdentificationIsPending"
+            "getIsAuthenticated"
         );
     }
 
@@ -65,36 +63,11 @@ class CryptoBridgeAccountStore extends BaseStore {
         return this.getMe() !== null;
     }
 
-    getRequiresUserIdentification() {
-        const {kyc} = this.getMe() || {};
-
-        if (!kyc) {
-            return null;
-        }
-
-        return kyc.required !== false;
-    }
-
-    getRequiresTermsAndConditions() {
-        const {terms} = this.getMe() || {};
-
-        if (!terms) {
-            return null;
-        }
-
-        return terms.status !== "complete";
-    }
-
-    getUserIdentificationIsPending() {
-        return (
-            this.getRequiresUserIdentification() &&
-            this.getMe().kyc.status === "pending"
-        );
-    }
-
-    onMe(me) {
+    onFetchMe(me) {
         this.setState({me});
     }
+
+    onUpdateMe() {}
 
     onLogin(access) {
         this.setState({access});

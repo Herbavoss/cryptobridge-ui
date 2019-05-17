@@ -47,7 +47,7 @@ class DashboardPage extends React.Component {
                         <div className="content-block small-12">
                             <div className="tabs-container generic-bordered-box">
                                 <Tabs
-                                    defaultActiveTab={"btc"}
+                                    defaultActiveTab={"bridge.btc"}
                                     className="account-tabs"
                                 >
                                     <Tabs.TabPane

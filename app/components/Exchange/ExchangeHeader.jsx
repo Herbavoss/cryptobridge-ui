@@ -460,7 +460,7 @@ export default class ExchangeHeader extends React.Component {
                                 ) : null}
                             </ul>
                             <ul
-                                className="market-stats stats top-stats"
+                                className="market-stats stats top-stats column-hide-tiny"
                                 data-position={"left"}
                                 data-step="1"
                                 data-intro={translator.translate(

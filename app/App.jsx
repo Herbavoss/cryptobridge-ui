@@ -27,7 +27,6 @@ import DirectDebit from "./components/Showcases/DirectDebit";
 
 /* CRYPTOBRIDGE */
 import CryptoBridgeAccount from "components/CryptoBridge/Account";
-import CryptoBridgeMessages from "components/Layout/CryptoBridge/Messages";
 /* /CRYPTOBRIDGE */
 
 import {Route, Switch, Redirect} from "react-router-dom";
@@ -529,7 +528,6 @@ class App extends React.Component {
                             )}
                         />
                     ) : null}
-                    <CryptoBridgeMessages />
                     <div id="content-wrapper">
                         {content}
                         <NotificationSystem

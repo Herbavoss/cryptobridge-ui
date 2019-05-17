@@ -2480,7 +2480,30 @@
             "terms_and_conditions": {
                 "title": "CryptoBridge terms and conditions",
                 "accept": "I have read and agree to the %(cryptobridge_terms_and_conditions)s.",
-                "disclaimer": "I hereby renounce to my consumer right of revocation and acknowledge I can terminate the use of the service at anytime as described in §5.9 of CryptoBridge's Terms of Service."
+                "disclaimer": "I hereby renounce to my consumer right of revocation and acknowledge I can terminate the use of the service at anytime as described in §5.9 of CryptoBridge's Terms of Service.",
+                "required": "Accepting the CryptoBridge Terms of Service is required.",
+                "open": "Open Terms of Service"
+            },
+            "user_verification": {
+                "required": "US citizens are required to submit user verification to use CryptoBridge",
+                "info": "To continue using the CryptoBridge gateway, US citizens must first submit verification of their identity. Proceeding with this requirement will redirect you to our partner, Fractal. Upon completion, full functionality of your account be restored.",
+                "start": "Start user verification",
+                "status": {
+                    "pending": {
+                        "title": "Awaiting user verification by Fractal",
+                        "info": "Our systems indicate you have begun the verification process. Trading, deposit and withdraw functionalities will be disabled until complete. Your submission should be approved by Fractal within 24 hours of submitting it. Please contact Fractal for issues related to the status of your verification."
+                    }
+                }
+            }
+        },
+        "account": {
+            "login": {
+                "success": "Welcome back, %(username)s!",
+                "error": "Login error"
+            },
+            "update": {
+                "success": "Your account has been updated",
+                "error": "Could not update account"
             }
         },
         "staking": {

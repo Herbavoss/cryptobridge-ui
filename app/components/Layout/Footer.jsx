@@ -585,7 +585,7 @@ class Footer extends React.Component {
                                 </div>
                             </span>
                         ) : null}
-                        {block_height ? (
+                        {false && block_height ? ( // TODO need to check invariant error
                             <div className="grid-block shrink">
                                 <Tooltip
                                     title={counterpart.translate(

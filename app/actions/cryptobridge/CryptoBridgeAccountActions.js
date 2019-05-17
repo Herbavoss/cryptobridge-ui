@@ -3,6 +3,7 @@ import alt from "alt-instance";
 import CryptoBridgeAccountStore from "stores/cryptobridge/CryptoBridgeAccountStore";
 import {getBasicHeaders, getBasicToken} from "api/cryptobridge/apiHelpers";
 import {cryptoBridgeAPIs} from "api/apiConfig";
+import counterpart from "counterpart";
 
 class CryptoBridgeAccountActions {
     login(account) {
@@ -25,23 +26,31 @@ class CryptoBridgeAccountActions {
 
             return fetch(`${cryptoBridgeAPIs.BASE_V2}/login`, options)
                 .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    }
+                    return response.json().then(access => {
+                        if (response.ok) {
+                            return access;
+                        }
 
-                    throw new Error("Auth basic error");
+                        throw new Error(
+                            access.message ||
+                                counterpart.translate(
+                                    "cryptobridge.account.login.error"
+                                )
+                        );
+                    });
                 })
                 .then(access => {
                     dispatch(access);
                     return access;
                 })
-                .catch(() => {
+                .catch(e => {
                     dispatch({access: null});
+                    throw new Error(e);
                 });
         };
     }
 
-    me() {
+    fetchMe() {
         return dispatch => {
             const options = {
                 method: "GET",
@@ -50,19 +59,58 @@ class CryptoBridgeAccountActions {
 
             return fetch(`${cryptoBridgeAPIs.BASE_V2}/accounts/me`, options)
                 .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    }
+                    return response.json().then(me => {
+                        if (response.ok) {
+                            return me;
+                        }
 
-                    throw new Error("Auth bearer error");
+                        throw new Error(
+                            me.message ||
+                                counterpart.translate(
+                                    "cryptobridge.account.login.error"
+                                )
+                        );
+                    });
                 })
-                .then(response => response.json())
                 .then(account => {
                     dispatch(account);
                     return account;
                 })
-                .catch(err => {
+                .catch(e => {
                     dispatch({});
+                    throw new Error(e);
+                });
+        };
+    }
+
+    updateMe(me) {
+        return dispatch => {
+            const options = {
+                method: "PUT",
+                headers: getBasicHeaders(),
+                body: JSON.stringify(me)
+            };
+
+            return fetch(`${cryptoBridgeAPIs.BASE_V2}/accounts/me`, options)
+                .then(response => {
+                    if (response.ok) {
+                        return {};
+                    }
+
+                    throw new Error(
+                        me.message ||
+                            counterpart.translate(
+                                "cryptobridge.account.update.error"
+                            )
+                    );
+                })
+                .then(me => {
+                    dispatch(me);
+                    return me;
+                })
+                .catch(e => {
+                    dispatch({});
+                    throw new Error(e);
                 });
         };
     }

@@ -36,10 +36,10 @@ export class Citizenship extends React.Component {
                 }
             >
                 <Radio.Group buttonStyle="solid" onChange={this.props.onChange}>
-                    <Radio.Button value="us">
+                    <Radio.Button value="non-us">
                         <Translate content="cryptobridge.registration.us_citizen.no" />
                     </Radio.Button>
-                    <Radio.Button value="non-us">
+                    <Radio.Button value="us">
                         <img
                             height={20}
                             width={20}
@@ -102,11 +102,15 @@ export default class RegisterFormItems extends React.Component {
     static propTypes = {
         onChange: PropTypes.func.isRequired,
         recaptchaPayload: PropTypes.object,
-        citizenship: PropTypes.bool.isRequired
+        citizenship: PropTypes.bool.isRequired,
+        disclaimer: PropTypes.bool.isRequired,
+        terms: PropTypes.bool.isRequired
     };
 
     static defaultProps = {
-        citizenship: false
+        citizenship: false,
+        disclaimer: true,
+        terms: true
     };
 
     constructor() {
@@ -171,11 +175,15 @@ export default class RegisterFormItems extends React.Component {
                     <Citizenship onChange={this.onCitizenShipChange} />
                 ) : null}
 
-                <Disclaimer onChange={this.onConfirmedDisclaimerChange} />
+                {this.props.terms ? (
+                    <TermsAndConditions
+                        onChange={this.onConfirmedTermsAndConditionsChange}
+                    />
+                ) : null}
 
-                <TermsAndConditions
-                    onChange={this.onConfirmedTermsAndConditionsChange}
-                />
+                {this.props.disclaimer ? (
+                    <Disclaimer onChange={this.onConfirmedDisclaimerChange} />
+                ) : null}
 
                 {this.props.recaptchaPayload ? (
                     <ReCAPTCHA

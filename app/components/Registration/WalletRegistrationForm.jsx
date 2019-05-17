@@ -121,18 +121,42 @@ class WalletRegistrationForm extends React.Component {
         if (!this.isValid()) {
             return;
         }
-        const {accountName} = this.state;
+        const {accountName, reCaptchaToken} = this.state;
+        /* CRYPTOBRIDGE */
+        const accountInfo = {
+            us_citizen: this.state.usCitizen,
+            waiver: this.state.confirmedDisclaimer,
+            terms_version: this.state.confirmedTermsAndConditions
+                ? "latest"
+                : null
+        };
+        /* CRYPTOBRIDGE */
+
         if (WalletDb.getWallet()) {
-            this.createAccount(accountName);
+            this.createAccount(
+                accountName,
+
+                /* CRYPTOBRIDGE */
+                reCaptchaToken,
+                accountInfo
+                /* /CRYPTOBRIDGE */
+            );
         } else {
             const password = this.state.password;
             this.createWallet(password).then(() =>
-                this.createAccount(accountName)
+                this.createAccount(
+                    accountName,
+
+                    /* CRYPTOBRIDGE */
+                    reCaptchaToken,
+                    accountInfo
+                    /* /CRYPTOBRIDGE */
+                )
             );
         }
     }
 
-    createAccount(name) {
+    createAccount(name, reCaptchaToken, accountInfo) {
         const {referralAccount} = AccountStore.getState();
         WalletUnlockActions.unlock().then(() => {
             this.setState({loading: true});
@@ -141,7 +165,13 @@ class WalletRegistrationForm extends React.Component {
                 name,
                 this.state.registrarAccount,
                 referralAccount || this.state.registrarAccount,
-                0
+                0,
+                undefined,
+
+                /* CRYPTOBRIDGE */
+                reCaptchaToken,
+                accountInfo
+                /* /CRYPTOBRIDGE */
             )
                 .then(() => {
                     // User registering his own account

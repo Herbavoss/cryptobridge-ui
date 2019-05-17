@@ -304,6 +304,9 @@ class DepositModalContent extends DecimalChecker {
                 <div className="modal__body" style={{paddingTop: "0"}}>
                     <div className="container-row">
                         <div className="no-margin no-padding">
+                            <label className="left-label">
+                                <Translate content="gateway.asset_to_deposit" />
+                            </label>
                             <div className="inline-label input-wrapper">
                                 <DepositWithdrawAssetSelector
                                     defaultValue={this.state.selectedAsset}

@@ -27,5 +27,14 @@ export function getIsValidPaymentId(asset, paymentId) {
 }
 
 export function getIsBridgeCoinAsset(asset) {
-    return asset && asset.get("symbol").indexOf("BRIDGE.") === 0;
+    return asset && /^BRIDGE\./.test(asset.get("symbol"));
+}
+
+export function getCleanAssetSymbol(asset) {
+    if (asset) {
+        const symbol = typeof asset === "object" ? asset.get("symbol") : asset;
+        return symbol.toUpperCase().replace(/^BRIDGE\./, "");
+    }
+
+    return "";
 }

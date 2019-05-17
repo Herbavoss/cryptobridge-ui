@@ -67,7 +67,10 @@ class AccountRegistrationConfirm extends React.Component {
 
         const accountInfo = {
             us_citizen: this.props.usCitizen,
-            waiver: this.state.confirmedDisclaimer
+            waiver: this.state.confirmedDisclaimer,
+            terms_version: this.state.confirmedTermsAndConditions
+                ? "latest"
+                : null
         };
 
         this.createAccount(

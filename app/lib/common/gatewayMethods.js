@@ -3,6 +3,11 @@ import {cryptoBridgeAPIs} from "api/apiConfig";
 import {availableGateways} from "common/gateways";
 const blockTradesStorage = new ls("");
 
+/* CRYPTOBRIDGE */
+import {getBasicHeaders} from "api/cryptobridge/apiHelpers";
+import {getCleanAssetSymbol} from "lib/cryptobridge/assetMethods";
+/* /CRYPTOBRIDGE */
+
 let fetchInProgess = {};
 let fetchCache = {};
 let clearIntervals = {};
@@ -223,48 +228,42 @@ export function getActiveWallets(
 }
 
 export function getDepositAddress({coin, account, stateCallback}) {
-    let body = {
-        coin,
-        account
-    };
+    const url = `${
+        cryptoBridgeAPIs.BASE_V2
+    }/accounts/${account}/assets/${getCleanAssetSymbol(coin)}/addresses/latest`;
 
-    let body_string = JSON.stringify(body);
-
-    fetch(cryptoBridgeAPIs.BASE_V1 + "/simple-api/get-last-address", {
-        method: "POST",
-        headers: new Headers({
-            Accept: "application/json",
-            "Content-Type": "application/json"
-        }),
-        body: body_string
+    fetch(url, {
+        headers: getBasicHeaders()
     })
         .then(
-            data => {
-                data.json().then(
-                    json => {
-                        let address = {
-                            address: json.address,
-                            memo: json.memo || null,
-                            error: json.error || null,
-                            loading: false
-                        };
-                        if (stateCallback) stateCallback(address);
-                    },
-                    error => {
-                        console.log("error: ", error);
-                        if (stateCallback)
-                            stateCallback({address: error.message, memo: null});
-                    }
-                );
+            reply => {
+                if (reply.status === 404) {
+                    throw new Error("Address not found");
+                } else {
+                    reply.json().then(
+                        json => {
+                            const address = {
+                                address: json.address,
+                                memo: json.memo || null,
+                                error: json.error || null,
+                                loading: false
+                            };
+                            if (stateCallback) stateCallback(address);
+                        },
+                        error => {
+                            throw new Error(error.message);
+                        }
+                    );
+                }
             },
             error => {
-                console.log("error: ", error);
-                if (stateCallback)
-                    stateCallback({address: error.message, memo: null});
+                throw new Error(error.message);
             }
         )
         .catch(err => {
-            console.log("fetch error:", err);
+            if (stateCallback) {
+                stateCallback({address: err.message, memo: null});
+            }
         });
 }
 
@@ -273,7 +272,7 @@ export function requestDepositAddress({
     inputCoinType,
     outputCoinType,
     outputAddress,
-    url = openledgerAPIs.BASE,
+    url = cryptoBridgeAPIs.BASE_V2,
     stateCallback,
     selectedGateway
 }) {
@@ -293,13 +292,16 @@ export function requestDepositAddress({
     let body_string = JSON.stringify(body);
     if (depositRequests[body_string]) return;
     depositRequests[body_string] = true;
-    fetch(url + "/simple-api/initiate-trade", {
-        method: "post",
-        headers: new Headers({
-            Accept: "application/json",
-            "Content-Type": "application/json"
-        }),
-        body: body_string
+
+    url = `${
+        cryptoBridgeAPIs.BASE_V2
+    }/accounts/${account}/assets/${getCleanAssetSymbol(
+        inputCoinType
+    )}/addresses`;
+
+    fetch(url, {
+        method: "POST",
+        headers: getBasicHeaders()
     })
         .then(
             reply => {
@@ -308,8 +310,8 @@ export function requestDepositAddress({
                         delete depositRequests[body_string];
                         // console.log( "reply: ", json );
                         let address = {
-                            address: json.inputAddress || "unknown",
-                            memo: json.inputMemo,
+                            address: json.address || "unknown",
+                            memo: null,
                             error: json.error || null
                         };
                         if (stateCallback) stateCallback(address);
@@ -419,7 +421,7 @@ export function getBackedCoins({allCoins, tradingPairs, backer}) {
 }
 
 export function validateAddress({
-    url = cryptoBridgeAPIs.BASE_V1,
+    url = cryptoBridgeAPIs.BASE_V2,
     walletType,
     newAddress,
     output_coin_type = null,
@@ -427,40 +429,23 @@ export function validateAddress({
 }) {
     if (!newAddress) return new Promise(res => res());
 
-    if (!method || method == "GET") {
-        url +=
-            "/wallets/" +
-            walletType +
-            "/address-validator?address=" +
-            encodeURIComponent(newAddress);
-        if (output_coin_type) {
-            url += "&outputCoinType=" + output_coin_type;
-        }
-        return fetch(url, {
-            method: "get",
-            headers: new Headers({
-                Accept: "application/json",
-                "Content-Type": "application/json"
-            })
+    /* CRYPTOBRIDGE */
+    url = `${
+        cryptoBridgeAPIs.BASE_V2
+    }/accounts/${account}/assets/${getCleanAssetSymbol(
+        output_coin_type
+    )}/addresses/validate?address=${encodeURIComponent(newAddress)}`;
+
+    return fetch(url, {
+        headers: getBasicHeaders()
+    })
+        .then(reply => {
+            return reply.ok;
         })
-            .then(reply => reply.json().then(json => json.isValid))
-            .catch(err => {
-                console.log("validate error:", err);
-            });
-    } else if (method == "POST") {
-        return fetch(url + "/wallets/" + walletType + "/check-address", {
-            method: "post",
-            headers: new Headers({
-                Accept: "application/json",
-                "Content-Type": "application/json"
-            }),
-            body: JSON.stringify({address: newAddress})
-        })
-            .then(reply => reply.json().then(json => json.isValid))
-            .catch(err => {
-                console.log("validate error:", err);
-            });
-    }
+        .catch(e => {
+            console.log("validateAddress error", e);
+        });
+    /* /CRYPTOBRIDGE */
 }
 
 let _conversionCache = {};

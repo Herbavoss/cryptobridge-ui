@@ -89,6 +89,8 @@ class MarketRow extends React.Component {
             };
         }
 
+        let changeClass = "";
+
         let columns = this.props.columns
             .map(column => {
                 switch (column.name) {
@@ -128,7 +130,7 @@ class MarketRow extends React.Component {
                             stats && stats.change ? stats.change : 0,
                             2
                         );
-                        let changeClass =
+                        changeClass =
                             change === "0.00"
                                 ? ""
                                 : change > 0
@@ -334,7 +336,7 @@ class MarketRow extends React.Component {
 
         let className = "clickable";
         if (this.props.current) {
-            className += " activeMarket";
+            className += ` activeMarket ${changeClass}`;
         }
 
         return (

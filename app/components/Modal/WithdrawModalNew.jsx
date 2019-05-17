@@ -1040,6 +1040,9 @@ class WithdrawModalNew extends React.Component {
                     <div className="modal__body" style={{paddingTop: 0}}>
                         <div style={{marginBottom: "1em"}}>
                             {/*ASSET SELECTION*/}
+                            <label className="left-label">
+                                <Translate content="gateway.asset_to_withdraw" />
+                            </label>
                             <DepositWithdrawAssetSelector
                                 onSelect={this.onAssetSelected.bind(this)}
                                 onChange={this.onAssetChanged.bind(this)}

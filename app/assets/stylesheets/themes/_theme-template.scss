@@ -1565,8 +1565,18 @@
     }
     tr.activeMarket,
     tr.activeMarket:hover {
-        color: #4c85d8;
-        background-color: $header-color;
+        color: $primary-text-color;
+        /* CRYPTOBRIDGE */
+        border: 1px solid $primary-text-color;
+        &.change-up {
+            border-color: $positive-color;
+            color: $primary-text-color !important;
+        }
+        &.change-down {
+            border-color: $negative-color;
+            color: $primary-text-color !important;
+        }
+        /* /CRYPTOBRIDGE */
     }
     .market-stats .stat .value {
         color: $primary-text-color;

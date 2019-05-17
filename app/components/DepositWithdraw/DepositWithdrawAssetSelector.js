@@ -123,7 +123,7 @@ class DepositWithdrawAssetSelector extends React.Component {
                         ? "gateway.asset_search_withdraw"
                         : "gateway.asset_search_deposit"
                 )}
-                value={this.props.defaultValue}
+                defaultValue={this.props.defaultValue || undefined}
                 optionLabelProp={"children"}
                 showSearch
                 style={{width: "100%"}}

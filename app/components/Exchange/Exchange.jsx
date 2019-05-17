@@ -3096,20 +3096,6 @@ class Exchange extends React.Component {
                     className="order-10 small-12"
                     key={`actionCard_${actionCardIndex++}`}
                 >
-                    <Tabs
-                        defaultActiveKey="my-market"
-                        activeKey={tabVerticalPanel}
-                        onChange={this._setTabVerticalPanel.bind(this)}
-                    >
-                        <Tabs.TabPane
-                            tab={translator.translate("exchange.market_name")}
-                            key="my-market"
-                        />
-                        <Tabs.TabPane
-                            tab={translator.translate("exchange.more")}
-                            key="find-market"
-                        />
-                    </Tabs>
                     {myMarkets}
                 </div>
             );
@@ -3176,22 +3162,6 @@ class Exchange extends React.Component {
                         header={translator.translate("exchange.market_name")}
                         key="myMarkets"
                     >
-                        <Tabs
-                            defaultActiveKey="my-market"
-                            activeKey={tabVerticalPanel}
-                            onChange={this._setTabVerticalPanel.bind(this)}
-                        >
-                            <Tabs.TabPane
-                                tab={translator.translate(
-                                    "exchange.market_name"
-                                )}
-                                key="my-market"
-                            />
-                            {/*<Tabs.TabPane*/}
-                            {/*tab={translator.translate("exchange.more")}*/}
-                            {/*key="find-market"*/}
-                            {/*/>*/}
-                        </Tabs>
                         {myMarkets}
                     </Collapse.Panel>
                 </Collapse>
@@ -3245,29 +3215,6 @@ class Exchange extends React.Component {
                     style={{display: "block"}}
                     key={`actionCard_${actionCardIndex++}`}
                 >
-                    <div
-                        className="v-align no-padding align-center grid-block footer shrink column"
-                        data-intro={translator.translate(
-                            "walkthrough.my_markets"
-                        )}
-                    >
-                        <Tabs
-                            defaultActiveKey="my-market"
-                            activeKey={tabVerticalPanel}
-                            onChange={this._setTabVerticalPanel.bind(this)}
-                        >
-                            <Tabs.TabPane
-                                tab={translator.translate(
-                                    "exchange.market_name"
-                                )}
-                                key="my-market"
-                            />
-                            {/*<Tabs.TabPane*/}
-                            {/*tab={translator.translate("exchange.more")}*/}
-                            {/*key="find-market"*/}
-                            {/*/>*/}
-                        </Tabs>
-                    </div>
                     {myMarkets}
                 </div>
             );
