@@ -106,7 +106,7 @@ class ReportModal extends React.Component {
                             target="_blank"
                             style={{textAlign: "center", width: "100%"}}
                         >
-                            https://github.com/bitshares/bitshares-ui/issues
+                            https://github.com/CryptoBridge/cryptobridge-ui/issues
                         </a>
                         <br />
                         <Translate content="modal.report.explanatory_text_3" />
