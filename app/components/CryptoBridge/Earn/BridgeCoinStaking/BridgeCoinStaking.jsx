@@ -2,10 +2,12 @@ import React from "react";
 import {connect} from "alt-react";
 
 import Translate from "react-translate-component";
+import counterpart from "counterpart";
+
 import {ChainStore} from "bitsharesjs";
 import {Apis} from "bitsharesjs-ws";
 import BridgeCoinStakingBalances from "./BridgeCoinStakingBalances";
-import {Typography} from "bitshares-ui-style-guide";
+import {Typography, Row, Col, Card} from "bitshares-ui-style-guide";
 const {Paragraph, Title} = Typography;
 import ChainTypes from "components/Utility/ChainTypes";
 import CryptoBridgeAccountStore from "stores/cryptobridge/CryptoBridgeAccountStore";
@@ -75,27 +77,40 @@ class BridgeCoinStaking extends React.Component {
 
         return (
             <div className="content padding">
-                <Title level={4}>
-                    <Translate
-                        content="cryptobridge.earn.staking.intro_text_1"
-                        with={{percent: "50%"}}
-                    />
-                </Title>
-                <Paragraph>
-                    <Translate content="cryptobridge.earn.staking.intro_text_2" />
-                </Paragraph>
-                <Paragraph>
-                    <Translate
-                        content="cryptobridge.earn.staking.intro_text_3"
-                        with={{url: "https://crypto-bridge.org/bridgecoin/"}}
-                        unsafe
-                    />
-                </Paragraph>
-
-                <BridgeCoinStakingForm
-                    account={account}
-                    balances={this.props.accountBalances}
-                />
+                <Row gutter={32}>
+                    <Col xs={{span: 24}} lg={{span: 16}}>
+                        <Title level={4}>
+                            <Translate
+                                content="cryptobridge.earn.staking.intro_text_1"
+                                with={{percent: "50%"}}
+                            />
+                        </Title>
+                        <Paragraph>
+                            <Translate content="cryptobridge.earn.staking.intro_text_2" />
+                        </Paragraph>
+                        <Paragraph>
+                            <Translate
+                                content="cryptobridge.earn.staking.intro_text_3"
+                                with={{
+                                    url: "https://crypto-bridge.org/bridgecoin/"
+                                }}
+                                unsafe
+                            />
+                        </Paragraph>
+                    </Col>
+                    <Col xs={{span: 24}} lg={{span: 8}}>
+                        <Card
+                            title={counterpart.translate(
+                                "cryptobridge.earn.staking.create"
+                            )}
+                        >
+                            <BridgeCoinStakingForm
+                                account={account}
+                                balances={this.props.accountBalances}
+                            />
+                        </Card>
+                    </Col>
+                </Row>
 
                 <BridgeCoinStakingBalances balances={stakingBalances} />
             </div>

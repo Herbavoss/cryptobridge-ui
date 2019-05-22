@@ -2543,7 +2543,13 @@
                 "available": "Available for claiming"
             },
             "referral": {
-                "title": "Referral program"
+                "title": "Referral program",
+                "card": {
+                    "title": "Your referral link",
+                    "copy": "Copy referral link",
+                    "login": "Please login to reveal your personal referral link.",
+                    "explain": "Short referral link explanation needed..."
+                }
             }
         },
         "support": {

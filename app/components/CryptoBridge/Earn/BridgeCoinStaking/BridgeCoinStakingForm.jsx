@@ -106,6 +106,8 @@ export default class BridgeCoinStakingForm extends React.Component {
                 JSON.stringify(prevProps.balances)
         ) {
             this.forceUpdate();
+            this._updateFee();
+            this._checkFeeStatus();
         }
     }
 
@@ -359,98 +361,89 @@ export default class BridgeCoinStakingForm extends React.Component {
                     />
                 </Paragraph>
 
-                <div className="grid-block small-12 medium-6">
-                    <div className="grid-content">
-                        <Translate
-                            component="label"
-                            className="left-label"
-                            unsafe
-                            content="cryptobridge.earn.staking.amount_bco"
-                        />
-                        <ExchangeInput
-                            placeholder="0.0"
-                            defaultValue={0}
-                            value={amount}
-                            onChange={this._onAmountChanged}
-                            addonAfter={
-                                <span>
-                                    <AssetName noTip name={asset.symbol} />
-                                </span>
-                            }
-                        />
-                        {balance}
-                    </div>
-                </div>
+                <Translate
+                    component="label"
+                    className="left-label"
+                    unsafe
+                    content="cryptobridge.earn.staking.amount_bco"
+                />
+                <ExchangeInput
+                    placeholder="0.0"
+                    defaultValue={0}
+                    value={amount}
+                    onChange={this._onAmountChanged}
+                    addonAfter={
+                        <span>
+                            <AssetName noTip name={"BRIDGE.BCO"} />
+                        </span>
+                    }
+                />
+                {balance}
 
-                <div className="grid-block small-12 medium-6">
-                    <div className="grid-content">
-                        <Translate
-                            component="label"
-                            style={{marginTop: "1rem"}}
-                            content="cryptobridge.earn.staking.duration"
-                        />
-                        <Select
-                            onChange={this._setStakingPeriod}
-                            value={stakingPeriodValue}
-                            style={{width: "100%"}}
-                        >
-                            {AccountStakingInfo.stakingPeriods.map((p, i) => {
-                                return (
-                                    <Select.Option
-                                        key={"stakingPeriod" + i}
-                                        value={p.value}
-                                    >
-                                        {counterpart.translate(p.name, {
-                                            bonus: p.bonus
-                                        })}
-                                    </Select.Option>
-                                );
-                            })}
-                        </Select>
-
-                        {amount > 0 ? (
-                            <label
-                                style={{marginTop: "20px"}}
-                                className={
-                                    showValidationErrors &&
-                                    !confirmationCheckboxChecked
-                                        ? "has-error"
-                                        : ""
-                                }
+                <Translate
+                    component="label"
+                    style={{marginTop: "1rem"}}
+                    content="cryptobridge.earn.staking.duration"
+                />
+                <Select
+                    onChange={this._setStakingPeriod}
+                    value={stakingPeriodValue}
+                    style={{width: "100%"}}
+                >
+                    {AccountStakingInfo.stakingPeriods.map((p, i) => {
+                        return (
+                            <Select.Option
+                                key={"stakingPeriod" + i}
+                                value={p.value}
                             >
-                                <Checkbox
-                                    key={`checkbox_${confirmationCheckboxChecked}`} // This is needed to prevent slow checkbox reaction
-                                    onChange={this._onUnderstandCheckboxChange}
-                                    checked={confirmationCheckboxChecked}
-                                >
-                                    <Translate
-                                        content="cryptobridge.earn.staking.understand"
-                                        with={{
-                                            amount,
-                                            month: counterpart(
-                                                stakingPeriod.name_plural
-                                            )
-                                        }}
-                                    />
-                                </Checkbox>
-                            </label>
-                        ) : null}
+                                {counterpart.translate(p.name, {
+                                    bonus: p.bonus
+                                })}
+                            </Select.Option>
+                        );
+                    })}
+                </Select>
 
-                        <div
-                            style={{
-                                width: "100%",
-                                textAlign: "right",
-                                marginTop: "20px"
-                            }}
+                {amount > 0 ? (
+                    <label
+                        style={{marginTop: "20px"}}
+                        className={
+                            showValidationErrors && !confirmationCheckboxChecked
+                                ? "has-error"
+                                : ""
+                        }
+                    >
+                        <Checkbox
+                            key={`checkbox_${confirmationCheckboxChecked}`} // This is needed to prevent slow checkbox reaction
+                            onChange={this._onUnderstandCheckboxChange}
+                            checked={confirmationCheckboxChecked}
                         >
-                            <Button
-                                onClick={this._stakeBalance.bind(this)}
-                                type="primary"
-                            >
-                                <Translate content="cryptobridge.earn.staking.create" />
-                            </Button>
-                        </div>
-                    </div>
+                            <Translate
+                                content="cryptobridge.earn.staking.understand"
+                                with={{
+                                    amount,
+                                    month: counterpart(
+                                        stakingPeriod.name_plural
+                                    )
+                                }}
+                            />
+                        </Checkbox>
+                    </label>
+                ) : null}
+
+                <div
+                    style={{
+                        width: "100%",
+                        textAlign: "right",
+                        marginTop: "20px"
+                    }}
+                >
+                    <Button
+                        onClick={this._stakeBalance.bind(this)}
+                        type="primary"
+                    >
+                        <Translate content="cryptobridge.earn.staking.create" />
+                    </Button>
                 </div>
             </Form>
         );
