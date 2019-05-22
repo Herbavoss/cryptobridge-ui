@@ -301,29 +301,6 @@ export default class DropDownMenu extends React.Component {
 
                 {/* CRYPTOBRIDGE */}
 
-                {isMyAccount ? (
-                    <li
-                        className={cnames({
-                            active: active.indexOf("/bridgecoin") !== -1
-                        })}
-                        onClick={this.props.onNavigate.bind(
-                            this,
-                            `/account/${currentAccount}/bridgecoin`
-                        )}
-                    >
-                        <div className="table-cell">
-                            <Icon
-                                size="2x"
-                                name="bridgecoin"
-                                title="cryptobridge.icons.bridgecoin"
-                            />
-                        </div>
-                        <div className="table-cell">
-                            <Translate content="cryptobridge.bridgecoin.title" />
-                        </div>
-                    </li>
-                ) : null}
-
                 <li
                     className={cnames({
                         active: active.indexOf("/benchmark") !== -1
@@ -401,47 +378,6 @@ export default class DropDownMenu extends React.Component {
                     </div>
                     <div className="table-cell">
                         <Translate content="header.settings" />{" "}
-                    </div>
-                </li>
-
-                <li
-                    className={cnames({
-                        active: active.indexOf("/news") !== -1
-                    })}
-                    onClick={this.props.onNavigate.bind(this, "/news")}
-                >
-                    <div className="table-cell">
-                        <Icon size="2x" name="news" title="icons.news" />
-                    </div>
-                    <div className="table-cell">
-                        <Translate content="news.news" />
-                    </div>
-                </li>
-
-                <li
-                    className={cnames(
-                        {
-                            active:
-                                active.indexOf(
-                                    "/help/introduction/bitshares"
-                                ) !== -1
-                        },
-                        "divider"
-                    )}
-                    onClick={this.props.onNavigate.bind(
-                        this,
-                        "/help/introduction/bitshares"
-                    )}
-                >
-                    <div className="table-cell">
-                        <Icon
-                            size="2x"
-                            name="question-circle"
-                            title="icons.question_circle"
-                        />
-                    </div>
-                    <div className="table-cell">
-                        <Translate content="header.help" />
                     </div>
                 </li>
 

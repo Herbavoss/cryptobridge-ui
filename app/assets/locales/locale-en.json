@@ -2439,7 +2439,8 @@
     },
     "cryptobridge": {
         "header": {
-            "trade": "Trade"
+            "trade": "Trade",
+            "earn": "Earn"
         },
         "benchmark": {
             "title": "Benchmark",
@@ -2506,38 +2507,44 @@
                 "error": "Could not update account"
             }
         },
-        "bridgecoin": {
-            "title": "BCO Staking",
-            "intro_text_1": "Stake your BridgeCoin (BCO) to receive twice-monthly revenue payout from CryptoBridge.",
-            "intro_text_2": "Everyone who stakes their BCO is entitled to %(percent)s of the trading fee revenue from the CryptoBridge gateway. Staking will lock your coins for the time you specify below. During the staking period you automatically take part in the payout distributions which are processed after the 1st and 15th of the month. A longer staking duration secures a more heavily weighted payout factor.",
-            "intro_text_3": "For a more detailed explanation of BCO staking, please visit this page on our website: <a target=\"_new\" href=\"%(url)s\">%(url)s</a>. ",
-            "intro_text_4": "After the staking period has been reached, you can reclaim your staked BCO balance with the 'Claim Now' button. The blockchain fee to start a new staking position is currently set at %(fee)s BCO. The blockchain fee to reclaim your staked BCO is currently set at %(reclaimFee)s BCO. You can only stake BCO that are already deposited to the CryptoBridge gateway.",
+        "earn": {
+            "staking": {
+                "title": "BridgeCoin staking",
+                "login": "In order to stake your BridgeCoin, you must first log in.",
+                "intro_text_1": "Stake your BridgeCoin (BCO) to receive twice-monthly revenue payout from CryptoBridge.",
+                "intro_text_2": "Everyone who stakes their BCO is entitled to %(percent)s of the trading fee revenue from the CryptoBridge gateway. Staking will lock your coins for the time you specify below. During the staking period you automatically take part in the payout distributions which are processed after the 1st and 15th of the month. A longer staking duration secures a more heavily weighted payout factor.",
+                "intro_text_3": "For a more detailed explanation of BCO staking, please visit this page on our website: <a target=\"_new\" href=\"%(url)s\">%(url)s</a>. ",
+                "intro_text_4": "After the staking period has been reached, you can reclaim your staked BCO balance with the 'Claim Now' button. The blockchain fee to start a new staking position is currently set at %(fee)s BCO. The blockchain fee to reclaim your staked BCO is currently set at %(reclaimFee)s BCO. You can only stake BCO that are already deposited to the CryptoBridge gateway.",
 
-            "amount_bco": "Amount of BCO to stake",
-            "bco_not_available": "No BCO available",
-            "bco_available": "Available %(bco)s",
+                "amount_bco": "Amount of BCO to stake",
+                "bco_not_available": "No BCO available",
+                "bco_available": "Available %(bco)s",
 
-            "understand": "I hereby agree that by staking %(amount)s BCO, I fully understand that they will be locked away for %(month)s and that there is no way of claiming the funds before the staking term is over. I also accept the share in the profits of CryptoBridge platform which is attributed to my staked funds.",
+                "understand": "I hereby agree that by staking %(amount)s BCO, I fully understand that they will be locked away for %(month)s and that there is no way of claiming the funds before the staking term is over. I also accept the share in the profits of CryptoBridge platform which is attributed to my staked funds.",
 
-            "create": "Create a new BCO staking position",
+                "create": "Create a new BCO staking position",
 
-            "no_balances": "You have no open BridgeCoin staking positions.",
+                "no_balances": "You have no open BridgeCoin staking positions.",
 
-            "duration": "Staking duration",
+                "duration": "Staking duration",
 
-            "month_1": "1 Month (%(bonus)s bonus)",
-            "month_3": "3 Month (%(bonus)s bonus)",
-            "month_6": "6 Month (%(bonus)s bonus)",
-            "month_12": "12 Month (%(bonus)s bonus)",
-            "month_1_plural": "1 Month",
-            "month_3_plural": "3 Months",
-            "month_6_plural": "6 Months",
-            "month_12_plural": "12 Months",
+                "month_1": "1 Month (%(bonus)s bonus)",
+                "month_3": "3 Month (%(bonus)s bonus)",
+                "month_6": "6 Month (%(bonus)s bonus)",
+                "month_12": "12 Month (%(bonus)s bonus)",
+                "month_1_plural": "1 Month",
+                "month_3_plural": "3 Months",
+                "month_6_plural": "6 Months",
+                "month_12_plural": "12 Months",
 
-            "amount": "Staking amount",
-            "remaining": "Remaining in staking period",
-            "status": "Status",
-            "available": "Available for claiming"
+                "amount": "Staking amount",
+                "remaining": "Remaining in staking period",
+                "status": "Status",
+                "available": "Available for claiming"
+            },
+            "referral": {
+                "title": "Referral program"
+            }
         },
         "support": {
             "title": "Support",

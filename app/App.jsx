@@ -121,6 +121,11 @@ const Support = Loadable({
         import(/* webpackChunkName: "create-worker" */ "./components/CryptoBridge/Support/Support"),
     loading: LoadingIndicator
 });
+const Earn = Loadable({
+    loader: () =>
+        import(/* webpackChunkName: "create-worker" */ "./components/CryptoBridge/Earn/Earn"),
+    loading: LoadingIndicator
+});
 
 /* /CRYPTOBRIDGE */
 
@@ -425,7 +430,7 @@ class App extends React.Component {
                                     component={Benchmark}
                                 />
                                 <Route path="/support" component={Support} />
-
+                                <Route path="/earn" component={Earn} />
                                 {/* /CRYPTOBRIDGE*/}
 
                                 {/* Explorer routes */}

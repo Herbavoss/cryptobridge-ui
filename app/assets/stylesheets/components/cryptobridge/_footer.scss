@@ -29,4 +29,13 @@
             }
         }
     }
+
+    .introjs-launcher {
+        .icon {
+            line-height: 2;
+            > svg > path {
+                fill: #fff;
+            }
+        }
+    }
 }

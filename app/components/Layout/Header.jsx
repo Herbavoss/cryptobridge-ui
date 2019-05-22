@@ -849,9 +849,6 @@ class Header extends React.Component {
             );
         };
 
-        if (active.indexOf("/bridgecoin") !== -1) {
-            dynamicMenuItem = getDynamicMenu("bridgecoin");
-        }
         if (active.indexOf("/support") !== -1) {
             dynamicMenuItem = getDynamicMenu("support");
         }
@@ -1142,6 +1139,43 @@ class Header extends React.Component {
                                     />
                                 </a>
                             </li>
+                            {/* CRYPTOBRIDGE */}
+                            <li>
+                                <a
+                                    style={{flexFlow: "row"}}
+                                    className={cnames(
+                                        active.indexOf("/earn") !== -1
+                                            ? null
+                                            : "column-hide-xxs",
+                                        {
+                                            active:
+                                                active.indexOf("/earn") !== -1
+                                        }
+                                    )}
+                                    onClick={this._onNavigate.bind(
+                                        this,
+                                        "/earn"
+                                    )}
+                                >
+                                    <Icon
+                                        size="1_5x"
+                                        style={{
+                                            position: "relative",
+                                            top: -2,
+                                            left: -8
+                                        }}
+                                        name="trade"
+                                        title="cryptobridge.header.earn"
+                                        className="column-show-small"
+                                    />
+                                    <Translate
+                                        className="column-hide-small"
+                                        component="span"
+                                        content="cryptobridge.header.earn"
+                                    />
+                                </a>
+                            </li>
+                            {/* /CRYPTOBRIDGE */}
                             {showAdvancedFeatures ? (
                                 <li>
                                     <a

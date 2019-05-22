@@ -676,7 +676,11 @@ class Footer extends React.Component {
                                             this.launchIntroJS();
                                         }}
                                     >
-                                        <Translate content="global.help" />
+                                        <Icon
+                                            size="1x"
+                                            name="support"
+                                            title="cryptobridge.icons.support"
+                                        />
                                     </div>
                                 </Tooltip>
                             </div>
