@@ -67,7 +67,7 @@ class StakingBalance extends React.Component {
                 <tbody>
                     <tr>
                         <td>
-                            <Translate content="cryptobridge.staking.amount" />
+                            <Translate content="cryptobridge.bridgecoin.amount" />
                         </td>
                         <td>
                             <FormattedAsset
@@ -79,19 +79,19 @@ class StakingBalance extends React.Component {
                     <tr>
                         <td>
                             {!available ? (
-                                <Translate content="cryptobridge.staking.remaining" />
+                                <Translate content="cryptobridge.bridgecoin.remaining" />
                             ) : null}
                         </td>
                         <td>
                             {daysLeft > 0 ? (
                                 <Translate
                                     days={daysLeft}
-                                    content="cryptobridge.staking.days"
+                                    content="cryptobridge.bridgecoin.days"
                                 />
                             ) : (
                                 <Translate
                                     className="green"
-                                    content="cryptobridge.staking.available"
+                                    content="cryptobridge.bridgecoin.available"
                                 />
                             )}
                         </td>
@@ -99,7 +99,7 @@ class StakingBalance extends React.Component {
                     <tr>
                         <td>
                             {!available ? (
-                                <Translate content="cryptobridge.staking.status" />
+                                <Translate content="cryptobridge.bridgecoin.status" />
                             ) : null}
                         </td>
                         <td style={{textAlign: "right"}}>
@@ -111,7 +111,7 @@ class StakingBalance extends React.Component {
                                     <Translate content="account.member.claim" />
                                 </Button>
                             ) : (
-                                <Translate content="cryptobridge.staking.staking" />
+                                <Translate content="cryptobridge.bridgecoin.staking" />
                             )}
                         </td>
                     </tr>
@@ -207,7 +207,9 @@ class AccountStaking extends React.Component {
                         {!vestingBalances.length ? (
                             <h4 style={{paddingTop: "1rem"}}>
                                 <Translate
-                                    content={"cryptobridge.staking.no_balances"}
+                                    content={
+                                        "cryptobridge.bridgecoin.no_balances"
+                                    }
                                 />
                             </h4>
                         ) : (

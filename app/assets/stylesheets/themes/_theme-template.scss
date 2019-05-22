@@ -2537,6 +2537,19 @@
         border-bottom: 1px solid $ask-color !important;
     }
 
+    .support {
+        &__tickets {
+            &__ticket {
+                &--active {
+                    .ant-list-item-meta-title .ant-typography {
+                        color: $positive-color;
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
+    }
+
     /* /CRYPTOBRIDGE */
 }
 .rc-time-picker-panel {

@@ -41,6 +41,7 @@ export const cryptoBridgeAPIs = {
     BASE: `${__API_URL__}/v1`,
     BASE_V1: `${__API_URL__}/v1`,
     BASE_V2: `${__API_URL__}/v2`,
+    BASE_SUPPORT: __API_SUPPORT_URL__,
     COINS_LIST: "/coins",
     ACTIVE_WALLETS: "/wallets",
     MARKETS: "/markets",

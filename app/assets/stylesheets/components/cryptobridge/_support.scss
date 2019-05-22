@@ -1,0 +1,30 @@
+.support {
+    &__tickets {
+        height: calc(100vh - 229px);
+        overflow: auto;
+        min-height: 100%;
+        margin-top: 1rem;
+
+        &__ticket {
+            cursor: pointer;
+
+            &--active {
+            }
+        }
+    }
+
+    &__ticket {
+        height: calc(100vh - 213px);
+        overflow: auto;
+    }
+}
+
+.ant-page-header-back {
+}
+
+@media screen and (max-width: 640px) {
+    .ant-page-header-back {
+        visibility: inherit;
+        margin-bottom: 0.5rem;
+    }
+}

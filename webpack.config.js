@@ -87,7 +87,7 @@ module.exports = function(env) {
     const walletUrl = process.env.WALLET_URL || "http://localhost:8080";
     const apiUrl = process.env.API_URL || "http://localhost:5000";
     const apiSupportUrl =
-        process.env.API_SUPPORT_URL || "https://localhost:3000";
+        process.env.API_SUPPORT_URL || "http://localhost:3000";
     /* /CRYPTOBRIDGE */
 
     var plugins = [

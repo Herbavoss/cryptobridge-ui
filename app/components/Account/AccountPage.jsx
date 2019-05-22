@@ -159,7 +159,7 @@ class AccountPage extends React.Component {
                         />
                         {/* CRYPTOBRIDGE */}
                         <Route
-                            path={`/account/${account_name}/staking`}
+                            path={`/account/${account_name}/bridgecoin`}
                             exact
                             render={() => <AccountStaking {...passOnProps} />}
                         />

@@ -23,6 +23,14 @@ export class CryptoBridgeUser {
         this.me = me || {};
     }
 
+    getName() {
+        return this.me.name;
+    }
+
+    getAvatar() {
+        return "/cryprobridge/cryptobridge-logo.svg"; // TODO get user avatar
+    }
+
     getRequiresUserVerification() {
         const {kyc} = this.me;
 

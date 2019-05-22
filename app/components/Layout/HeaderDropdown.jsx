@@ -304,11 +304,11 @@ export default class DropDownMenu extends React.Component {
                 {isMyAccount ? (
                     <li
                         className={cnames({
-                            active: active.indexOf("/staking") !== -1
+                            active: active.indexOf("/bridgecoin") !== -1
                         })}
                         onClick={this.props.onNavigate.bind(
                             this,
-                            `/account/${currentAccount}/staking`
+                            `/account/${currentAccount}/bridgecoin`
                         )}
                     >
                         <div className="table-cell">
@@ -319,7 +319,7 @@ export default class DropDownMenu extends React.Component {
                             />
                         </div>
                         <div className="table-cell">
-                            <Translate content="cryptobridge.staking.title" />
+                            <Translate content="cryptobridge.bridgecoin.title" />
                         </div>
                     </li>
                 ) : null}

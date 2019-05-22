@@ -831,27 +831,32 @@ class Header extends React.Component {
         }
 
         /* CRYPTOBRIDGE */
-        if (active.indexOf("/staking") !== -1) {
-            dynamicMenuItem = (
-                <a
-                    style={{flexFlow: "row"}}
-                    className={cnames({
-                        active: active.indexOf("staking") !== -1
-                    })}
-                >
+        const getDynamicMenu = menu => {
+            return (
+                <a style={{flexFlow: "row"}} className="active">
                     <Icon
                         size="1_5x"
                         style={{position: "relative", top: 0, left: -8}}
-                        name="bridgecoin"
-                        title="cryptobridge.icons.bridgecoin"
+                        name={menu}
+                        title={`cryptobridge.icons.${menu}`}
                     />
                     <Translate
                         className="column-hide-small"
                         component="span"
-                        content="cryptobridge.staking.title"
+                        content={`cryptobridge.${menu}.title`}
                     />
                 </a>
             );
+        };
+
+        if (active.indexOf("/bridgecoin") !== -1) {
+            dynamicMenuItem = getDynamicMenu("bridgecoin");
+        }
+        if (active.indexOf("/support") !== -1) {
+            dynamicMenuItem = getDynamicMenu("support");
+        }
+        if (active.indexOf("/benchmark") !== -1) {
+            dynamicMenuItem = getDynamicMenu("benchmark");
         }
         /* /CRYPTOBRIDGE */
 
@@ -1074,8 +1079,9 @@ class Header extends React.Component {
                                                 ) === -1 &&
                                                 active.indexOf("/vesting") ===
                                                     -1 &&
-                                                active.indexOf("/staking") ===
-                                                    -1 &&
+                                                active.indexOf(
+                                                    "/bridgecoin"
+                                                ) === -1 &&
                                                 active.indexOf("/whitelist") ===
                                                     -1 &&
                                                 active.indexOf(

@@ -107,22 +107,26 @@ class DepositWithdrawAssetSelector extends React.Component {
     }
 
     render() {
-        let {usageContext} = this.props;
+        let {usageContext, placeholder} = this.props;
 
         let coinItems = this.state.assets.sort(function(a, b) {
             if (a.id && b.id) return a.id.localeCompare(b.id);
         });
+
+        if (!placeholder) {
+            placeholder = counterpart.translate(
+                usageContext == "withdraw"
+                    ? "gateway.asset_search_withdraw"
+                    : "gateway.asset_search_deposit"
+            );
+        }
 
         return (
             <Select
                 onSelect={this._onSelect.bind(this)}
                 onChange={this._onInputChanged.bind(this)}
                 onSearch={this._onInputChanged.bind(this)}
-                placeholder={counterpart.translate(
-                    usageContext == "withdraw"
-                        ? "gateway.asset_search_withdraw"
-                        : "gateway.asset_search_deposit"
-                )}
+                placeholder={placeholder}
                 defaultValue={this.props.defaultValue || undefined}
                 optionLabelProp={"children"}
                 showSearch

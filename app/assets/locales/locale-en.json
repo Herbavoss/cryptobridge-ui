@@ -2506,10 +2506,10 @@
                 "error": "Could not update account"
             }
         },
-        "staking": {
+        "bridgecoin": {
             "title": "BCO Staking",
             "intro_text_1": "Stake your BridgeCoin (BCO) to receive twice-monthly revenue payout from CryptoBridge.",
-            "intro_text_2": "Everyone who stakes their BCO is entitled to %(percent)% of the trading fee revenue from the CryptoBridge gateway. Staking will lock your coins for the time you specify below. During the staking period you automatically take part in the payout distributions which are processed after the 1st and 15th of the month. A longer staking duration secures a more heavily weighted payout factor.",
+            "intro_text_2": "Everyone who stakes their BCO is entitled to %(percent)s of the trading fee revenue from the CryptoBridge gateway. Staking will lock your coins for the time you specify below. During the staking period you automatically take part in the payout distributions which are processed after the 1st and 15th of the month. A longer staking duration secures a more heavily weighted payout factor.",
             "intro_text_3": "For a more detailed explanation of BCO staking, please visit this page on our website: <a target=\"_new\" href=\"%(url)s\">%(url)s</a>. ",
             "intro_text_4": "After the staking period has been reached, you can reclaim your staked BCO balance with the 'Claim Now' button. The blockchain fee to start a new staking position is currently set at %(fee)s BCO. The blockchain fee to reclaim your staked BCO is currently set at %(reclaimFee)s BCO. You can only stake BCO that are already deposited to the CryptoBridge gateway.",
 
@@ -2540,7 +2540,87 @@
             "available": "Available for claiming"
         },
         "support": {
-            "title": "Support"
+            "title": "Support",
+            "description": "CryptoBridge now offers integrated support where you can manage your support tickets in one place, and see the current status. In order to use this service, you must first log in.",
+            "faq": {
+                "title": "FAQs"
+            },
+            "contact": {
+                "title": "Get in contact"
+            },
+            "tickets": {
+                "none": "No tickets yet",
+                "title": "Tickets",
+                "create": {
+                    "title": "Create Ticket",
+                    "description": "Please do not open multiple tickets for the same issue - doing so could slow down the processing of your issue.",
+                    "form": {
+                        "asset": {
+                            "label": "Asset",
+                            "placeholder": "Select an asset",
+                            "error": "You have to select an asset"
+                        },
+                        "transaction_id": {
+                            "label": "Transaction ID",
+                            "placeholder": "Enter a transaction ID",
+                            "error": "You have to provide a transaction ID"
+                        },
+                        "recipient_address": {
+                            "label": "Recipient address",
+                            "placeholder": "Enter recipient address",
+                            "error": "You have to enter the recipient address"
+                        },
+                        "amount": {
+                            "label": "Amount",
+                            "placeholder": "Enter transaction amount",
+                            "error": "You have to enter the transaction amount"
+                        },
+                        "message": {
+                            "label": "Message",
+                            "placeholder": "Describe your issue",
+                            "error": "Please describe your issue"
+                        }
+                    }
+                },
+                "fetch": {
+                    "success": "Tickets loaded",
+                    "error": "Could not load existing tickets"
+                },
+                "add": {
+                    "success": "Ticket added",
+                    "error": "Could not add tickets"
+                },
+                "close": {
+                    "title": "Close ticket",
+                    "success": "Ticket closed",
+                    "error": "Could not close ticket"
+                },
+                "type": {
+                    "withdrawal": "Withdrawal",
+                    "deposit": "Deposit",
+                    "other": "Other"
+                },
+                "status": {
+                    "open": "Open",
+                    "in_progress": "In progress",
+                    "waiting_for_customer": "Awaiting user response",
+                    "waiting_for_support": "Awaiting agent response",
+                    "blocked": "Blocked",
+                    "closed": "Closed"
+                }
+            },
+            "comments": {
+                "none": "No comments yet",
+                "fetch": {
+                    "success": "Comments loaded",
+                    "error": "Could no load comments"
+                },
+                "add": {
+                    "title": "Add comment",
+                    "success": "Comment added",
+                    "error": "Could not add comment"
+                }
+            }
         }
     }
 }

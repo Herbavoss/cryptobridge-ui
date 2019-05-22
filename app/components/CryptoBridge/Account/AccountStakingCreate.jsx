@@ -22,26 +22,26 @@ import AssetName from "components/Utility/AssetName";
 export class AccountStakingInfo {
     static stakingPeriods = [
         {
-            name: "cryptobridge.staking.month_1",
-            name_plural: "cryptobridge.staking.month_1_plural",
+            name: "cryptobridge.bridgecoin.month_1",
+            name_plural: "cryptobridge.bridgecoin.month_1_plural",
             bonus: "0%",
             value: 2678400
         },
         {
-            name: "cryptobridge.staking.month_3",
-            name_plural: "cryptobridge.staking.month_3_plural",
+            name: "cryptobridge.bridgecoin.month_3",
+            name_plural: "cryptobridge.bridgecoin.month_3_plural",
             bonus: "20%",
             value: 7776000
         },
         {
-            name: "cryptobridge.staking.month_6",
-            name_plural: "cryptobridge.staking.month_6_plural",
+            name: "cryptobridge.bridgecoin.month_6",
+            name_plural: "cryptobridge.bridgecoin.month_6_plural",
             bonus: "50%",
             value: 15552000
         },
         {
-            name: "cryptobridge.staking.month_12",
-            name_plural: "cryptobridge.staking.month_12_plural",
+            name: "cryptobridge.bridgecoin.month_12",
+            name_plural: "cryptobridge.bridgecoin.month_12_plural",
             bonus: "100%",
             value: 31536000
         }
@@ -295,7 +295,7 @@ class AccountStakingCreate extends React.Component {
                 {currentBalance && currentBalance.get("balance") ? (
                     <Translate
                         component="span"
-                        content="cryptobridge.staking.bco_available"
+                        content="cryptobridge.bridgecoin.bco_available"
                         with={{
                             bco: (
                                 <BalanceComponent
@@ -307,7 +307,7 @@ class AccountStakingCreate extends React.Component {
                 ) : (
                     <Translate
                         component="span"
-                        content="cryptobridge.staking.bco_not_available"
+                        content="cryptobridge.bridgecoin.bco_not_available"
                     />
                 )}{" "}
             </div>
@@ -322,26 +322,26 @@ class AccountStakingCreate extends React.Component {
                 <Icon name="bridgecoin" size="2x" className="title" />
                 <Translate
                     component="h2"
-                    content="cryptobridge.staking.title"
+                    content="cryptobridge.bridgecoin.title"
                 />
                 <Translate
                     component="p"
-                    content="cryptobridge.staking.intro_text_1"
+                    content="cryptobridge.bridgecoin.intro_text_1"
                     with={{percent: "50%"}}
                 />
                 <Translate
                     component="p"
-                    content="cryptobridge.staking.intro_text_2"
+                    content="cryptobridge.bridgecoin.intro_text_2"
                 />
                 <Translate
                     component="p"
-                    content="cryptobridge.staking.intro_text_3"
+                    content="cryptobridge.bridgecoin.intro_text_3"
                     with={{url: "https://crypto-bridge.org/bridgecoin/"}}
                     unsafe
                 />
                 <Translate
                     component="p"
-                    content="cryptobridge.staking.intro_text_4"
+                    content="cryptobridge.bridgecoin.intro_text_4"
                     with={{
                         fee,
                         reclaimFee
@@ -354,7 +354,7 @@ class AccountStakingCreate extends React.Component {
                             component="label"
                             className="left-label"
                             unsafe
-                            content="cryptobridge.staking.amount_bco"
+                            content="cryptobridge.bridgecoin.amount_bco"
                         />
                         <ExchangeInput
                             placeholder="0.0"
@@ -376,7 +376,7 @@ class AccountStakingCreate extends React.Component {
                         <Translate
                             component="label"
                             style={{marginTop: "1rem"}}
-                            content="cryptobridge.staking.duration"
+                            content="cryptobridge.bridgecoin.duration"
                         />
                         <Select
                             onChange={this._setStakingPeriod}
@@ -413,7 +413,7 @@ class AccountStakingCreate extends React.Component {
                                     checked={confirmationCheckboxChecked}
                                 >
                                     <Translate
-                                        content="cryptobridge.staking.understand"
+                                        content="cryptobridge.bridgecoin.understand"
                                         with={{
                                             amount,
                                             month: counterpart(
@@ -436,7 +436,7 @@ class AccountStakingCreate extends React.Component {
                                 onClick={this._stakeBalance.bind(this)}
                                 type="primary"
                             >
-                                <Translate content="cryptobridge.staking.create" />
+                                <Translate content="cryptobridge.bridgecoin.create" />
                             </Button>
                         </div>
                     </div>
