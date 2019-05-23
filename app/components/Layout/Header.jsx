@@ -30,7 +30,7 @@ import {Notification} from "bitshares-ui-style-guide";
 import AccountBrowsingMode from "../Account/AccountBrowsingMode";
 import {setLocalStorageType, isPersistantType} from "lib/common/localStorage";
 
-import Logo from "components/CryptoBridge/Logo";
+import Logo from "components/CryptoBridge/Global/Logo";
 
 const SUBMENUS = {
     SETTINGS: "SETTINGS"
@@ -47,7 +47,11 @@ class Header extends React.Component {
             isDepositModalVisible: false,
             hasDepositModalBeenShown: false,
             isWithdrawModalVisible: false,
-            hasWithdrawalModalBeenShown: false
+            hasWithdrawalModalBeenShown: false,
+
+            /* CRYPTOBRIDGE */
+            depositAsset: null
+            /* /CRYPTOBRIDGE */
         };
 
         this.unlisten = null;
@@ -72,10 +76,11 @@ class Header extends React.Component {
         this.onBodyClick = this.onBodyClick.bind(this);
     }
 
-    showDepositModal() {
+    showDepositModal(depositAsset) {
         this.setState({
             isDepositModalVisible: true,
-            hasDepositModalBeenShown: true
+            hasDepositModalBeenShown: true,
+            depositAsset
         });
     }
 
@@ -117,6 +122,19 @@ class Header extends React.Component {
             capture: false,
             passive: true
         });
+
+        /* CRYPTOBRIDGE */
+        ZfApi.subscribe(
+            "deposit_modal",
+            (name, {visible = false, asset = null}) => {
+                if (visible) {
+                    this.showDepositModal(asset);
+                } else {
+                    this.hideDepositModal();
+                }
+            }
+        );
+        /* /CRYPTOBRIDGE */
     }
 
     componentWillUnmount() {
@@ -126,6 +144,10 @@ class Header extends React.Component {
         }
 
         document.body.removeEventListener("click", this.onBodyClick);
+
+        /* CRYPTOBRIDGE */
+        ZfApi.unsubscribe("deposit_modal");
+        /* /CRYPTOBRIDGE */
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -1342,6 +1364,7 @@ class Header extends React.Component {
                         visible={this.state.isDepositModalVisible}
                         hideModal={this.hideDepositModal}
                         showModal={this.showDepositModal}
+                        asset={this.state.depositAsset}
                         ref="deposit_modal_new"
                         modalId="deposit_modal_new"
                         account={currentAccount}

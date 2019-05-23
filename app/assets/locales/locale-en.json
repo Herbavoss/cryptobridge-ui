@@ -2552,6 +2552,18 @@
                 }
             }
         },
+        "trade": {
+            "button": {
+                "buy": "Buy",
+                "sell": "Sell"
+            },
+            "tooltip": {
+                "deposit": "Deposit %(asset)s"
+            },
+            "deposit": {
+                "login": "Please login to deposit an asset."
+            }
+        },
         "support": {
             "title": "Support",
             "description": "CryptoBridge now offers integrated support where you can manage your support tickets in one place, and see the current status. In order to use this service, you must first log in.",

@@ -2,7 +2,7 @@ import React from "react";
 import {connect} from "alt-react";
 
 import {ChainStore} from "bitsharesjs";
-import {Card, Input, Form, Button, Typography} from "bitshares-ui-style-guide";
+import {Card, Input, Form, Typography} from "bitshares-ui-style-guide";
 const {Paragraph} = Typography;
 
 import CopyButton from "components/Utility/CopyButton";
@@ -11,7 +11,7 @@ import CryptoBridgeAccountStore from "stores/cryptobridge/CryptoBridgeAccountSto
 
 import counterpart from "counterpart";
 import Translate from "react-translate-component";
-import {login} from "lib/cryptobridge/accountMethods";
+import LoginButton from "components/CryptoBridge/Global/LoginButton";
 
 class ReferralProgramCard extends React.Component {
     render() {
@@ -30,18 +30,11 @@ class ReferralProgramCard extends React.Component {
                 )}
             >
                 {!link ? (
-                    <div>
-                        <Paragraph>
-                            <Translate
-                                content={
-                                    "cryptobridge.earn.referral.card.login"
-                                }
-                            />
-                        </Paragraph>
-                        <Button type={"primary"} onClick={login}>
-                            <Translate content="login.loginButton" />
-                        </Button>
-                    </div>
+                    <LoginButton
+                        title={counterpart.translate(
+                            "cryptobridge.earn.referral.card.login"
+                        )}
+                    />
                 ) : (
                     <div>
                         <Form.Item className="clipboard">

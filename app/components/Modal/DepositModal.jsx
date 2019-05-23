@@ -1,7 +1,7 @@
 import React from "react";
 import Translate from "react-translate-component";
 import utils from "common/utils";
-import {requestDepositAddress} from "common/gatewayMethods";
+import {requestDepositAddress, getDepositAddress} from "common/gatewayMethods";
 import BlockTradesDepositAddressCache from "common/BlockTradesDepositAddressCache";
 import CopyButton from "../Utility/CopyButton";
 import Icon from "../Icon/Icon";
@@ -21,7 +21,10 @@ import counterpart from "counterpart";
 import {Modal, Button} from "bitshares-ui-style-guide";
 
 /* /CRYPTOBRIDGE */
+import {connect} from "alt-react";
 import AssetGatewayInfo from "components/Utility/CryptoBridge/AssetGatewayInfo";
+import CryptoBridgeAccountStore from "stores/cryptobridge/CryptoBridgeAccountStore";
+import LoginButton from "components/CryptoBridge/Global/LoginButton";
 /* /CRYPTOBRIDGE */
 
 class DepositModalContent extends DecimalChecker {
@@ -44,11 +47,21 @@ class DepositModalContent extends DecimalChecker {
     }
 
     shouldComponentUpdate(np, ns) {
-        if (np.asset !== this.props.asset) {
+        return (
+            np.authenticated !== this.props.authenticated ||
+            !utils.are_equal_shallow(ns, this.state)
+        );
+    }
+
+    componentDidUpdate(prevProps) {
+        const assetChanged = prevProps.asset !== this.props.asset;
+        const authenticationChanged =
+            prevProps.authenticated !== this.props.authenticated;
+
+        if (assetChanged || authenticationChanged) {
             this.setState(this._intitalState());
-            this._setDepositAsset(np.asset);
+            this._setDepositAsset(this.props.asset);
         }
-        return !utils.are_equal_shallow(ns, this.state);
     }
 
     onGatewayChanged(selectedGateway) {
@@ -192,14 +205,25 @@ class DepositModalContent extends DecimalChecker {
                     backingAsset.backingCoinType || backingAsset.backingCoin;
                 const fullAssetName = backingAsset.symbol;
 
-                requestDepositAddress(
-                    this._getDepositObject(
-                        assetName,
-                        fullAssetName,
-                        selectedGateway,
-                        gatewayStatus[selectedGateway].baseAPI.BASE
-                    )
-                );
+                if (this.props.authenticated && this.props.account) {
+                    getDepositAddress({
+                        coin: assetName,
+                        account: this.props.account
+                    })
+                        .then(address => {
+                            this.addDepositAddress(address);
+                        })
+                        .catch(() => {
+                            requestDepositAddress(
+                                this._getDepositObject(
+                                    assetName,
+                                    fullAssetName,
+                                    selectedGateway,
+                                    gatewayStatus[selectedGateway].baseAPI.BASE
+                                )
+                            );
+                        });
+                }
             } else {
                 this.setState({
                     depositAddress,
@@ -242,7 +266,20 @@ class DepositModalContent extends DecimalChecker {
             gatewayStatus,
             backingAsset
         } = this.state;
-        let {account} = this.props;
+        const {account, authenticated} = this.props;
+
+        /* CRYPTOBRIDGE */
+        if (!authenticated) {
+            return (
+                <LoginButton
+                    title={counterpart.translate(
+                        "cryptobridge.trade.deposit.login"
+                    )}
+                />
+            );
+        }
+        /* /CRYPTOBRIDGE */
+
         let usingGateway = true;
 
         if (selectedGateway == null && selectedAsset == "BTS") {
@@ -474,6 +511,22 @@ class DepositModalContent extends DecimalChecker {
         );
     }
 }
+
+DepositModalContent = connect(
+    DepositModalContent,
+    {
+        listenTo() {
+            return [CryptoBridgeAccountStore];
+        },
+        getProps() {
+            const authenticated = CryptoBridgeAccountStore.getIsAuthenticated();
+
+            return {
+                authenticated
+            };
+        }
+    }
+);
 
 export default class DepositModal extends React.Component {
     constructor() {

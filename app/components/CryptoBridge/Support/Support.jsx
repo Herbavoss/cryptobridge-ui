@@ -4,14 +4,14 @@ import {connect} from "alt-react";
 import counterpart from "counterpart";
 import Translate from "react-translate-component";
 
-import {Tabs, Row, Col, Button, Typography} from "bitshares-ui-style-guide";
+import {Tabs, Row, Col, Typography} from "bitshares-ui-style-guide";
 const {Title, Paragraph} = Typography;
 
 import Tickets from "./Tickets";
 import Ticket from "./Ticket";
 import Faqs from "./Faqs";
 import CryptoBridgeAccountStore from "stores/cryptobridge/CryptoBridgeAccountStore";
-import {login} from "lib/cryptobridge/accountMethods";
+import LoginButton from "components/CryptoBridge/Global/LoginButton";
 
 class Support extends React.Component {
     constructor(props) {
@@ -69,9 +69,7 @@ class Support extends React.Component {
                     <Paragraph>
                         <Translate content="cryptobridge.support.description" />
                     </Paragraph>
-                    <Button type="primary" onClick={login}>
-                        <Translate content="login.loginButton" />
-                    </Button>
+                    <LoginButton />
                 </Col>
             </Row>
         );

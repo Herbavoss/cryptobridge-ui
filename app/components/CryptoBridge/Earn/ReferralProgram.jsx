@@ -46,8 +46,6 @@ export default class ReferralProgram extends React.Component {
                             you, but we will also add an extra 10% bonus coins
                             to the stake being created!
                         </Paragraph>
-
-                        <Paragraph>Voilà!</Paragraph>
                     </Col>
                     <Col xs={{span: 24}} lg={{span: 8}}>
                         <ReferralProgramCard />

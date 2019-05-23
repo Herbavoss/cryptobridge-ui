@@ -11,6 +11,7 @@ import ChainTypes from "../Utility/ChainTypes";
 import BindToChainState from "../Utility/BindToChainState";
 import PriceText from "../Utility/PriceText";
 import AssetName from "../Utility/AssetName";
+import AssetImage from "../Utility/CryptoBridge/AssetImage";
 import {Asset} from "common/MarketClasses";
 import ExchangeInput from "./ExchangeInput";
 import assetUtils from "common/asset_utils";
@@ -21,6 +22,10 @@ import SettleModal from "../Modal/SettleModal";
 import {Button, Select, Popover, Tooltip} from "bitshares-ui-style-guide";
 import ReactTooltip from "react-tooltip";
 import AccountStore from "../../stores/AccountStore";
+
+/* CRYPTOBRIDGE */
+import ZfApi from "react-foundation-apps/src/utils/foundation-api";
+/* /CRYPTOBRIDGE */
 
 class BuySell extends React.Component {
     static propTypes = {
@@ -515,13 +520,10 @@ class BuySell extends React.Component {
             feeAsset = feeAssets[0];
             feeAssets.splice(1, 1);
         }
-        let index = 0;
-        let options = feeAssets.map(asset => {
-            let {name, prefix} = utils.replaceName(asset);
+        let options = feeAssets.map((asset, index) => {
             return (
-                <Select.Option key={asset.get("id")} value={index++}>
-                    {prefix}
-                    {name}
+                <Select.Option key={asset.get("id")} value={index}>
+                    <AssetName name={asset.get("symbol")} noTip={true} />
                 </Select.Option>
             );
         });
@@ -654,7 +656,6 @@ class BuySell extends React.Component {
                                 disabled
                                 addonAfter={
                                     <Select
-                                        style={{width: 100}}
                                         disabled={feeAssets.length === 1}
                                         defaultValue={feeAssets.indexOf(
                                             this.props.feeAsset
@@ -963,6 +964,7 @@ class BuySell extends React.Component {
 
         const currentAccount = AccountStore.getState().currentAccount;
 
+        const assetName = isBid ? baseName : quoteName;
         return (
             <div
                 className={cnames(this.props.className)}
@@ -1210,7 +1212,11 @@ class BuySell extends React.Component {
                                                 type="primary"
                                                 style={{margin: 5}}
                                             >
-                                                {isBid ? "Buy" : "Sell"}
+                                                <Translate
+                                                    content={`cryptobridge.trade.button.${
+                                                        isBid ? "buy" : "sell"
+                                                    }`}
+                                                />
                                             </Button>
                                         </Tooltip>
                                         {/* <Button
@@ -1220,43 +1226,44 @@ class BuySell extends React.Component {
                                             Clear
                                         </Button> */}
 
-                                        {this.props.currentBridges &&
-                                        !this.props.backedCoin ? (
+                                        {/* CRYPTOBRIDGE */}
+                                        {this.props.backedCoin ? (
                                             <Tooltip
                                                 title={counterpart.translate(
-                                                    "exchange.quick_deposit_bridge",
-                                                    {
-                                                        target: isBid
-                                                            ? baseName
-                                                            : quoteName
-                                                    }
+                                                    "cryptobridge.trade.tooltip.deposit",
+                                                    {asset: assetName}
                                                 )}
                                             >
                                                 <Button
                                                     style={{margin: 5}}
-                                                    onClick={this.props.onBuy.bind(
-                                                        this
-                                                    )}
-                                                    disabled={
-                                                        !this.props
-                                                            .currentAccount ||
-                                                        this.props.currentAccount.get(
-                                                            "id"
-                                                        ) === "1.2.3"
-                                                    }
+                                                    onClick={() => {
+                                                        ZfApi.publish(
+                                                            "deposit_modal",
+                                                            {
+                                                                visible: true,
+                                                                asset: balanceSymbol
+                                                            }
+                                                        );
+                                                    }}
+                                                    disabled={false}
+                                                    className={"deposit-button"}
                                                 >
+                                                    <AssetImage
+                                                        asset={assetName}
+                                                    />
                                                     <Translate
                                                         content="exchange.quick_deposit"
-                                                        asset={
-                                                            isBid
-                                                                ? baseName
-                                                                : quoteName
-                                                        }
+                                                        with={{
+                                                            asset: assetName
+                                                        }}
                                                     />
                                                 </Button>
                                             </Tooltip>
                                         ) : null}
-                                        {this.props.backedCoin &&
+                                        {/* /CRYPTOBRIDGE */}
+
+                                        {false &&
+                                        this.props.backedCoin && // CRYPTOBRIDGE DISBALED
                                         !this.props.currentBridges ? (
                                             <Tooltip
                                                 title={counterpart.translate(
@@ -1287,7 +1294,8 @@ class BuySell extends React.Component {
                                                 </Button>
                                             </Tooltip>
                                         ) : null}
-                                        {this.props.currentBridges &&
+                                        {false &&
+                                        this.props.currentBridges && // CRYPTOBRIDGE DISABLED
                                         this.props.backedCoin ? (
                                             <Popover
                                                 title={

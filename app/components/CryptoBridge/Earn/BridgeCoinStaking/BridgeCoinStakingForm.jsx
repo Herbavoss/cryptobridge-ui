@@ -25,7 +25,7 @@ const {Paragraph} = Typography;
 import ExchangeInput from "components/Exchange/ExchangeInput";
 import AssetName from "components/Utility/AssetName";
 
-import {login} from "lib/cryptobridge/accountMethods";
+import LoginButton from "components/CryptoBridge/Global/LoginButton";
 
 export class AccountStakingInfo {
     static stakingPeriods = [
@@ -305,14 +305,11 @@ export default class BridgeCoinStakingForm extends React.Component {
 
         if (!this.props.account) {
             return (
-                <div>
-                    <Paragraph>
-                        <Translate content="cryptobridge.earn.staking.login" />
-                    </Paragraph>
-                    <Button type={"primary"} onClick={login}>
-                        <Translate content="login.loginButton" />
-                    </Button>
-                </div>
+                <LoginButton
+                    title={counterpart.translate(
+                        "cryptobridge.earn.staking.login"
+                    )}
+                />
             );
         }
 

@@ -232,7 +232,7 @@ export function getDepositAddress({coin, account, stateCallback}) {
         cryptoBridgeAPIs.BASE_V2
     }/accounts/${account}/assets/${getCleanAssetSymbol(coin)}/addresses/latest`;
 
-    fetch(url, {
+    return fetch(url, {
         headers: getBasicHeaders()
     })
         .then(
@@ -249,6 +249,7 @@ export function getDepositAddress({coin, account, stateCallback}) {
                                 loading: false
                             };
                             if (stateCallback) stateCallback(address);
+                            return address;
                         },
                         error => {
                             throw new Error(error.message);
@@ -289,6 +290,8 @@ export function requestDepositAddress({
         outputAddress
     };
 
+    const account = outputAddress;
+
     let body_string = JSON.stringify(body);
     if (depositRequests[body_string]) return;
     depositRequests[body_string] = true;
@@ -299,7 +302,7 @@ export function requestDepositAddress({
         inputCoinType
     )}/addresses`;
 
-    fetch(url, {
+    return fetch(url, {
         method: "POST",
         headers: getBasicHeaders()
     })

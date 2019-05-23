@@ -27,7 +27,7 @@ export function getIsValidPaymentId(asset, paymentId) {
 }
 
 export function getIsBridgeCoinAsset(asset) {
-    return asset && /^BRIDGE\./.test(asset.get("symbol"));
+    return asset && /^BRIDGE\./i.test(asset.get("symbol"));
 }
 
 export function getCleanAssetSymbol(asset) {

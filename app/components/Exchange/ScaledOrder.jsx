@@ -378,6 +378,7 @@ class ScaledOrderForm extends Component {
             <Select
                 showSearch
                 dropdownMatchSelectWidth={false}
+                optionLabelProp={"children"}
                 style={{minWidth: "80px", maxWidth: "120px"}}
             >
                 {this.state.feeAssets &&
