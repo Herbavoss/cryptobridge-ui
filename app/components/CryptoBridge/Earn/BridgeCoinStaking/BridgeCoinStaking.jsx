@@ -111,8 +111,11 @@ class BridgeCoinStaking extends React.Component {
                         </Card>
                     </Col>
                 </Row>
-
-                <BridgeCoinStakingBalances balances={stakingBalances} />
+                <Row>
+                    <Col>
+                        <BridgeCoinStakingBalances balances={stakingBalances} />
+                    </Col>
+                </Row>
             </div>
         );
     }
