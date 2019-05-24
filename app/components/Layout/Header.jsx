@@ -1266,7 +1266,6 @@ class Header extends React.Component {
                                 usernameViewIcon={true}
                             />
                         </div>
-                        {walletBalance}
                     </div>
 
                     {hasLocalWallet && (
