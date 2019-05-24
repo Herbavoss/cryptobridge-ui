@@ -12,6 +12,11 @@ import MarketsStore from "stores/MarketsStore";
 import SettingsStore from "stores/SettingsStore";
 import {Link, withRouter} from "react-router-dom";
 
+/* CRYPTOBRIDGE */
+import AssetName from "components/Utility/AssetName";
+import {getCleanAssetSymbol} from "lib/cryptobridge/assetMethods";
+/* /CRYPTOBRIDGE */
+
 Treemap(ReactHighcharts.Highcharts);
 Heatmap(ReactHighcharts.Highcharts);
 
@@ -110,9 +115,8 @@ class AccountTreemap extends React.Component {
                     const symbol = asset.get("symbol");
                     return {
                         symbol: symbol,
-                        name: `${symbol} (${
-                            totalValue === 0 ? 0 : percent.toFixed(2)
-                        }%)`,
+                        percentage: totalValue === 0 ? 0 : percent.toFixed(2),
+                        name: getCleanAssetSymbol(symbol),
                         value: finalValue,
                         color: ReactHighcharts.Highcharts.getOptions().colors[
                             index
@@ -154,9 +158,9 @@ class AccountTreemap extends React.Component {
                     animation: false,
                     tooltip: {
                         pointFormatter: function() {
-                            return `<b>${
-                                this.name
-                            }</b>: ${ReactHighcharts.Highcharts.numberFormat(
+                            return `<b>${this.name} (${
+                                this.percentage
+                            }%)</b>: ${ReactHighcharts.Highcharts.numberFormat(
                                 this.value,
                                 0
                             )} ${preferredAsset.get("symbol")}`;
@@ -200,7 +204,7 @@ class AccountTreemap extends React.Component {
         return (
             <div className="account-treemap">
                 <div className="account-treemap--legend">
-                    {accountBalances.map(({name, symbol, color}, key) => {
+                    {accountBalances.map(({percentage, symbol, color}, key) => {
                         return (
                             <Link key={key} to={`/asset/${symbol}`}>
                                 <div className="legend-item">
@@ -208,7 +212,8 @@ class AccountTreemap extends React.Component {
                                         className="legend-square"
                                         style={{backgroundColor: color}}
                                     />
-                                    {name}
+                                    <AssetName name={symbol} /> ({percentage}
+                                    %)
                                 </div>
                             </Link>
                         );

@@ -4,6 +4,7 @@ import BalanceComponent from "../Utility/BalanceComponent";
 import {BalanceValueComponent} from "../Utility/EquivalentValueComponent";
 import {Market24HourChangeComponent} from "../Utility/MarketChangeComponent";
 import assetUtils from "common/asset_utils";
+import Translate from "react-translate-component";
 import counterpart from "counterpart";
 import {Link} from "react-router-dom";
 import EquivalentPrice from "../Utility/EquivalentPrice";
@@ -29,10 +30,21 @@ import ZfApi from "react-foundation-apps/src/utils/foundation-api";
 import ReserveAssetModal from "../Modal/ReserveAssetModal";
 import PaginatedList from "../Utility/PaginatedList";
 import MarketUtils from "common/market_utils";
-import {Tooltip, Icon as AntIcon} from "bitshares-ui-style-guide";
+import {
+    Tooltip,
+    Icon as AntIcon,
+    Table,
+    Button,
+    Typography
+} from "bitshares-ui-style-guide";
+const {Paragraph} = Typography;
 
 /* CRYPTOBRIDGE */
 import AssetImage from "../Utility/CryptoBridge/AssetImage";
+import {
+    getCleanAssetSymbol,
+    getIsBridgeCoinAsset
+} from "lib/cryptobridge/assetMethods";
 /* /CRYPTOBRIDGE */
 
 class AccountPortfolioList extends React.Component {
@@ -503,6 +515,11 @@ class AccountPortfolioList extends React.Component {
         };
 
         let balances = [];
+
+        /* CRYPTOBRIDGE */
+        const rowsData = [];
+        /* CRYPTOBRIDGE */
+
         const emptyCell = "-";
         balanceList.forEach(balance => {
             let balanceObject = ChainStore.getObject(balance);
@@ -654,6 +671,26 @@ class AccountPortfolioList extends React.Component {
                 currentMarketStats && currentMarketStats.change
                     ? currentMarketStats.change
                     : 0;
+
+            /* CRYPTOBRIDGE */
+            rowsData.push({
+                asset,
+                qty: {
+                    hasBalance,
+                    hasOnOrder,
+                    balance
+                },
+                change24h: {
+                    base: asset.get("id"),
+                    quote: preferredUnit,
+                    marketId
+                },
+                send: transferLink,
+                deposit: asset,
+                withdraw: asset,
+                trade: directMarketLink
+            });
+            /* /CRYPTOBRIDGE */
 
             balances.push(
                 <tr key={asset.get("symbol")} style={{maxWidth: "100rem"}}>
@@ -1057,7 +1094,8 @@ class AccountPortfolioList extends React.Component {
         }
 
         balances.sort(this.sortFunctions[this.props.sortKey]);
-        return balances;
+
+        return {rowsData, rowsRendered: balances};
     }
 
     _renderSendModal() {
@@ -1114,84 +1152,172 @@ class AccountPortfolioList extends React.Component {
         const currentBridges =
             this.props.bridgeCoins.get(this.state.bridgeAsset) || null;
 
-        return (
-            <div>
-                <PaginatedList
-                    style={{padding: 0}}
-                    className="table dashboard-table table-hover"
-                    rows={this._renderBalances(
-                        this.props.balanceList,
-                        this.props.optionalAssets,
-                        this.props.visible
-                    )}
-                    header={this.props.header}
-                    pageSize={20}
-                    label="utility.total_x_assets"
-                    extraRow={this.props.extraRow}
-                    leftPadding="1.5rem"
-                >
-                    {this._renderSendModal()}
-                    {(this.state.isSettleModalVisible ||
-                        this.state.isSettleModalVisibleBefore) &&
-                        this._renderSettleModal()}
-                    {this._renderBorrowModal()}
+        /* CRYPTOBRIDGE */
+        const columns = [
+            {
+                title: counterpart.translate("account.asset"),
+                dataIndex: "asset",
+                key: "asset",
+                render: asset => (
+                    <div>
+                        <AssetImage asset={asset.get("symbol")} />
+                        <LinkToAssetById asset={asset.get("id")} />
+                    </div>
+                ),
+                sorter: (a, b) => {
+                    a = getCleanAssetSymbol(a.asset.get("symbol"));
+                    b = getCleanAssetSymbol(b.asset.get("symbol"));
 
-                    {(this.state.isWithdrawModalVisible ||
-                        this.state.isWithdrawModalVisibleBefore) && (
-                        <WithdrawModal
-                            hideModal={this.hideWithdrawModal}
-                            visible={this.state.isWithdrawModalVisible}
-                            backedCoins={this.props.backedCoins}
-                            initialSymbol={this.state.withdrawAsset}
-                        />
-                    )}
+                    if (a > b) {
+                        return 1;
+                    }
+                    if (a < b) {
+                        return -1;
+                    }
+                    return 0;
+                }
+            },
+            {
+                title: counterpart.translate("account.qty"),
+                dataIndex: "qty",
+                key: "qty",
+                render: ({hasBalance, hasOnOrder, balance}) => {
+                    return hasBalance || hasOnOrder ? (
+                        <BalanceComponent balance={balance} hide_asset />
+                    ) : null;
+                },
+                sorter: (a, b) => {
+                    const aKey = a.asset.get("symbol");
+                    const bKey = b.asset.get("symbol");
 
-                    {/* Deposit Modal */}
-                    {(this.state.isDepositModalVisible ||
-                        this.state.isDepositModalVisibleBefore) && (
-                        <DepositModal
-                            visible={this.state.isDepositModalVisible}
-                            showModal={this.showDepositModal}
-                            hideModal={this.hideDepositModal}
-                            asset={this.state.depositAsset}
-                            account={this.props.account.get("name")}
-                            backedCoins={this.props.backedCoins}
-                        />
-                    )}
+                    return (
+                        Number(this.qtyRefs[aKey]) - Number(this.qtyRefs[bKey])
+                    );
+                }
+            },
+            {
+                title: counterpart.translate("account.hour_24_short"),
+                dataIndex: "change24h",
+                key: "change24h",
+                render: props => <Market24HourChangeComponent {...props} />
+            },
+            {
+                title: "Send",
+                dataIndex: "send",
+                render: send => send
+            },
+            {
+                title: counterpart.translate("modal.deposit.submit"),
+                dataIndex: "deposit",
+                render: asset => {
+                    if (getIsBridgeCoinAsset(asset)) {
+                        return (
+                            <Icon
+                                style={{cursor: "pointer"}}
+                                name="deposit"
+                                title="icons.deposit.deposit"
+                                className="icon-14x"
+                                onClick={() => {
+                                    ZfApi.publish("deposit_modal", {
+                                        visible: true,
+                                        asset: asset.get("symbol")
+                                    });
+                                }}
+                            />
+                        );
+                    }
+                    return null;
+                }
+            },
+            {
+                title: counterpart.translate("modal.withdraw.submit"),
+                dataIndex: "withdraw",
+                render: asset => {
+                    if (getIsBridgeCoinAsset(asset)) {
+                        return (
+                            <Icon
+                                style={{cursor: "pointer"}}
+                                name="withdraw"
+                                title="icons.withdraw.withdraw"
+                                className="icon-14x"
+                                onClick={() => {
+                                    ZfApi.publish("withdrawal_modal", {
+                                        visible: true,
+                                        asset: asset.get("symbol")
+                                    });
+                                }}
+                            />
+                        );
+                    }
+                    return null;
+                }
+            },
+            {
+                title: counterpart.translate("account.trade"),
+                dataIndex: "trade",
+                render: trade => trade
+            }
+        ];
 
-                    {/* Bridge modal */}
-                    {(this.state.isBridgeModalVisible ||
-                        this.state.isBridgeModalVisibleBefore) && (
-                        <SimpleDepositBlocktradesBridge
-                            visible={this.state.isBridgeModalVisible}
-                            showModal={this.showBridgeModal}
-                            hideModal={this.hideBridgeModal}
-                            action="deposit"
-                            account={this.props.account.get("name")}
-                            sender={this.props.account.get("id")}
-                            asset={this.state.bridgeAsset}
-                            balances={this.props.balances}
-                            bridges={currentBridges}
-                            isDown={this.props.gatewayDown.get("TRADE")}
-                        />
-                    )}
-
-                    {/* Burn Modal */}
-                    {(this.state.isBurnModalVisible ||
-                        this.state.isBurnModalVisibleBefore) && (
-                        <ReserveAssetModal
-                            visible={this.state.isBurnModalVisible}
-                            hideModal={this.hideBurnModal}
-                            asset={this.state.reserve}
-                            account={this.props.account}
-                            onClose={() => {
-                                ZfApi.publish("reserve_asset", "close");
-                            }}
-                        />
-                    )}
-                </PaginatedList>
-            </div>
+        const {rowsData, rowsRendered} = this._renderBalances(
+            this.props.balanceList,
+            this.props.optionalAssets,
+            this.props.visible
         );
+
+        return (
+            <Table
+                className="portfolio"
+                columns={columns}
+                dataSource={rowsData}
+                onChange={this.onTableChange}
+                pagination={{
+                    defaultPageSize: 20,
+                    position: "bottom"
+                }}
+                locale={{
+                    emptyText: (
+                        <div>
+                            <Translate
+                                content={
+                                    "cryptobridge.dashboard.portfolio.empty"
+                                }
+                            />
+                            <Paragraph>
+                                <Button
+                                    onClick={() => {
+                                        ZfApi.publish("deposit_modal", {
+                                            visible: true
+                                        });
+                                    }}
+                                >
+                                    <Translate
+                                        content={
+                                            "cryptobridge.dashboard.portfolio.deposit"
+                                        }
+                                    />
+                                </Button>
+                                <Button
+                                    onClick={() => {
+                                        ZfApi.publish("deposit_modal", {
+                                            visible: true
+                                        });
+                                    }}
+                                    style={{marginLeft: "1rem"}}
+                                >
+                                    <Translate
+                                        content={
+                                            "cryptobridge.dashboard.portfolio.trade"
+                                        }
+                                    />
+                                </Button>
+                            </Paragraph>
+                        </div>
+                    )
+                }}
+            />
+        );
+        /* /CRYPTOBRIDGE */
     }
 }
 

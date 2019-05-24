@@ -18,7 +18,7 @@ import BalanceWrapper from "./BalanceWrapper";
 import AccountTreemap from "./AccountTreemap";
 import AssetWrapper from "../Utility/AssetWrapper";
 import AccountPortfolioList from "./AccountPortfolioList";
-import {Input, Icon, Switch} from "bitshares-ui-style-guide";
+import {Input, Icon, Switch, Radio, Form} from "bitshares-ui-style-guide";
 
 class AccountOverview extends React.Component {
     constructor(props) {
@@ -235,6 +235,13 @@ class AccountOverview extends React.Component {
             </tr>
         );
     }
+
+    /* CRYPTOBRIDGE */
+    onRadioFilterChange = e => {
+        console.log("onRadioChange", e.target.value);
+        this._changeShownAssets(e.target.value);
+    };
+    /* /CRYPTOBRIDGE */
 
     render() {
         let {account, hiddenAssets, settings, orders} = this.props;
@@ -482,79 +489,45 @@ class AccountOverview extends React.Component {
                                 tab={<Translate content="account.portfolio" />}
                                 subText={portfolioActiveAssetsBalance}
                             >
-                                <div className="header-selector">
-                                    <div className="filter inline-block">
-                                        <Input
-                                            type="text"
-                                            placeholder="Filter..."
-                                            onChange={this._handleFilterInput}
-                                            addonAfter={<Icon type="search" />}
-                                        />
-                                    </div>
-                                    <div
-                                        className="selector inline-block"
-                                        style={{
-                                            position: "relative",
-                                            top: "6px"
-                                        }}
-                                    >
-                                        <div
-                                            className={cnames("inline-block", {
-                                                inactive:
-                                                    shownAssets != "active"
-                                            })}
-                                            onClick={
-                                                shownAssets != "active"
-                                                    ? this._changeShownAssets.bind(
-                                                          this,
-                                                          "active"
-                                                      )
-                                                    : () => {}
-                                            }
-                                        >
-                                            <Translate content="account.hide_hidden" />
-                                        </div>
-                                        {hiddenBalancesList.size ? (
-                                            <div
-                                                className={cnames(
-                                                    "inline-block",
-                                                    {
-                                                        inactive:
-                                                            shownAssets !=
-                                                            "hidden"
-                                                    }
-                                                )}
-                                                onClick={
-                                                    shownAssets != "hidden"
-                                                        ? this._changeShownAssets.bind(
-                                                              this,
-                                                              "hidden"
-                                                          )
-                                                        : () => {}
+                                <div className="content padding">
+                                    <Form layout="inline">
+                                        <Form.Item>
+                                            <Input
+                                                type="text"
+                                                placeholder="Filter..."
+                                                onChange={
+                                                    this._handleFilterInput
                                                 }
+                                                addonAfter={
+                                                    <Icon type="search" />
+                                                }
+                                            />
+                                        </Form.Item>
+                                        <Form.Item>
+                                            <Radio.Group
+                                                onChange={
+                                                    this.onRadioFilterChange
+                                                }
+                                                defaultValue={
+                                                    shownAssets || "active"
+                                                }
+                                                buttonStyle="solid"
                                             >
-                                                <Translate content="account.show_hidden" />
-                                            </div>
-                                        ) : null}
-                                        <div
-                                            className={cnames("inline-block", {
-                                                inactive:
-                                                    shownAssets != "visual"
-                                            })}
-                                            onClick={
-                                                shownAssets != "visual"
-                                                    ? this._changeShownAssets.bind(
-                                                          this,
-                                                          "visual"
-                                                      )
-                                                    : () => {}
-                                            }
-                                        >
-                                            <Translate content="account.show_visual" />
-                                        </div>
-                                    </div>
+                                                <Radio.Button value="active">
+                                                    <Translate content="cryptobridge.dashboard.portfolio.button.list" />
+                                                </Radio.Button>
+                                                {hiddenBalancesList.size ? (
+                                                    <Radio.Button value="hidden">
+                                                        <Translate content="account.show_hidden" />
+                                                    </Radio.Button>
+                                                ) : null}
+                                                <Radio.Button value="visual">
+                                                    <Translate content="account.show_visual" />
+                                                </Radio.Button>
+                                            </Radio.Group>
+                                        </Form.Item>
+                                    </Form>
                                 </div>
-
                                 {shownAssets != "visual" ? (
                                     shownAssets === "hidden" &&
                                     hiddenBalancesList.size ? (

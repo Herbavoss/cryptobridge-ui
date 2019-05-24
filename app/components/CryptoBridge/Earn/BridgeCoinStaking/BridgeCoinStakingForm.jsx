@@ -379,6 +379,7 @@ export default class BridgeCoinStakingForm extends React.Component {
 
                 <Translate
                     component="label"
+                    className="left-label"
                     style={{marginTop: "1rem"}}
                     content="cryptobridge.earn.staking.duration"
                 />

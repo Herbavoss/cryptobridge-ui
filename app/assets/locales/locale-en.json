@@ -2471,6 +2471,17 @@
             "bridgecoin": "BridgeCoin",
             "benchmark": "Benchmark"
         },
+        "dashboard": {
+            "portfolio": {
+                "button": {
+                    "list": "List",
+                    "hidden_assets": "Hidden assets"
+                },
+                "empty": "Your portfolio is empty",
+                "deposit": "Deposit funds",
+                "trade": "Start trading"
+            }
+        },
         "registration": {
             "us_citizen": {
                 "label": "Are you a U.S. citizen?",

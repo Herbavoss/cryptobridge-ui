@@ -19,6 +19,8 @@ import CryptoBridgeAccountStore from "stores/cryptobridge/CryptoBridgeAccountSto
 import SupportActions from "actions/cryptobridge/SupportActions";
 import SupportStore from "stores/cryptobridge/SupportStore";
 
+import AccountImage from "components/Account/AccountImage";
+
 const Editor = ({onChange, onSubmit, submitting, value}) => (
     <div>
         <Form.Item>
@@ -64,7 +66,20 @@ class Comments extends React.Component {
             JSON.stringify(this.state.ticketComments) !==
             JSON.stringify(ticketComments)
         ) {
-            this.setState({ticketComments});
+            this.setState({
+                ticketComments: ticketComments.map(comment => {
+                    if (!comment.avatar) {
+                        comment.avatar = (
+                            <AccountImage
+                                account={name}
+                                size={{height: 30, width: 30}}
+                            />
+                        );
+                    }
+
+                    return comment;
+                })
+            });
         }
     }
 

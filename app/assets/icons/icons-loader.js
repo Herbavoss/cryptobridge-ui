@@ -34,6 +34,7 @@ let icons = [
     "hamburger-x",
     "hamburger",
     "hourglass",
+    "identity", //CRYPTOBRIDGE
     "key",
     "list",
     "locked",
