@@ -6,7 +6,7 @@ export default class TitleUtils {
      *  @return string value to be used by document.title or equivalent
      */
     static GetTitleByPath(path) {
-        let title = "BitShares";
+        let title = "CryptoBridge";
         let lastPart = null;
         let prefix = " - ";
 
@@ -84,6 +84,16 @@ export default class TitleUtils {
                 return "wallet.title";
             case "witnesses":
                 return "explorer.witnesses.title";
+
+            /* CRYPTOBRIDGE */
+            case "benchmark":
+                return "cryptobridge.benchmark.title";
+            case "earn":
+                return "cryptobridge.earn.title";
+            case "support":
+                return "cryptobridge.support.title";
+            /* /CRYPTOBRIDGE */
+
             default:
                 return null;
         }

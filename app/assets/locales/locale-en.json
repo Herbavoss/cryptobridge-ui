@@ -2480,6 +2480,12 @@
                 "empty": "Your portfolio is empty",
                 "deposit": "Deposit funds",
                 "trade": "Start trading"
+            },
+            "open_orders": {
+                "empty": "You don't have any open orders"
+            },
+            "markets": {
+                "empty": "No markets available"
             }
         },
         "registration": {
@@ -2519,6 +2525,7 @@
             }
         },
         "earn": {
+            "title": "Earn",
             "staking": {
                 "title": "BridgeCoin staking",
                 "login": "In order to stake your BridgeCoin, you must first log in.",

@@ -1494,23 +1494,26 @@
         }
     }
     .bid,
-    .bid > button[disabled] {
+    .bid > button[disabled],
+    button.bid[disabled] {
         border-color: $bid-color !important;
         color: $bid-color !important;
         background-color: transparent !important;
     }
     .ask,
-    .ask > button[disabled] {
+    .ask > button[disabled],
+    button.ask[disabled] {
         border-color: $ask-color !important;
         color: $ask-color !important;
         background-color: transparent !important;
     }
-    .ask,
-    .bid {
-        > button[disabled] {
-            opacity: 0.4;
-        }
+    .bid > button[disabled],
+    button.bid[disabled],
+    .ask > button[disabled],
+    button.ask[disabled] {
+        opacity: 0.4;
     }
+
     .orderbook-latest-price {
         > div {
             $orderbook-center-horizontal-margin: 5px;

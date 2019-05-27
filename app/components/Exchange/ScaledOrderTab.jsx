@@ -813,6 +813,7 @@ class ScaledOrderForm extends Component {
                         onClick={this.props.handleSubmit}
                         type="primary"
                         disabled={!this.isFormValid()}
+                        className={isBid ? "bid" : "ask"}
                     >
                         {counterpart.translate(
                             isBid

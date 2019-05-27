@@ -1297,20 +1297,15 @@ class AccountPortfolioList extends React.Component {
                                         }
                                     />
                                 </Button>
-                                <Button
-                                    onClick={() => {
-                                        ZfApi.publish("deposit_modal", {
-                                            visible: true
-                                        });
-                                    }}
-                                    style={{marginLeft: "1rem"}}
-                                >
-                                    <Translate
-                                        content={
-                                            "cryptobridge.dashboard.portfolio.trade"
-                                        }
-                                    />
-                                </Button>
+                                <Link to={"/market/BRIDGE.BCO_BRIDGE.BTC"}>
+                                    <Button style={{marginLeft: "1rem"}}>
+                                        <Translate
+                                            content={
+                                                "cryptobridge.dashboard.portfolio.trade"
+                                            }
+                                        />
+                                    </Button>
+                                </Link>
                             </Paragraph>
                         </div>
                     )
