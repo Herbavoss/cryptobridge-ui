@@ -10,7 +10,6 @@ import {
     Modal,
     Tabs,
     Typography,
-    Form,
     Tag
 } from "bitshares-ui-style-guide";
 const {Paragraph, Text} = Typography;
