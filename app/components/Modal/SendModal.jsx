@@ -55,16 +55,31 @@ class SendModal extends React.Component {
         this._checkFeeStatus = this._checkFeeStatus.bind(this);
         this._checkBalance = this._checkBalance.bind(this);
 
+        this.showModal = this.showModal.bind(this);
+        this.hideModal = this.hideModal.bind(this);
+        this.onClose = this.onClose.bind(this);
+    }
+
+    componentDidMount() {
         ZfApi.subscribe("transaction_confirm_actions", (name, msg) => {
             if (msg == "close") {
                 this.setState({hidden: false});
                 this.hideModal();
             }
         });
+        ZfApi.subscribe(
+            "send_modal",
+            (name, {visible = false, asset = null}) => {
+                if (visible) {
+                    this.show(asset);
+                }
+            }
+        );
+    }
 
-        this.showModal = this.showModal.bind(this);
-        this.hideModal = this.hideModal.bind(this);
-        this.onClose = this.onClose.bind(this);
+    componentWillUnmount() {
+        ZfApi.unsubscribe("transaction_confirm_actions");
+        ZfApi.unsubscribe("send_modal");
     }
 
     showModal() {
@@ -104,15 +119,14 @@ class SendModal extends React.Component {
         };
     }
 
-    show() {
+    show(asset) {
         this.setState({open: true, hidden: false}, () => {
             this.showModal();
-            this._initForm();
+            this._initForm(asset);
         });
     }
 
     onClose(publishClose = true) {
-        ZfApi.unsubscribe("transaction_confirm_actions");
         this.setState(
             {
                 open: false,
@@ -181,7 +195,7 @@ class SendModal extends React.Component {
             });
     }
 
-    _initForm() {
+    _initForm(asset) {
         if (this.props.to_name != this.props.from_name) {
             this.setState({
                 to_name: this.props.to_name,
@@ -202,13 +216,15 @@ class SendModal extends React.Component {
         }
 
         if (
-            this.props.asset_id &&
-            this.state.asset_id !== this.props.asset_id
+            asset ||
+            (this.props.asset_id && this.state.asset_id !== this.props.asset_id)
         ) {
-            let asset = ChainStore.getAsset(this.props.asset_id);
+            if (!asset) {
+                asset = ChainStore.getAsset(this.props.asset_id);
+            }
             if (asset) {
                 this.setState({
-                    asset_id: this.props.asset_id,
+                    asset_id: asset.get("id"),
                     asset
                 });
             }

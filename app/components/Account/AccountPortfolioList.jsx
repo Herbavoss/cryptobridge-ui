@@ -566,7 +566,11 @@ class AccountPortfolioList extends React.Component {
                 emptyCell
             );
             transferLink = (
-                <a onClick={this.triggerSend.bind(this, asset.get("id"))}>
+                <a
+                    onClick={() => {
+                        ZfApi.publish("send_modal", {visible: true, asset});
+                    }}
+                >
                     <Icon
                         name="transfer"
                         title="icons.transfer"
@@ -1238,12 +1242,12 @@ class AccountPortfolioList extends React.Component {
                             <Icon
                                 style={{cursor: "pointer"}}
                                 name="withdraw"
-                                title="icons.withdraw.withdraw"
+                                title="icons.withdraw"
                                 className="icon-14x"
                                 onClick={() => {
-                                    ZfApi.publish("withdrawal_modal", {
+                                    ZfApi.publish("withdraw_modal", {
                                         visible: true,
-                                        asset: asset.get("symbol")
+                                        asset: asset
                                     });
                                 }}
                             />

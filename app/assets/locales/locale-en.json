@@ -2455,12 +2455,18 @@
             "": ""
         },
         "gateway": {
+            "asset": {
+                "not_found": "Asset not found"
+            },
             "withdraw": {
                 "payment_id": {
                     "tag": "Destination Tag (optional)",
                     "tag_invalid": "Destination Tag is not valid",
                     "hash": "Payment ID (optional)",
                     "hash_invalid": "Payment ID is not valid"
+                },
+                "address": {
+                    "not_available": "Please enter and select the withdrawal address"
                 }
             },
             "deposit": {
@@ -2583,6 +2589,9 @@
             },
             "deposit": {
                 "login": "Please login to deposit an asset."
+            },
+            "withdraw": {
+                "login": "Please login to withdraw an asset."
             }
         },
         "support": {

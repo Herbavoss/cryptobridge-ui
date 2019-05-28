@@ -425,6 +425,7 @@ export function getBackedCoins({allCoins, tradingPairs, backer}) {
 
 export function validateAddress({
     url = cryptoBridgeAPIs.BASE_V2,
+    account,
     walletType,
     newAddress,
     output_coin_type = null,

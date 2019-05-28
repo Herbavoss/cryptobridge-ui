@@ -132,6 +132,9 @@ class DepositWithdrawAssetSelector extends React.Component {
                 showSearch
                 style={{width: "100%"}}
                 className="asset-selector"
+                notFoundContent={counterpart.translate(
+                    "cryptobridge.gateway.asset.not_found"
+                )}
             >
                 {/*
                     NOTE

@@ -90,10 +90,11 @@ class Header extends React.Component {
         });
     }
 
-    showWithdrawModal() {
+    showWithdrawModal(withdrawAsset) {
         this.setState({
             isWithdrawModalVisible: true,
-            hasWithdrawalModalBeenShown: true
+            hasWithdrawalModalBeenShown: true,
+            withdrawAsset
         });
     }
 
@@ -134,6 +135,16 @@ class Header extends React.Component {
                 }
             }
         );
+        ZfApi.subscribe(
+            "withdraw_modal",
+            (name, {visible = false, asset = null}) => {
+                if (visible) {
+                    this.showWithdrawModal(asset);
+                } else {
+                    this.hideWithdrawModal();
+                }
+            }
+        );
         /* /CRYPTOBRIDGE */
     }
 
@@ -147,6 +158,7 @@ class Header extends React.Component {
 
         /* CRYPTOBRIDGE */
         ZfApi.unsubscribe("deposit_modal");
+        ZfApi.unsubscribe("withdraw_modal");
         /* /CRYPTOBRIDGE */
     }
 
@@ -1375,6 +1387,7 @@ class Header extends React.Component {
                         visible={this.state.isWithdrawModalVisible}
                         hideModal={this.hideWithdrawModal}
                         showModal={this.showWithdrawModal}
+                        asset={this.state.withdrawAsset}
                         ref="withdraw_modal_new"
                         modalId="withdraw_modal_new"
                         backedCoins={this.props.backedCoins}
