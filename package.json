@@ -127,7 +127,7 @@
                 "AppImage",
                 "snap"
             ],
-            "synopsis": "BitShares: Cryptocurrency and Decentralized Exchange"
+            "synopsis": "CryptoBridge: Gateway to Decentralized Trading"
         },
         "directories": {
             "buildResources": "resources",

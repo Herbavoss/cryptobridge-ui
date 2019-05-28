@@ -160,7 +160,7 @@ class SupportActions {
                             return ticket;
                         }
                         throw new Error(
-                            data.message ||
+                            ticket.message ||
                                 counterpart.translate(
                                     "cryptobridge.support.tickets.add.error"
                                 )

@@ -19,14 +19,14 @@ stages:
       if: branch = develop
 
     - name: build-stage
-      if: branch = feature/cb-1648-upstream
+      if: branch = master
     - name: deploy-stage
-      if: branch = feature/cb-1648-upstream
+      if: branch = master
 
     - name: build-preview
-      if: branch = feature/cb-1648-upstream-preview
+      if: branch = feature/cb-1648-upstream
     - name: deploy-preview
-      if: branch = feature/cb-1648-upstream-preview
+      if: branch = feature/cb-1648-upstream
 
     - name: build-prod
       if: tag =~ /^v\d+\.\d+(\.\d+)?$/
@@ -58,6 +58,7 @@ jobs:
           script:
               - export RECAPTCHA_SITE_KEY=$STAGE_RECAPTCHA_SITE_KEY
               - export CRYPTOBRIDGE_PUB_KEY=$STAGE_CRYPTOBRIDGE_PUB_KEY
+              - export STAGENET=true
               - export CHAIN_ID=$STAGE_CHAIN_ID
               - export WALLET_URL=$STAGE_WALLET_URL
               - export API_URL=$STAGE_API_URL

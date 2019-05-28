@@ -104,7 +104,7 @@ class AccountRegistrationForm extends React.Component {
 
     isValid() {
         /* CRYPTOBRIDGE */
-        if (this.state.usCitizen !== true) {
+        if (this.state.usCitizen === null) {
             return false;
         }
         /* /CRYPTOBRIDGE */

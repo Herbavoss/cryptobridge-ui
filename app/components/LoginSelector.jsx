@@ -117,7 +117,7 @@ class LoginSelector extends React.Component {
                             />
                             <Translate
                                 unsafe
-                                content="account.intro_text_1"
+                                content="cryptobridge.global.claim"
                                 component="p"
                             />
 

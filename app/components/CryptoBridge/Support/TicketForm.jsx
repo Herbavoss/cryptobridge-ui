@@ -4,6 +4,7 @@ import Translate from "react-translate-component";
 import PropTypes from "prop-types";
 
 import SupportActions from "actions/cryptobridge/SupportActions";
+import CryptoBridgeAccountStore from "stores/cryptobridge/CryptoBridgeAccountStore";
 
 import {
     Form,
@@ -13,6 +14,7 @@ import {
     message
 } from "bitshares-ui-style-guide";
 import DepositWithdrawAssetSelector from "components/DepositWithdraw/DepositWithdrawAssetSelector";
+import ReCAPTCHA from "components/Utility/CryptoBridge/ReCAPTCHA";
 
 const formItemAsset = getFieldDecorator => {
     return (
@@ -226,6 +228,8 @@ export default class TicketForm extends React.Component {
                     this.props.issueType
                 }`;
 
+                const {reCaptchaToken} = values;
+
                 const ticket = Object.assign(
                     {
                         title: title,
@@ -239,7 +243,7 @@ export default class TicketForm extends React.Component {
                     loading: true
                 });
 
-                SupportActions.addTicket(ticket)
+                SupportActions.addTicket(ticket, reCaptchaToken)
                     .then(() => {
                         this.setState({
                             loading: false
@@ -252,7 +256,11 @@ export default class TicketForm extends React.Component {
                         this.props.onSuccess();
                     })
                     .catch(e => {
-                        message.error(e);
+                        message.error(e.message);
+
+                        this.setState({
+                            loading: false
+                        });
                     });
             }
         });
@@ -271,12 +279,30 @@ export default class TicketForm extends React.Component {
 
     render() {
         const {loading} = this.state;
+        const {getFieldDecorator} = this.props.form;
 
         const hasErrors = this.getHasError();
+        const user = CryptoBridgeAccountStore.getName();
 
         return (
             <Form onSubmit={this.onSubmit}>
                 {this.props.children}
+                <Form.Item
+                    label={counterpart.translate(
+                        "cryptobridge.support.tickets.create.form.recaptcha.label"
+                    )}
+                >
+                    {getFieldDecorator("reCaptchaToken", {
+                        rules: [
+                            {
+                                required: true,
+                                message: counterpart.translate(
+                                    "cryptobridge.support.tickets.create.form.recaptcha.error"
+                                )
+                            }
+                        ]
+                    })(<ReCAPTCHA payload={{user}} />)}
+                </Form.Item>
                 <Form.Item>
                     <Button
                         type="primary"
