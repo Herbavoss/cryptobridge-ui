@@ -2414,6 +2414,7 @@ class Exchange extends React.Component {
                         height: smallScreen ? 680 : "calc(100vh - 215px)",
                         padding: smallScreen ? 10 : 0
                     }}
+                    backedCoins={this.props.backedCoins}
                     headerStyle={{
                         width: "100%",
                         display: !smallScreen ? "display: none" : ""

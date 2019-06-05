@@ -12,6 +12,7 @@ const {Paragraph, Title} = Typography;
 import ChainTypes from "components/Utility/ChainTypes";
 import CryptoBridgeAccountStore from "stores/cryptobridge/CryptoBridgeAccountStore";
 import BridgeCoinStakingForm from "./BridgeCoinStakingForm";
+import BridgeCoinRewards from "./BridgeCoinRewards";
 import {List} from "immutable";
 
 class BridgeCoinStaking extends React.Component {
@@ -23,27 +24,35 @@ class BridgeCoinStaking extends React.Component {
         super(props);
 
         this.state = {
-            stakingBalances: []
+            stakingBalances: [],
+            reclaimFee: null
         };
     }
 
     componentDidMount() {
-        if (this.props.account) {
-            this.retrieveStakingBalances.call(
-                this,
-                this.props.account.get("id")
-            );
+        this.unmounted = false;
+
+        const {account} = this.props;
+
+        if (account) {
+            this.retrieveStakingBalances(account.get("id"));
         }
     }
 
     componentDidUpdate(prevProps) {
-        if (
-            JSON.stringify(this.props.accountBalances) !==
-                JSON.stringify(prevProps.accountBalances) ||
+        const accountChange =
             JSON.stringify(this.props.account) !==
-                JSON.stringify(prevProps.account)
-        ) {
+            JSON.stringify(prevProps.account);
+        const balanceChange =
+            JSON.stringify(this.props.accountBalances) !==
+            JSON.stringify(prevProps.accountBalances);
+
+        if (accountChange || balanceChange) {
             this.forceUpdate();
+        }
+
+        if (accountChange && this.props.account) {
+            this.retrieveStakingBalances(this.props.account.get("id"));
         }
     }
 
@@ -72,13 +81,14 @@ class BridgeCoinStaking extends React.Component {
     }
 
     render() {
-        const {stakingBalances} = this.state;
+        const {stakingBalances, reclaimFee} = this.state;
         const {account} = this.props;
 
         return (
             <div className="content padding">
                 <Row gutter={32}>
                     <Col xs={{span: 24}} lg={{span: 16}}>
+                        <BridgeCoinRewards reclaimFee={reclaimFee} />
                         <Title level={4}>
                             <Translate
                                 content="cryptobridge.earn.staking.intro_text_1"
@@ -97,6 +107,10 @@ class BridgeCoinStaking extends React.Component {
                                 unsafe
                             />
                         </Paragraph>
+                        <BridgeCoinStakingBalances
+                            balances={stakingBalances}
+                            account={account}
+                        />
                     </Col>
                     <Col xs={{span: 24}} lg={{span: 8}}>
                         <Card
@@ -107,13 +121,11 @@ class BridgeCoinStaking extends React.Component {
                             <BridgeCoinStakingForm
                                 account={account}
                                 balances={this.props.accountBalances}
+                                onReclaimFeeChange={reclaimFee => {
+                                    this.setState({reclaimFee});
+                                }}
                             />
                         </Card>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        <BridgeCoinStakingBalances balances={stakingBalances} />
                     </Col>
                 </Row>
             </div>

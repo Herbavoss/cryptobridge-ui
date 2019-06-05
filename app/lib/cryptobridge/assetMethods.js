@@ -26,8 +26,14 @@ export function getIsValidPaymentId(asset, paymentId) {
     );
 }
 
-export function getIsBridgeCoinAsset(asset) {
-    return asset && /^BRIDGE\./i.test(asset.get("symbol"));
+export function getIsCryptoBridgeAsset(asset) {
+    if (!asset) {
+        return false;
+    }
+
+    const symbol = typeof asset === "string" ? asset : asset.get("symbol");
+
+    return /^BRIDGE\./i.test(symbol);
 }
 
 export function getCleanAssetSymbol(asset) {

@@ -1,4 +1,5 @@
 import React from "react";
+import counterpart from "counterpart";
 import FormattedAsset from "../Utility/FormattedAsset";
 import AssetWrapper from "../Utility/AssetWrapper";
 import AccountName from "../Utility/AccountName";
@@ -8,6 +9,7 @@ import MarketsActions from "actions/MarketsActions";
 import SettingsActions from "actions/SettingsActions";
 import {withRouter} from "react-router-dom";
 import {Tooltip} from "bitshares-ui-style-guide";
+import {getCleanAssetSymbol} from "../../lib/cryptobridge/assetMethods";
 
 class MarketRow extends React.Component {
     static defaultProps = {
@@ -55,7 +57,15 @@ class MarketRow extends React.Component {
     }
 
     render() {
-        let {quote, base, noSymbols, stats, starred} = this.props;
+        let {
+            quote,
+            quoteInfo,
+            base,
+            baseInfo,
+            noSymbols,
+            stats,
+            starred
+        } = this.props;
         if (!quote || !base) {
             return null;
         }
@@ -163,11 +173,64 @@ class MarketRow extends React.Component {
                         );
 
                     case "market":
+                        const hasBadges =
+                            quoteInfo &&
+                            quoteInfo.badges &&
+                            quoteInfo.badges.length;
+
+                        const isIdentified =
+                            hasBadges && quoteInfo.badges.indexOf("kyc") !== -1;
+                        const isBenchmarked =
+                            hasBadges &&
+                            quoteInfo.badges.indexOf("darc") !== -1;
+
                         return (
                             <td
                                 onClick={this._onClick.bind(this, marketID)}
                                 key={column.index}
                             >
+                                {isIdentified ? (
+                                    <div
+                                        style={{float: "right", marginTop: -3}}
+                                    >
+                                        <Tooltip
+                                            title={counterpart.translate(
+                                                "cryptobridge.trade.tooltip.identity",
+                                                {
+                                                    asset: getCleanAssetSymbol(
+                                                        base.get("symbol")
+                                                    )
+                                                }
+                                            )}
+                                        >
+                                            <Icon
+                                                name="identity"
+                                                title="cryptobridge.icons.identity"
+                                            />
+                                        </Tooltip>
+                                    </div>
+                                ) : null}
+                                {isBenchmarked ? (
+                                    <div
+                                        style={{float: "right", marginLeft: 5}}
+                                    >
+                                        <Tooltip
+                                            title={counterpart.translate(
+                                                "cryptobridge.trade.tooltip.benchmark",
+                                                {
+                                                    asset: getCleanAssetSymbol(
+                                                        base.get("symbol")
+                                                    )
+                                                }
+                                            )}
+                                        >
+                                            <Icon
+                                                name="benchmark"
+                                                title="cryptobridge.icons.benchmark"
+                                            />
+                                        </Tooltip>
+                                    </div>
+                                ) : null}
                                 {this.props.name}
                             </td>
                         );
@@ -202,7 +265,7 @@ class MarketRow extends React.Component {
                             "GOLD",
                             "SILVER"
                         ];
-                        let precision = 6;
+                        let precision = 8; // ALWAYS SAME PRECISION
                         if (
                             highPrecisionAssets.indexOf(base.get("symbol")) !==
                             -1

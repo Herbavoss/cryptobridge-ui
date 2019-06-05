@@ -43,7 +43,7 @@ const {Paragraph} = Typography;
 import AssetImage from "../Utility/CryptoBridge/AssetImage";
 import {
     getCleanAssetSymbol,
-    getIsBridgeCoinAsset
+    getIsCryptoBridgeAsset
 } from "lib/cryptobridge/assetMethods";
 /* /CRYPTOBRIDGE */
 
@@ -1214,7 +1214,7 @@ class AccountPortfolioList extends React.Component {
                 title: counterpart.translate("modal.deposit.submit"),
                 dataIndex: "deposit",
                 render: asset => {
-                    if (getIsBridgeCoinAsset(asset)) {
+                    if (getIsCryptoBridgeAsset(asset)) {
                         return (
                             <Icon
                                 style={{cursor: "pointer"}}
@@ -1237,7 +1237,7 @@ class AccountPortfolioList extends React.Component {
                 title: counterpart.translate("modal.withdraw.submit"),
                 dataIndex: "withdraw",
                 render: asset => {
-                    if (getIsBridgeCoinAsset(asset)) {
+                    if (getIsCryptoBridgeAsset(asset)) {
                         return (
                             <Icon
                                 style={{cursor: "pointer"}}

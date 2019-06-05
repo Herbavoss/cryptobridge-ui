@@ -2478,7 +2478,8 @@
         "icons": {
             "support": "Support",
             "bridgecoin": "BridgeCoin",
-            "benchmark": "Benchmark"
+            "benchmark": "Benchmark",
+            "identity": "Identity"
         },
         "dashboard": {
             "portfolio": {
@@ -2531,6 +2532,26 @@
             "update": {
                 "success": "Your account has been updated",
                 "error": "Could not update account"
+            },
+            "rewards": {
+                "notification": {
+                    "title": "Congratulations!",
+                    "description": "You have rewards to claim!",
+                    "action": "Take me there"
+                },
+                "fetch": {
+                    "error": "Could not fetch BridgeCoin rewards"
+                },
+                "claim": {
+                    "claim": {
+                        "success": "BridgeCoins claimed!",
+                        "error": "Could not claim BridgeCoins."
+                    },
+                    "stake": {
+                        "success": "BridgeCoins staked!",
+                        "error": "Could not stake BridgeCoins."
+                    }
+                }
             }
         },
         "earn": {
@@ -2551,7 +2572,8 @@
 
                 "create": "Create a new BCO staking position",
 
-                "no_balances": "You have no open BridgeCoin staking positions.",
+                "no_positions": "You have no open BridgeCoin staking positions.",
+                "positions": "Your BridgeCoin staking positions:",
 
                 "duration": "Staking duration",
 
@@ -2566,8 +2588,29 @@
 
                 "amount": "Staking amount",
                 "remaining": "Remaining in staking period",
+
                 "status": "Status",
-                "available": "Available for claiming"
+                "available": "Available for claiming",
+
+                "days": "%(days)s days",
+
+                "rewards": {
+                    "title": "Congratulations, you have rewards to claim!",
+                    "description": "All prices are paid in BridgeCoin (BCO).\n\nUSD to BCO exchange rate is determined at the time of the payout using the exchange rate from coinmarketcap.com.\n\nFor more details, check out the <a href=\"https://crypto-bridge.org/trading-competition/\" target=\"_blank\">trading competition details</a>.",
+                    "disclaimer": "Disclaimer: Claiming your stake after ending of staking period costs %(amount)s BCO in fees at this moment. The fees are subject to change.",
+                    "reward": {
+                        "usd": "Reward (USD)",
+                        "bonus": "If you \"Claim & Stake\" your %(amount)s BCO, you will receive 10% bonus on top!",
+                        "period": "Period",
+                        "payout": "Payout"
+                    },
+                    "button": {
+                        "claim": "Claim only",
+                        "claim_bonus": "no bonus",
+                        "stake": "Claim and stake",
+                        "stake_bonus": "with %(percent)s% bonus"
+                    }
+                }
             },
             "referral": {
                 "title": "Referral program",
@@ -2577,6 +2620,11 @@
                     "login": "Please login to reveal your personal referral link.",
                     "explain": "Short referral link explanation needed..."
                 }
+            },
+            "competition": {
+                "title": "Trading competition",
+                "claim": "#FromJunetotheMoon - The CryptoBridge Trading Competition",
+                "intro_text_1": "This is the moment you’ve been waiting for: The full scoop on our trading competition! Find all about it along with the terms and conditions on the website."
             }
         },
         "trade": {
@@ -2585,7 +2633,9 @@
                 "sell": "Sell"
             },
             "tooltip": {
-                "deposit": "Deposit %(asset)s"
+                "deposit": "Deposit %(asset)s",
+                "identity": "%(asset)s fulfilled user identification process",
+                "benchmark": "%(asset)s is benchmarked"
             },
             "deposit": {
                 "login": "Please login to deposit an asset."

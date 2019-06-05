@@ -98,10 +98,9 @@ class CryptoBridgeAccountActions {
                     }
 
                     throw new Error(
-                        me.message ||
-                            counterpart.translate(
-                                "cryptobridge.account.update.error"
-                            )
+                        counterpart.translate(
+                            "cryptobridge.account.update.error"
+                        )
                     );
                 })
                 .then(me => {
@@ -118,6 +117,76 @@ class CryptoBridgeAccountActions {
     logout() {
         return dispatch => {
             dispatch();
+        };
+    }
+
+    fetchRewards() {
+        return dispatch => {
+            const options = {
+                headers: getBasicHeaders()
+            };
+
+            return fetch(
+                `${cryptoBridgeAPIs.BASE_V2}/accounts/me/rewards`,
+                options
+            )
+                .then(response => {
+                    return response.json().then(rewards => {
+                        if (response.ok) {
+                            return rewards;
+                        }
+
+                        throw new Error(
+                            rewards.message ||
+                                counterpart.translate(
+                                    "cryptobridge.account.rewards.fetch.error"
+                                )
+                        );
+                    });
+                })
+                .then(rewards => {
+                    dispatch(rewards);
+                    return rewards;
+                })
+                .catch(e => {
+                    dispatch([]);
+                    throw new Error(e);
+                });
+        };
+    }
+
+    claimReward(id, type) {
+        return dispatch => {
+            const options = {
+                method: "PUT",
+                headers: getBasicHeaders()
+            };
+
+            return fetch(
+                `${
+                    cryptoBridgeAPIs.BASE_V2
+                }/accounts/me/rewards/${id}?type=${type}`,
+                options
+            )
+                .then(response => {
+                    if (response.ok) {
+                        return {id, type};
+                    }
+
+                    throw new Error(
+                        counterpart.translate(
+                            `cryptobridge.account.rewards.claim.${type}.error`
+                        )
+                    );
+                })
+                .then(response => {
+                    dispatch(response);
+                    return response;
+                })
+                .catch(e => {
+                    dispatch({id: null, type: null});
+                    throw new Error(e);
+                });
         };
     }
 }

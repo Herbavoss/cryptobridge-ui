@@ -1,31 +1,37 @@
 import React from "react";
 import PropTypes from "prop-types";
+import {
+    getCleanAssetSymbol,
+    getIsCryptoBridgeAsset
+} from "lib/cryptobridge/assetMethods";
 
 class AssetImage extends React.Component {
     static propTypes = {
-        asset: PropTypes.string.isRequired
+        asset: PropTypes.string.isRequired,
+        forceImage: PropTypes.bool.isRequired
     };
 
     static defaultProps = {
-        asset: ""
+        asset: "",
+        forceImage: false
     };
 
     render() {
-        const {asset} = this.props;
+        const {asset, forceImage} = this.props;
 
         const style = {
             verticalAlign: "middle"
         };
 
-        const assetName = asset.replace(/^bridge\./i, "").toLowerCase();
+        const hasAssetImage = getIsCryptoBridgeAsset(asset) || asset === "BTS";
+        const assetName = getCleanAssetSymbol(asset).toLowerCase();
 
-        return (
-            <img
-                className={"asset-image"}
-                src={`${__WALLET_URL_PROD__}/assets/${assetName}.png`}
-                style={style}
-            />
-        );
+        const src =
+            hasAssetImage || forceImage
+                ? `${__WALLET_URL_PROD__}/assets/${assetName}.png`
+                : "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+
+        return <img className={"asset-image"} src={src} style={style} />;
     }
 }
 

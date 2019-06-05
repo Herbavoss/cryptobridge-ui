@@ -1,4 +1,6 @@
 import React from "react";
+import PropTypes from "prop-types";
+
 import {debounce} from "lodash";
 
 import utils from "common/utils";
@@ -63,9 +65,13 @@ export class AccountStakingInfo {
 }
 
 export default class BridgeCoinStakingForm extends React.Component {
-    static propTypes = {};
+    static propTypes = {
+        onReclaimFeeChange: PropTypes.func.isRequired
+    };
 
-    static defaultProps = {};
+    static defaultProps = {
+        onReclaimFeeChange: () => {}
+    };
 
     constructor(props) {
         super(props);
@@ -157,7 +163,13 @@ export default class BridgeCoinStakingForm extends React.Component {
                     hasPoolBalance,
                     error: !hasBalance || !hasPoolBalance
                 },
-                this._checkFeeStatus
+                () => {
+                    this._checkFeeStatus();
+
+                    const reclaimFee =
+                        ((fee && fee.getAmount({real: true})) || 0) * 2;
+                    this.props.onReclaimFeeChange(reclaimFee);
+                }
             );
         });
     }

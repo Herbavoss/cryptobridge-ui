@@ -219,6 +219,7 @@ class MarketGroup extends React.Component {
                 ) {
                     return null;
                 }
+
                 return (
                     <MarketRow
                         key={market.id}
@@ -239,7 +240,9 @@ class MarketGroup extends React.Component {
                             )
                         }
                         quote={market.quote}
+                        quoteInfo={market.quoteInfo || {}}
                         base={market.base}
+                        baseInfo={market.baseInfo || {}}
                         columns={columns}
                         leftAlign={true}
                         compact={true}
@@ -598,7 +601,8 @@ class MyMarkets extends React.Component {
             userMarkets,
             preferredBases,
             starredMarkets,
-            chainMarkets
+            chainMarkets,
+            backedCoins
         } = this.props;
         const {
             activeTab,
@@ -672,7 +676,8 @@ class MyMarkets extends React.Component {
             matchBases,
             markets,
             baseGroups,
-            otherMarkets
+            otherMarkets,
+            backedCoins
         ) {
             let others = markets
                 .filter(a => {
@@ -700,6 +705,14 @@ class MyMarkets extends React.Component {
                 })
                 .map(market => {
                     let marketID = market.quote + "_" + market.base;
+
+                    const quoteInfo = backedCoins.find(
+                        coin => coin.symbol === market.quote
+                    );
+                    const baseInfo = backedCoins.find(
+                        coin => coin.symbol === market.base
+                    );
+
                     if (matchBases.indexOf(market.base) !== -1) {
                         if (!baseGroups[base]) {
                             baseGroups[base] = [];
@@ -707,7 +720,9 @@ class MyMarkets extends React.Component {
                         let marketObject = {
                             id: marketID,
                             quote: market.quote,
-                            base: market.base
+                            quoteInfo,
+                            base: market.base,
+                            baseInfo
                         };
                         if (!baseGroups[base].find(m => m.id === marketID))
                             baseGroups[base].push(marketObject);
@@ -722,7 +737,9 @@ class MyMarkets extends React.Component {
                         return {
                             id: marketID,
                             quote: market.quote,
-                            base: market.base
+                            quoteInfo,
+                            base: market.base,
+                            baseInfo
                         };
                     }
                 })
@@ -742,7 +759,8 @@ class MyMarkets extends React.Component {
                 [currentBase],
                 activeMarkets,
                 baseGroups,
-                otherMarkets
+                otherMarkets,
+                backedCoins
             ));
 
             /* Check for possible gateway versions of the asset */

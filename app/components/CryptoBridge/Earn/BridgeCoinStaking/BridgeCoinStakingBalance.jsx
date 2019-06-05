@@ -7,6 +7,8 @@ import utils from "lib/common/utils";
 import FormattedAsset from "components/Utility/FormattedAsset";
 import CryptoBridgeWalletActions from "actions/cryptobridge/CryptoBridgeWalletActions";
 
+import {Button} from "bitshares-ui-style-guide";
+
 export default class BridgeCoinStakingBalance extends React.Component {
     _onClaim(claimAll, e) {
         e.preventDefault();
@@ -20,43 +22,33 @@ export default class BridgeCoinStakingBalance extends React.Component {
     }
 
     render() {
-        let {vb} = this.props;
-        if (!this.props.vb) {
+        const {vb} = this.props;
+        if (
+            !vb ||
+            !vb.balance.amount ||
+            !ChainStore.getAsset(vb.balance.asset_id)
+        ) {
             return null;
         }
 
-        let cvbAsset,
-            available = false,
-            daysLeft = 0,
-            balance;
-        if (vb) {
-            balance = vb.balance.amount;
-            cvbAsset = ChainStore.getAsset(vb.balance.asset_id);
+        let available = false,
+            daysLeft = 0;
 
-            const claimStartDate = utils.timeStringToGrapheneDate(
-                vb.policy[1].start_claim
+        const claimStartDate = utils.timeStringToGrapheneDate(
+            vb.policy[1].start_claim
+        );
+        const claimEndDate = new Date(
+            claimStartDate.getTime() + vb.policy[1].vesting_seconds * 1000
+        );
+
+        if (new Date() >= claimEndDate) {
+            available = true;
+            daysLeft = 0;
+        } else {
+            daysLeft = parseInt(
+                claimEndDate.getTime() / 1000 - new Date().getTime() / 1000
             );
-            const claimEndDate = new Date(
-                claimStartDate.getTime() + vb.policy[1].vesting_seconds * 1000
-            );
-
-            if (new Date() >= claimEndDate) {
-                available = true;
-                daysLeft = 0;
-            } else {
-                daysLeft = parseInt(
-                    claimEndDate.getTime() / 1000 - new Date().getTime() / 1000
-                );
-                daysLeft = (daysLeft / 86400).toFixed(2);
-            }
-        }
-
-        if (!cvbAsset) {
-            return null;
-        }
-
-        if (!balance) {
-            return null;
+            daysLeft = (daysLeft / 86400).toFixed(2);
         }
 
         return (
@@ -64,7 +56,7 @@ export default class BridgeCoinStakingBalance extends React.Component {
                 <tbody>
                     <tr>
                         <td>
-                            <Translate content="cryptobridge.bridgecoin.amount" />
+                            <Translate content="cryptobridge.earn.staking.amount" />
                         </td>
                         <td>
                             <FormattedAsset
@@ -76,19 +68,19 @@ export default class BridgeCoinStakingBalance extends React.Component {
                     <tr>
                         <td>
                             {!available ? (
-                                <Translate content="cryptobridge.bridgecoin.remaining" />
+                                <Translate content="cryptobridge.earn.staking.remaining" />
                             ) : null}
                         </td>
                         <td>
                             {daysLeft > 0 ? (
                                 <Translate
                                     days={daysLeft}
-                                    content="cryptobridge.bridgecoin.days"
+                                    content="cryptobridge.earn.staking.days"
                                 />
                             ) : (
                                 <Translate
                                     className="green"
-                                    content="cryptobridge.bridgecoin.available"
+                                    content="cryptobridge.earn.staking.available"
                                 />
                             )}
                         </td>
@@ -96,7 +88,7 @@ export default class BridgeCoinStakingBalance extends React.Component {
                     <tr>
                         <td>
                             {!available ? (
-                                <Translate content="cryptobridge.bridgecoin.status" />
+                                <Translate content="cryptobridge.earn.staking.status" />
                             ) : null}
                         </td>
                         <td style={{textAlign: "right"}}>
@@ -108,7 +100,7 @@ export default class BridgeCoinStakingBalance extends React.Component {
                                     <Translate content="account.member.claim" />
                                 </Button>
                             ) : (
-                                <Translate content="cryptobridge.bridgecoin.staking" />
+                                <Translate content="cryptobridge.earn.staking.staking" />
                             )}
                         </td>
                     </tr>

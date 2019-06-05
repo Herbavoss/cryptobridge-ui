@@ -18,9 +18,13 @@ import RegisterFormItems from "./Registration/FormItems";
 
 import {message, Notification, Button, Form} from "bitshares-ui-style-guide";
 
+import {withRouter} from "react-router-dom";
+
 export class CryptoBridgeUser {
-    constructor(me) {
+    constructor({me, rewards, access}) {
         this.me = me || {};
+        this.rewards = rewards || [];
+        this.access = access || null;
     }
 
     getName() {
@@ -109,6 +113,16 @@ export class CryptoBridgeUser {
 
         return terms.latest.version;
     }
+
+    getHasRewards() {
+        const {rewards} = this.me;
+
+        return rewards === true;
+    }
+
+    getRewards() {
+        return this.rewards;
+    }
 }
 
 class CryptoBridgeAccount extends React.Component {
@@ -152,6 +166,12 @@ class CryptoBridgeAccount extends React.Component {
                             {username: me.name}
                         )
                     );
+
+                    if (me.rewards) {
+                        CryptoBridgeAccountActions.fetchRewards().catch(
+                            () => {}
+                        );
+                    }
                 })
                 .catch(e => {
                     message.error(e.message);
@@ -258,6 +278,35 @@ class CryptoBridgeAccount extends React.Component {
                     });
                 }
             }
+
+            // BRIDGECOIN REWARDS
+            if (me.getRewards().length) {
+                const bridgeCoinRewardsModalKey = "bridgeCoinRewardsModal";
+                Notification.info({
+                    key: bridgeCoinRewardsModalKey,
+                    message: counterpart.translate(
+                        "cryptobridge.account.rewards.notification.title"
+                    ),
+                    description: counterpart.translate(
+                        "cryptobridge.account.rewards.notification.description"
+                    ),
+                    btn: (
+                        <Button
+                            type="primary"
+                            size="small"
+                            onClick={() => {
+                                this.props.history.push(
+                                    "/earn/bridgecoin-staking"
+                                );
+                                Notification.close(bridgeCoinRewardsModalKey);
+                            }}
+                        >
+                            <Translate content="cryptobridge.account.rewards.notification.action" />
+                        </Button>
+                    ),
+                    duration: 0
+                });
+            }
         }
     }
 
@@ -338,6 +387,8 @@ class CryptoBridgeAccount extends React.Component {
     }
 }
 
+CryptoBridgeAccount = withRouter(CryptoBridgeAccount);
+
 export default connect(
     CryptoBridgeAccount,
     {
@@ -356,7 +407,9 @@ export default connect(
             const account = ChainStore.getAccount(currentAccount, null);
             const bearerToken = CryptoBridgeAccountStore.getBearerToken();
             const locked = WalletUnlockStore.getState().locked;
-            const me = new CryptoBridgeUser(CryptoBridgeAccountStore.getMe());
+            const me = new CryptoBridgeUser(
+                CryptoBridgeAccountStore.getState()
+            );
             const theme = SettingsStore.getState().settings.get("themes");
 
             return {

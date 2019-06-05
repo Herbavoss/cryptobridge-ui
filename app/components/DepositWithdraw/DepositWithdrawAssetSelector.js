@@ -148,7 +148,8 @@ class DepositWithdrawAssetSelector extends React.Component {
                         key={coin.label}
                         className="asset-selector--option"
                     >
-                        <AssetImage asset={coin.label} /> {coin.label}{" "}
+                        <AssetImage asset={coin.label} forceImage={true} />{" "}
+                        {coin.label}{" "}
                         <span className="asset-selector--asset-name">
                             ({coin.name})
                         </span>

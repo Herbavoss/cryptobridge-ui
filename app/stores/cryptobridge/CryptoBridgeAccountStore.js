@@ -12,7 +12,9 @@ class CryptoBridgeAccountStore extends BaseStore {
             onLogin: CryptoBridgeAccountActions.login,
             onLogout: CryptoBridgeAccountActions.logout,
             onFetchMe: CryptoBridgeAccountActions.fetchMe,
-            onUpdateMe: CryptoBridgeAccountActions.updateMe
+            onUpdateMe: CryptoBridgeAccountActions.updateMe,
+            onFetchRewards: CryptoBridgeAccountActions.fetchRewards,
+            onClaimReward: CryptoBridgeAccountActions.claimReward
         });
 
         this._export(
@@ -27,7 +29,8 @@ class CryptoBridgeAccountStore extends BaseStore {
     _getInitialState() {
         return {
             access: null,
-            me: null
+            me: null,
+            rewards: []
         };
     }
 
@@ -63,6 +66,16 @@ class CryptoBridgeAccountStore extends BaseStore {
         return this.getMe() !== null;
     }
 
+    getRewards() {
+        const {rewards} = this.state;
+
+        if (this.getIsAuthenticated() && rewards) {
+            return rewards;
+        }
+
+        return [];
+    }
+
     onFetchMe(me) {
         this.setState({me});
     }
@@ -75,6 +88,18 @@ class CryptoBridgeAccountStore extends BaseStore {
 
     onLogout() {
         this.setState(this._getInitialState());
+    }
+
+    onFetchRewards(rewards) {
+        this.setState({rewards: this.getIsAuthenticated() ? rewards : []});
+    }
+
+    onClaimReward({id}) {
+        const rewards = this.getRewards();
+
+        this.setState({
+            rewards: rewards.filter(reward => reward.id !== id)
+        });
     }
 }
 

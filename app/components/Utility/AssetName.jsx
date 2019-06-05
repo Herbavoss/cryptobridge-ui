@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import {Popover} from "bitshares-ui-style-guide";
 
 /* CRYPTOBRIDGE */
-import {getIsBridgeCoinAsset} from "lib/cryptobridge/assetMethods";
+import {getIsCryptoBridgeAsset} from "lib/cryptobridge/assetMethods";
 /* /CRYPTOBRIDGE */
 
 class AssetName extends React.Component {
@@ -38,8 +38,8 @@ class AssetName extends React.Component {
         if (!asset) return null;
 
         /* CRYPTOBRIDGE */
-        const isBridgeCoinAsset = getIsBridgeCoinAsset(asset);
-        if (isBridgeCoinAsset) noPrefix = true;
+        const isCryptoBridgeAsset = getIsCryptoBridgeAsset(asset);
+        if (isCryptoBridgeAsset) noPrefix = true;
         /* CRYPTOBRIDGE */
 
         const name = asset.get("symbol");

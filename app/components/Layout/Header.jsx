@@ -1188,7 +1188,7 @@ class Header extends React.Component {
                                     )}
                                     onClick={this._onNavigate.bind(
                                         this,
-                                        "/earn"
+                                        "/earn/referral-program"
                                     )}
                                 >
                                     <Icon
