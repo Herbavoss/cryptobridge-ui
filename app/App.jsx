@@ -425,10 +425,10 @@ class App extends React.Component {
                                 />
 
                                 {/* CRYPTOBRIDGE*/}
-                                <Route
-                                    path="/benchmark"
-                                    component={Benchmark}
-                                />
+                                {/*<Route*/}
+                                {/*path="/benchmark"*/}
+                                {/*component={Benchmark}*/}
+                                {/*/>*/}
                                 <Route path="/support" component={Support} />
                                 <Route path="/earn" component={Earn} />
                                 {/* /CRYPTOBRIDGE*/}

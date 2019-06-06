@@ -886,9 +886,9 @@ class Header extends React.Component {
         if (active.indexOf("/support") !== -1) {
             dynamicMenuItem = getDynamicMenu("support");
         }
-        if (active.indexOf("/benchmark") !== -1) {
-            dynamicMenuItem = getDynamicMenu("benchmark");
-        }
+        // if (active.indexOf("/benchmark") !== -1) {
+        //     dynamicMenuItem = getDynamicMenu("benchmark");
+        // }
         /* /CRYPTOBRIDGE */
 
         const submenus = {

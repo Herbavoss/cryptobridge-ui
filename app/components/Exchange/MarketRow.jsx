@@ -99,6 +99,10 @@ class MarketRow extends React.Component {
             };
         }
 
+        if (!stats || !stats.price) {
+            rowStyles.display = "none";
+        }
+
         let changeClass = "";
 
         let columns = this.props.columns

@@ -214,7 +214,7 @@ class MarketGroup extends React.Component {
             .map(market => {
                 if (
                     this.props.onlyLiquid &&
-                    (!marketStats.get(market.id) ||
+                    (marketStats.get(market.id) &&
                         marketStats.get(market.id).volumeBase < 0.01)
                 ) {
                     return null;

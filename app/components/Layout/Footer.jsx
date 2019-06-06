@@ -550,22 +550,23 @@ class Footer extends React.Component {
                         {this.props.backup_recommended ? (
                             <span>
                                 <div className="grid-block">
-                                    <Tooltip
-                                        overlay={
-                                            <div>
-                                                Please understand that you are
-                                                responsible for making your own
-                                                backup&hellip;
-                                            </div>
-                                        }
+                                    {/*<Tooltip*/}
+                                    overlay=
+                                    {
+                                        <div>
+                                            Please understand that you are
+                                            responsible for making your own
+                                            backup&hellip;
+                                        </div>
+                                    }
+                                    {/*>*/}
+                                    <a
+                                        className="shrink txtlabel facolor-alert"
+                                        onClick={this.onBackup.bind(this)}
                                     >
-                                        <a
-                                            className="shrink txtlabel facolor-alert"
-                                            onClick={this.onBackup.bind(this)}
-                                        >
-                                            <Translate content="footer.backup" />
-                                        </a>
-                                    </Tooltip>
+                                        <Translate content="footer.backup" />
+                                    </a>
+                                    {/*</Tooltip>*/}
                                     &nbsp;&nbsp;
                                 </div>
                             </span>
@@ -586,65 +587,64 @@ class Footer extends React.Component {
                             </span>
                         ) : null}
                         <div className="grid-block shrink">
-                            <Tooltip
-                                title={counterpart.translate(
-                                    "tooltip.nodes_popup"
-                                )}
-                                mouseEnterDelay={0.5}
-                                onVisibleChange={
-                                    this._showAccessSettingsTooltip
-                                }
-                                visible={this.state.showAccessSettingsTooltip}
+                            {/*<Tooltip*/}
+                            {/*title={counterpart.translate(*/}
+                            {/*"tooltip.nodes_popup"*/}
+                            {/*)}*/}
+                            {/*mouseEnterDelay={0.5}*/}
+                            {/*onVisibleChange={*/}
+                            {/*this._showAccessSettingsTooltip*/}
+                            {/*}*/}
+                            {/*visible={this.state.showAccessSettingsTooltip}*/}
+                            {/*>*/}
+                            <div
+                                onClick={() => {
+                                    this._showNodesPopover();
+                                }}
+                                style={{
+                                    position: "relative",
+                                    cursor: "pointer"
+                                }}
                             >
-                                <div
-                                    onClick={() => {
-                                        this._showNodesPopover();
-                                    }}
-                                    style={{
-                                        position: "relative",
-                                        cursor: "pointer"
-                                    }}
-                                >
-                                    <div className="footer-status">
-                                        {connected &&
-                                            activeNode.testNet && (
-                                                <span className="testnet">
-                                                    <Translate content="settings.testnet_nodes" />{" "}
-                                                </span>
-                                            )}
-                                        {!connected ? (
-                                            <span className="warning">
-                                                <Translate content="footer.disconnected" />
-                                            </span>
-                                        ) : (
-                                            <span className="success">
-                                                {activeNode.name}
+                                <div className="footer-status">
+                                    {connected &&
+                                        activeNode.testNet && (
+                                            <span className="testnet">
+                                                <Translate content="settings.testnet_nodes" />{" "}
                                             </span>
                                         )}
-                                    </div>
-                                    <div className="footer-block">
-                                        <span>
-                                            <span className="footer-block-title">
-                                                <Translate content="footer.latency" />
-                                            </span>
-                                            &nbsp;
-                                            {!connected
-                                                ? "-"
-                                                : !activeNode.ping
-                                                    ? "-"
-                                                    : parseInt(
-                                                          activeNode.ping
-                                                      ) + "ms"}
-                                            &nbsp;/&nbsp;
-                                            <span className="footer-block-title">
-                                                <Translate content="footer.block" />
-                                            </span>
-                                            &nbsp;#
-                                            {block_height}
+                                    {!connected ? (
+                                        <span className="warning">
+                                            <Translate content="footer.disconnected" />
                                         </span>
-                                    </div>
+                                    ) : (
+                                        <span className="success">
+                                            {activeNode.name}
+                                        </span>
+                                    )}
                                 </div>
-                            </Tooltip>
+                                <div className="footer-block">
+                                    <span>
+                                        <span className="footer-block-title">
+                                            <Translate content="footer.latency" />
+                                        </span>
+                                        &nbsp;
+                                        {!connected
+                                            ? "-"
+                                            : !activeNode.ping
+                                                ? "-"
+                                                : parseInt(activeNode.ping) +
+                                                  "ms"}
+                                        &nbsp;/&nbsp;
+                                        <span className="footer-block-title">
+                                            <Translate content="footer.block" />
+                                        </span>
+                                        &nbsp;#
+                                        {block_height}
+                                    </span>
+                                </div>
+                            </div>
+                            {/*</Tooltip>*/}
 
                             <div className="grid-block">
                                 {/*<Tooltip*/}
@@ -663,26 +663,26 @@ class Footer extends React.Component {
                                     <Translate content="modal.report.button" />
                                 </div>
                                 {/*</Tooltip>*/}
-                                <Tooltip
-                                    title={counterpart.translate(
-                                        "tooltip.self_help"
-                                    )}
-                                    placement="topRight"
-                                    mouseEnterDelay={0.5}
+                                {/*<Tooltip*/}
+                                {/*title={counterpart.translate(*/}
+                                {/*"tooltip.self_help"*/}
+                                {/*)}*/}
+                                {/*placement="topRight"*/}
+                                {/*mouseEnterDelay={0.5}*/}
+                                {/*>*/}
+                                <div
+                                    className="introjs-launcher"
+                                    onClick={() => {
+                                        this.launchIntroJS();
+                                    }}
                                 >
-                                    <div
-                                        className="introjs-launcher"
-                                        onClick={() => {
-                                            this.launchIntroJS();
-                                        }}
-                                    >
-                                        <Icon
-                                            size="1x"
-                                            name="support"
-                                            title="cryptobridge.icons.support"
-                                        />
-                                    </div>
-                                </Tooltip>
+                                    <Icon
+                                        size="1x"
+                                        name="support"
+                                        title="cryptobridge.icons.support"
+                                    />
+                                </div>
+                                {/*</Tooltip>*/}
                             </div>
                         </div>
                     </div>

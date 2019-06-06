@@ -128,6 +128,7 @@ class DepositWithdrawAssetSelector extends React.Component {
                 onSearch={this._onInputChanged.bind(this)}
                 placeholder={placeholder}
                 defaultValue={this.props.defaultValue || undefined}
+                value={this.props.value || undefined}
                 optionLabelProp={"children"}
                 showSearch
                 style={{width: "100%"}}

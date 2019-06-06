@@ -1250,6 +1250,7 @@ class BuySell extends React.Component {
                                                 >
                                                     <AssetImage
                                                         asset={assetName}
+                                                        forceImage={true}
                                                     />
                                                     <Translate
                                                         content="exchange.quick_deposit"

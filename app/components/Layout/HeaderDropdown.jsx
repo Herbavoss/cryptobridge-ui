@@ -301,23 +301,23 @@ export default class DropDownMenu extends React.Component {
 
                 {/* CRYPTOBRIDGE */}
 
-                <li
-                    className={cnames({
-                        active: active.indexOf("/benchmark") !== -1
-                    })}
-                    onClick={this.props.onNavigate.bind(this, "/benchmark")}
-                >
-                    <div className="table-cell">
-                        <Icon
-                            size="2x"
-                            name="benchmark"
-                            title="cryptobridge.icons.benchmark"
-                        />
-                    </div>
-                    <div className="table-cell">
-                        <Translate content="cryptobridge.benchmark.title" />
-                    </div>
-                </li>
+                {/*<li*/}
+                {/*className={cnames({*/}
+                {/*active: active.indexOf("/benchmark") !== -1*/}
+                {/*})}*/}
+                {/*onClick={this.props.onNavigate.bind(this, "/benchmark")}*/}
+                {/*>*/}
+                {/*<div className="table-cell">*/}
+                {/*<Icon*/}
+                {/*size="2x"*/}
+                {/*name="benchmark"*/}
+                {/*title="cryptobridge.icons.benchmark"*/}
+                {/*/>*/}
+                {/*</div>*/}
+                {/*<div className="table-cell">*/}
+                {/*<Translate content="cryptobridge.benchmark.title" />*/}
+                {/*</div>*/}
+                {/*</li>*/}
 
                 <li
                     className={cnames({

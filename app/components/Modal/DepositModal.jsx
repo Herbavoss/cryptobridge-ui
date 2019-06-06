@@ -49,6 +49,7 @@ class DepositModalContent extends DecimalChecker {
     shouldComponentUpdate(np, ns) {
         return (
             np.authenticated !== this.props.authenticated ||
+            np.asset !== this.props.asset ||
             !utils.are_equal_shallow(ns, this.state)
         );
     }
@@ -347,6 +348,7 @@ class DepositModalContent extends DecimalChecker {
                             <div className="inline-label input-wrapper">
                                 <DepositWithdrawAssetSelector
                                     defaultValue={this.state.selectedAsset}
+                                    value={this.state.selectedAsset}
                                     onSelect={this.onAssetSelected.bind(this)}
                                     selectOnBlur
                                 />

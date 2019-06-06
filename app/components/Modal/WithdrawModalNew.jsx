@@ -1069,6 +1069,7 @@ class WithdrawModalNew extends React.Component {
                                     include={symbolsToInclude}
                                     selectOnBlur
                                     defaultValue={selectedAsset}
+                                    value={selectedAsset}
                                     includeBTS={false}
                                     usageContext="withdraw"
                                 />
