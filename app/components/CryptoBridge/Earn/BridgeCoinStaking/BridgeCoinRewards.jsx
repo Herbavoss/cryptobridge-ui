@@ -71,7 +71,6 @@ class BridgeCoinRewards extends React.Component {
             return (
                 <Button
                     type={type === "stake" ? "primary" : undefined}
-                    size={"large"}
                     onClick={() => {
                         this.claimReward(id, type);
                     }}
@@ -101,26 +100,26 @@ class BridgeCoinRewards extends React.Component {
         };
 
         const renderReward = reward => {
-            const actions = [
-                actionButton(reward.id, "claim"),
-                actionButton(reward.id, "stake")
-            ];
+            const actions = [actionButton(reward.id, "claim")];
 
-            const title = `${reward.from.substr(0, 10)} - ${reward.to.substr(
+            const period = `${reward.from.substr(0, 10)} - ${reward.to.substr(
                 0,
                 10
             )}`;
-            const description = `${counterpart.translate(
+            const rewardUsd = `${counterpart.translate(
                 "cryptobridge.earn.staking.rewards.reward.usd"
             )} ${reward.amount}`;
-            const content = `${counterpart.translate(
+            const payoutBco = `${counterpart.translate(
                 "cryptobridge.earn.staking.rewards.reward.payout"
             )} ${reward.payout} BCO (@ ${reward.price} BCO/USD)`;
 
             return (
-                <List.Item actions={actions}>
-                    <List.Item.Meta title={title} description={description} />
-                    <div>{content}</div>
+                <List.Item
+                    actions={actions}
+                    extra={actionButton(reward.id, "stake")}
+                >
+                    <List.Item.Meta title={period} description={payoutBco} />
+                    <div>{rewardUsd}</div>
                 </List.Item>
             );
         };
@@ -140,14 +139,23 @@ class BridgeCoinRewards extends React.Component {
                         unsafe
                     />
                 </Paragraph>
-                <Alert
-                    message={counterpart.translate(
-                        "cryptobridge.earn.staking.rewards.disclaimer",
-                        {amount: reclaimFee}
+                <Paragraph>
+                    <Alert
+                        message={counterpart.translate(
+                            "cryptobridge.earn.staking.rewards.disclaimer",
+                            {amount: reclaimFee}
+                        )}
+                        type="warning"
+                    />
+                </Paragraph>
+                <List
+                    dataSource={rewards}
+                    renderItem={renderReward}
+                    header={counterpart.translate(
+                        "cryptobridge.earn.staking.rewards.list"
                     )}
-                    type="warning"
+                    bordered={true}
                 />
-                <List dataSource={rewards} renderItem={renderReward} />
             </div>
         );
     }

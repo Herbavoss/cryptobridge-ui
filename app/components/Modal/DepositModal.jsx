@@ -25,6 +25,9 @@ import {connect} from "alt-react";
 import AssetGatewayInfo from "components/Utility/CryptoBridge/AssetGatewayInfo";
 import CryptoBridgeAccountStore from "stores/cryptobridge/CryptoBridgeAccountStore";
 import LoginButton from "components/CryptoBridge/Global/LoginButton";
+import ComplianceInfo from "components/CryptoBridge/Global/ComplianceInfo";
+import {CryptoBridgeUser} from "../CryptoBridge/Account";
+import ZfApi from "react-foundation-apps/src/utils/foundation-api";
 /* /CRYPTOBRIDGE */
 
 class DepositModalContent extends DecimalChecker {
@@ -54,14 +57,34 @@ class DepositModalContent extends DecimalChecker {
         );
     }
 
+    componentDidMount() {
+        if (
+            this.props.authenticated &&
+            this.props.requiresComplianceEnforcement
+        ) {
+            ZfApi.publish("check_required_account_actions");
+        }
+    }
+
     componentDidUpdate(prevProps) {
         const assetChanged = prevProps.asset !== this.props.asset;
         const authenticationChanged =
             prevProps.authenticated !== this.props.authenticated;
+        const requiresComplianceEnforcementChanged =
+            prevProps.requiresComplianceEnforcement !==
+            this.props.requiresComplianceEnforcement;
 
         if (assetChanged || authenticationChanged) {
             this.setState(this._intitalState());
             this._setDepositAsset(this.props.asset);
+        }
+
+        if (
+            this.props.authenticated &&
+            this.props.requiresComplianceEnforcement &&
+            (authenticationChanged || requiresComplianceEnforcementChanged)
+        ) {
+            ZfApi.publish("check_required_account_actions");
         }
     }
 
@@ -267,7 +290,11 @@ class DepositModalContent extends DecimalChecker {
             gatewayStatus,
             backingAsset
         } = this.state;
-        const {account, authenticated} = this.props;
+        const {
+            account,
+            authenticated,
+            requiresComplianceEnforcement
+        } = this.props;
 
         /* CRYPTOBRIDGE */
         if (!authenticated) {
@@ -279,6 +306,10 @@ class DepositModalContent extends DecimalChecker {
                 />
             );
         }
+        if (requiresComplianceEnforcement) {
+            return <ComplianceInfo />;
+        }
+
         /* /CRYPTOBRIDGE */
 
         let usingGateway = true;
@@ -522,9 +553,14 @@ DepositModalContent = connect(
         },
         getProps() {
             const authenticated = CryptoBridgeAccountStore.getIsAuthenticated();
+            const me = new CryptoBridgeUser(
+                CryptoBridgeAccountStore.getState()
+            );
+            const requiresComplianceEnforcement = me.getRequiresComplianceEnforcement();
 
             return {
-                authenticated
+                authenticated,
+                requiresComplianceEnforcement
             };
         }
     }

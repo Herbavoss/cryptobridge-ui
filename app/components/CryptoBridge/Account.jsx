@@ -19,6 +19,7 @@ import RegisterFormItems from "./Registration/FormItems";
 import {message, Notification, Button, Form} from "bitshares-ui-style-guide";
 
 import {withRouter} from "react-router-dom";
+import ZfApi from "react-foundation-apps/src/utils/foundation-api";
 
 export class CryptoBridgeUser {
     constructor({me, rewards, access}) {
@@ -42,7 +43,16 @@ export class CryptoBridgeUser {
             return null;
         }
 
-        return kyc.required !== false;
+        return kyc.required !== false && kyc.status !== "complete";
+    }
+
+    getRequiresUserVerificationEnforcement() {
+        const {kyc} = this.me;
+
+        return (
+            this.getRequiresUserVerification() &&
+            (!kyc.deadline || (kyc.deadline && kyc.expired))
+        );
     }
 
     getRequiresTermsAndConditions() {
@@ -55,6 +65,16 @@ export class CryptoBridgeUser {
         return terms.status !== "complete";
     }
 
+    getRequiresTermsAndConditionsEnforcement() {
+        const {terms} = this.me;
+
+        return (
+            this.getRequiresTermsAndConditions() &&
+            (!terms.latest.deadline ||
+                (terms.latest.deadline && terms.latest.expired))
+        );
+    }
+
     getUserVerificationIsPending() {
         return (
             this.getRequiresUserVerification() &&
@@ -64,6 +84,20 @@ export class CryptoBridgeUser {
 
     getIsAuthenticated() {
         return this.me && this.me.name;
+    }
+
+    getIsCompliant() {
+        return (
+            !this.getRequiresTermsAndConditions() &&
+            !this.getRequiresUserVerification()
+        );
+    }
+
+    getRequiresComplianceEnforcement() {
+        return (
+            this.getRequiresUserVerificationEnforcement() ||
+            !this.getRequiresTermsAndConditionsEnforcement()
+        );
     }
 
     getUserVerificationProviderUrl() {
@@ -187,7 +221,15 @@ class CryptoBridgeAccount extends React.Component {
     }
 
     componentDidMount() {
+        ZfApi.subscribe("check_required_account_actions", () => {
+            this.checkRequiredAccountActions();
+        });
+
         this.checkRequiredAccountActions();
+    }
+
+    componentWillUnmount() {
+        ZfApi.unsubscribe("check_required_account_actions");
     }
 
     openUserVerificationProvider() {
@@ -236,7 +278,8 @@ class CryptoBridgeAccount extends React.Component {
                             <Translate content="global.confirm" />
                         </Button>
                     ),
-                    duration: 0
+                    duration: 0,
+                    placement: "bottomRight"
                 });
             }
 
@@ -250,7 +293,8 @@ class CryptoBridgeAccount extends React.Component {
                         description: counterpart.translate(
                             "cryptobridge.registration.user_verification.status.pending.info"
                         ),
-                        duration: 0
+                        duration: 0,
+                        placement: "bottomRight"
                     });
                 } else {
                     const userVerficationModalKey = "userVerficationModal";
@@ -274,7 +318,8 @@ class CryptoBridgeAccount extends React.Component {
                                 <Translate content="cryptobridge.registration.user_verification.start" />
                             </Button>
                         ),
-                        duration: 0
+                        duration: 0,
+                        placement: "bottomRight"
                     });
                 }
             }
@@ -304,7 +349,8 @@ class CryptoBridgeAccount extends React.Component {
                             <Translate content="cryptobridge.account.rewards.notification.action" />
                         </Button>
                     ),
-                    duration: 0
+                    duration: 0,
+                    placement: "bottomRight"
                 });
             }
         }

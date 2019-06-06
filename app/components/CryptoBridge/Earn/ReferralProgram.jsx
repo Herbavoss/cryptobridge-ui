@@ -12,7 +12,7 @@ export default class ReferralProgram extends React.Component {
         return (
             <div className={"content padding"}>
                 <Row gutter={32}>
-                    <Col xs={{span: 24}} lg={{span: 16}}>
+                    <Col xs={{span: 24}} lg={{span: 14}}>
                         <Paragraph>
                             We are pleased to announce the launch of the
                             referral program for CryptoBridge users! This begins
@@ -47,7 +47,7 @@ export default class ReferralProgram extends React.Component {
                             to the stake being created!
                         </Paragraph>
                     </Col>
-                    <Col xs={{span: 24}} lg={{span: 8}}>
+                    <Col xs={{span: 24}} lg={{span: 10}}>
                         <ReferralProgramCard />
                     </Col>
                 </Row>

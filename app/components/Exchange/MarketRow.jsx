@@ -210,6 +210,7 @@ class MarketRow extends React.Component {
                                             <Icon
                                                 name="identity"
                                                 title="cryptobridge.icons.identity"
+                                                style={{opacity: 0.9}}
                                             />
                                         </Tooltip>
                                     </div>

@@ -2552,6 +2552,9 @@
                         "error": "Could not stake BridgeCoins."
                     }
                 }
+            },
+            "compliance": {
+                "info": "Compliance info"
             }
         },
         "earn": {
@@ -2598,6 +2601,7 @@
                     "title": "Congratulations, you have rewards to claim!",
                     "description": "All prices are paid in BridgeCoin (BCO).\n\nUSD to BCO exchange rate is determined at the time of the payout using the exchange rate from coinmarketcap.com.\n\nFor more details, check out the <a href=\"https://crypto-bridge.org/trading-competition/\" target=\"_blank\">trading competition details</a>.",
                     "disclaimer": "Disclaimer: Claiming your stake after ending of staking period costs %(amount)s BCO in fees at this moment. The fees are subject to change.",
+                    "list": "Your claimable rewards",
                     "reward": {
                         "usd": "Reward (USD)",
                         "bonus": "If you \"Claim & Stake\" your %(amount)s BCO, you will receive 10% bonus on top!",
@@ -2624,7 +2628,13 @@
             "competition": {
                 "title": "Trading competition",
                 "claim": "#FromJunetotheMoon - The CryptoBridge Trading Competition",
-                "intro_text_1": "This is the moment you’ve been waiting for: The full scoop on our trading competition! Find all about it along with the terms and conditions on the website."
+                "description": "This is the moment you’ve been waiting for: The full scoop on our trading competition! Find all about it along with the terms and conditions on the website.",
+                "leaderboard": {
+                    "title": "The Leader Board",
+                    "description_1": "The CryptoBridge hall of fame is where the best traders leave their legacy. Are you one of them? Then you’re eligible to win prizes for holding one of the top three slots.",
+                    "description_2": "By the way: Do you like the leader board? Then make it your own and include it as a widget on your website or blog. You can also simply link it anywhere you like:",
+                    "action": "Customize it now"
+                }
             }
         },
         "trade": {

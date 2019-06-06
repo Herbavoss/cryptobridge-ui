@@ -87,7 +87,7 @@ class BridgeCoinStaking extends React.Component {
         return (
             <div className="content padding">
                 <Row gutter={32}>
-                    <Col xs={{span: 24}} lg={{span: 16}}>
+                    <Col xs={{span: 24}} lg={{span: 14}}>
                         <BridgeCoinRewards reclaimFee={reclaimFee} />
                         <Title level={4}>
                             <Translate
@@ -112,7 +112,7 @@ class BridgeCoinStaking extends React.Component {
                             account={account}
                         />
                     </Col>
-                    <Col xs={{span: 24}} lg={{span: 8}}>
+                    <Col xs={{span: 24}} lg={{span: 10}}>
                         <Card
                             title={counterpart.translate(
                                 "cryptobridge.earn.staking.create"

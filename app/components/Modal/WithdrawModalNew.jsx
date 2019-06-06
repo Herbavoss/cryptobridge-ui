@@ -53,6 +53,9 @@ import {
 } from "lib/cryptobridge/assetMethods";
 import CryptoBridgeAccountStore from "stores/cryptobridge/CryptoBridgeAccountStore";
 import LoginButton from "components/CryptoBridge/Global/LoginButton";
+import ComplianceInfo from "components/CryptoBridge/Global/ComplianceInfo";
+import {CryptoBridgeUser} from "components/CryptoBridge/Account";
+import ZfApi from "react-foundation-apps/src/utils/foundation-api";
 /* /CRYPTOBRIDGE */
 
 class WithdrawModalNew extends React.Component {
@@ -129,6 +132,31 @@ class WithdrawModalNew extends React.Component {
 
         this.setState(initialState);
         this.setState(this._getAssetPairVariables(this.props, initialState));
+    }
+
+    componentDidMount() {
+        if (
+            this.props.authenticated &&
+            this.props.requiresComplianceEnforcement
+        ) {
+            ZfApi.publish("check_required_account_actions");
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        const authenticationChanged =
+            prevProps.authenticated !== this.props.authenticated;
+        const requiresComplianceEnforcementChanged =
+            prevProps.requiresComplianceEnforcement !==
+            this.props.requiresComplianceEnforcement;
+
+        if (
+            this.props.authenticated &&
+            this.props.requiresComplianceEnforcement &&
+            (authenticationChanged || requiresComplianceEnforcementChanged)
+        ) {
+            ZfApi.publish("check_required_account_actions");
+        }
     }
 
     _getAssetAndGatewayFromInitialSymbol(initialSymbol) {
@@ -1056,6 +1084,8 @@ class WithdrawModalNew extends React.Component {
                             "cryptobridge.trade.withdraw.login"
                         )}
                     />
+                ) : requiresComplianceEnforcement ? (
+                    <ComplianceInfo />
                 ) : (
                     <div className="grid-block vertical no-overflow">
                         <div className="modal__body" style={{paddingTop: 0}}>
@@ -1518,9 +1548,16 @@ const ConnectedWrapper = connect(
             return [AccountStore, CryptoBridgeAccountStore];
         },
         getProps() {
+            const authenticated = CryptoBridgeAccountStore.getIsAuthenticated();
+            const me = new CryptoBridgeUser(
+                CryptoBridgeAccountStore.getState()
+            );
+            const requiresComplianceEnforcement = me.getRequiresComplianceEnforcement();
+
             return {
                 account: AccountStore.getState().currentAccount,
-                authenticated: CryptoBridgeAccountStore.getIsAuthenticated()
+                authenticated,
+                requiresComplianceEnforcement
             };
         }
     }

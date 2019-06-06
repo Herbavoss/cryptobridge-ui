@@ -2,7 +2,7 @@ import React from "react";
 
 import Translate from "react-translate-component";
 
-import {Typography, Row, Col} from "bitshares-ui-style-guide";
+import {Typography, Row, Col, Button} from "bitshares-ui-style-guide";
 const {Title, Paragraph} = Typography;
 
 export default class TradingCompetition extends React.Component {
@@ -12,7 +12,7 @@ export default class TradingCompetition extends React.Component {
         return (
             <div className={"content padding"}>
                 <Row gutter={32}>
-                    <Col xs={{span: 24}} lg={{span: 16}}>
+                    <Col xs={{span: 24}} lg={{span: 14}}>
                         <Title level={4}>
                             <Translate
                                 content={"cryptobridge.earn.competition.claim"}
@@ -22,15 +22,48 @@ export default class TradingCompetition extends React.Component {
                         <Paragraph>
                             <Translate
                                 content={
-                                    "cryptobridge.earn.competition.intro_text_1"
+                                    "cryptobridge.earn.competition.description"
+                                }
+                                unsafe
+                            />
+                        </Paragraph>
+
+                        <Title level={4}>
+                            <Translate
+                                content={
+                                    "cryptobridge.earn.competition.leaderboard.title"
+                                }
+                            />
+                        </Title>
+
+                        <Paragraph>
+                            <Translate
+                                content={
+                                    "cryptobridge.earn.competition.leaderboard.description_1"
                                 }
                             />
                         </Paragraph>
+
+                        <Paragraph>
+                            <Button
+                                onClick={() => {
+                                    window.open(
+                                        `https://widgets.crypto-bridge.org/leaderboard/?type=trading&pageSize=10&me=${account}&modal=true`
+                                    );
+                                }}
+                            >
+                                <Translate
+                                    content={
+                                        "cryptobridge.earn.competition.leaderboard.action"
+                                    }
+                                />
+                            </Button>
+                        </Paragraph>
                     </Col>
-                    <Col xs={{span: 24}} lg={{span: 8}}>
+                    <Col xs={{span: 24}} lg={{span: 10}}>
                         <iframe
                             src={`https://widgets.crypto-bridge.org/leaderboard/?type=trading&pageSize=10&me=${account}`}
-                            style={{width: "100%", height: "600px"}}
+                            style={{width: "100%", height: "700px"}}
                             frameBorder="0"
                         >
                             Browser not compatible.
