@@ -159,6 +159,10 @@ class BuySell extends React.Component {
         this.props.onBuy();
     }
 
+    onSubmit = (short, e) => {
+        this.props.onSubmit(short, e);
+    };
+
     render() {
         let {
             type,
@@ -168,7 +172,6 @@ class BuySell extends React.Component {
             fee,
             isPredictionMarket,
             priceChange,
-            onSubmit,
             balance,
             totalChange,
             balancePrecision,
@@ -1205,7 +1208,7 @@ class BuySell extends React.Component {
                                             <Button
                                                 className={buttonClass}
                                                 disabled={disabled}
-                                                onClick={onSubmit.bind(
+                                                onClick={this.onSubmit.bind(
                                                     this,
                                                     true
                                                 )}
@@ -1449,7 +1452,7 @@ class BuySell extends React.Component {
                                                 style={{margin: 0}}
                                                 className={buttonClass}
                                                 type="submit"
-                                                onClick={onSubmit.bind(
+                                                onClick={this.onSubmit.bind(
                                                     this,
                                                     false
                                                 )}
@@ -1467,7 +1470,7 @@ class BuySell extends React.Component {
                                                 style={{margin: 0}}
                                                 className={buttonClass}
                                                 type="submit"
-                                                onClick={onSubmit.bind(
+                                                onClick={this.onSubmit.bind(
                                                     this,
                                                     false
                                                 )}

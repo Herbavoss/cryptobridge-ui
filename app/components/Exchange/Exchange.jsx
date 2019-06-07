@@ -44,6 +44,14 @@ import {Notification} from "bitshares-ui-style-guide";
 import PriceAlert from "./PriceAlert";
 import counterpart from "counterpart";
 
+/* CRYPTOBRIDGE */
+import ZfApi from "react-foundation-apps/src/utils/foundation-api";
+import {connect} from "alt-react";
+import CryptoBridgeAccountStore from "stores/cryptobridge/CryptoBridgeAccountStore";
+import {CryptoBridgeUser} from "../CryptoBridge/Account";
+import {login} from "lib/cryptobridge/accountMethods";
+/* CRYPTOBRIDGE */
+
 class Exchange extends React.Component {
     static propTypes = {
         marketCallOrders: PropTypes.object.isRequired,
@@ -866,6 +874,20 @@ class Exchange extends React.Component {
         }
     }
 
+    /* CRYPTOBRIDGE */
+    getIsCompliant() {
+        if (!this.props.authenticated) {
+            login();
+            return false;
+        } else if (this.props.requiresComplianceEnforcement) {
+            ZfApi.publish("check_required_account_actions");
+            return false;
+        }
+
+        return true;
+    }
+    /* CRYPTOBRIDGE */
+
     _createLimitOrderConfirm(
         buyAsset,
         sellAsset,
@@ -877,6 +899,11 @@ class Exchange extends React.Component {
         e
     ) {
         e.preventDefault();
+
+        if (!this.getIsCompliant()) {
+            return;
+        }
+
         let {highestBid, lowestAsk} = this.props.marketData;
         let current = this.state[type === "sell" ? "ask" : "bid"];
 
@@ -963,6 +990,10 @@ class Exchange extends React.Component {
     }
 
     _createScaledOrder(orders, feeID) {
+        if (!this.getIsCompliant()) {
+            return;
+        }
+
         const limitOrders = orders.map(
             order =>
                 new LimitOrderCreate({
@@ -3598,5 +3629,26 @@ class Exchange extends React.Component {
         );
     }
 }
+
+Exchange = connect(
+    Exchange,
+    {
+        listenTo() {
+            return [CryptoBridgeAccountStore];
+        },
+        getProps() {
+            const authenticated = CryptoBridgeAccountStore.getIsAuthenticated();
+            const me = new CryptoBridgeUser(
+                CryptoBridgeAccountStore.getState()
+            );
+            const requiresComplianceEnforcement = me.getRequiresComplianceEnforcement();
+
+            return {
+                authenticated,
+                requiresComplianceEnforcement
+            };
+        }
+    }
+);
 
 export default Exchange;
