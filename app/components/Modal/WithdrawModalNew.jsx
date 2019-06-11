@@ -961,7 +961,13 @@ class WithdrawModalNew extends React.Component {
 
     render() {
         const {state, props} = this;
-        let {preferredCurrency, assets, balances, authenticated} = props;
+        let {
+            preferredCurrency,
+            assets,
+            balances,
+            authenticated,
+            requiresComplianceEnforcement
+        } = props;
         let {
             selectedAsset,
             selectedGateway,
@@ -982,6 +988,7 @@ class WithdrawModalNew extends React.Component {
 
             paymentId,
             paymentIdError,
+
             validatingAddress
         } = this.state;
         let symbolsToInclude = [];
