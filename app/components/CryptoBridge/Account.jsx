@@ -96,7 +96,7 @@ export class CryptoBridgeUser {
     getRequiresComplianceEnforcement() {
         return (
             this.getRequiresUserVerificationEnforcement() ||
-            !this.getRequiresTermsAndConditionsEnforcement()
+            this.getRequiresTermsAndConditionsEnforcement()
         );
     }
 
