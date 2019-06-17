@@ -224,9 +224,17 @@ export default class TicketForm extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                const title = `TODO: create title on API side: ${
-                    this.props.issueType
-                }`;
+                //TODO automatic title generation should be handled by the API
+                const type = counterpart.translate(
+                    `cryptobridge.support.tickets.type.${this.props.issueType}`,
+                    {locale: "en"}
+                );
+                const detail =
+                    values.amount && values.coin
+                        ? `: ${values.amount} ${values.coin}`
+                        : "";
+
+                const title = `${type}${detail} / USER: ${CryptoBridgeAccountStore.getName()}`;
 
                 const {reCaptchaToken} = values;
 

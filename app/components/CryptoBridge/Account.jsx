@@ -11,6 +11,8 @@ import SettingsStore from "stores/SettingsStore";
 import CryptoBridgeAccountStore from "stores/cryptobridge/CryptoBridgeAccountStore";
 import CryptoBridgeAccountActions from "actions/cryptobridge/CryptoBridgeAccountActions";
 
+import {getBasicToken} from "api/cryptobridge/apiHelpers";
+
 import counterpart from "counterpart";
 import Translate from "react-translate-component";
 
@@ -175,6 +177,7 @@ class CryptoBridgeAccount extends React.Component {
         if (prevProps.locked !== this.props.locked) {
             if (this.props.locked) {
                 CryptoBridgeAccountActions.logout();
+                this.fetchOnAccount = false;
             } else {
                 this.fetchOnAccount = true;
             }
@@ -450,16 +453,20 @@ export default connect(
             const currentAccount =
                 AccountStore.getState().currentAccount ||
                 AccountStore.getState().passwordAccount;
-            const account = ChainStore.getAccount(currentAccount, null);
-            const bearerToken = CryptoBridgeAccountStore.getBearerToken();
             const locked = WalletUnlockStore.getState().locked;
+            const account = !locked
+                ? ChainStore.getAccount(currentAccount, null)
+                : null;
+
+            const bearerToken = CryptoBridgeAccountStore.getBearerToken();
             const me = new CryptoBridgeUser(
                 CryptoBridgeAccountStore.getState()
             );
             const theme = SettingsStore.getState().settings.get("themes");
 
             return {
-                account,
+                currentAccount,
+                account: getBasicToken(account) ? account : null,
                 bearerToken,
                 locked,
                 me,
