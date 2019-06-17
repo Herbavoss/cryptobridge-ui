@@ -2470,7 +2470,17 @@
                 }
             },
             "deposit": {
-                "tag_notice": "Tag <b>required</b> for proper routing to your account",
+                "tag": {
+                    "notice": "Tag <b>required</b> for proper routing to your account",
+                    "acknowledgement": {
+                        "alert": "WARNING: Failure to follow correct %(asset)s deposit procedure will result in lost deposits.",
+                        "info": "<p>Depositing %(asset)s to CryptoBridge requires <strong>BOTH</strong> a deposit address and a deposit tag. To make a %(asset)s deposit, you need to use both:</p><ul><li>Address</li><li>Tag</li></ul><p>Do NOT send %(asset)s to CryptoBridge unless you know how to indicate a tag. If you fail to include the tag with your deposit the funds will be lost forever.</p>",
+                        "confirm": "I understand. Continue."
+                    }
+                },
+                "address": {
+                    "notice": "%(asset)s deposit address:"
+                },
                 "fee_warning": "WARNING: Depositing %(asset)s more than once every %(fee_time_frame)s minutes will incur a %(fee_percentage)s% deposit fee (minimum %(fee_minimum)s %(asset)s). A deposit fee of %(fee_percentage_low_amounts)s% is charged when the deposit is below 1 %(asset)s.",
                 "required_confirmations": "Required confirmations: %(required_confirmations)s"
             }

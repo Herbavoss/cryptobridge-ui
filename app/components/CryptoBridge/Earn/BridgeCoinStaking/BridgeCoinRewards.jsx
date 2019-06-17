@@ -108,10 +108,10 @@ class BridgeCoinRewards extends React.Component {
             )}`;
             const rewardUsd = `${counterpart.translate(
                 "cryptobridge.earn.staking.rewards.reward.usd"
-            )} ${reward.amount}`;
+            )} ${reward.payout}`;
             const payoutBco = `${counterpart.translate(
                 "cryptobridge.earn.staking.rewards.reward.payout"
-            )} ${reward.payout} BCO (@ ${reward.price} BCO/USD)`;
+            )} ${reward.amount} BCO (@ ${reward.price} BCO/USD)`;
 
             return (
                 <List.Item

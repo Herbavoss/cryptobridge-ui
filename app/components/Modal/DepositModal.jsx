@@ -23,11 +23,13 @@ import {Modal, Button} from "bitshares-ui-style-guide";
 /* /CRYPTOBRIDGE */
 import {connect} from "alt-react";
 import AssetGatewayInfo from "components/Utility/CryptoBridge/AssetGatewayInfo";
+import AssetGatewayInfoAccept from "components/Utility/CryptoBridge/AssetGatewayInfoAccept";
 import CryptoBridgeAccountStore from "stores/cryptobridge/CryptoBridgeAccountStore";
 import LoginButton from "components/CryptoBridge/Global/LoginButton";
 import ComplianceInfo from "components/CryptoBridge/Global/ComplianceInfo";
 import {CryptoBridgeUser} from "../CryptoBridge/Account";
 import ZfApi from "react-foundation-apps/src/utils/foundation-api";
+import {getCleanAssetSymbol} from "lib/cryptobridge/assetMethods";
 /* /CRYPTOBRIDGE */
 
 class DepositModalContent extends DecimalChecker {
@@ -399,131 +401,133 @@ class DepositModalContent extends DecimalChecker {
                           })
                         : null}
 
-                    {!fetchingAddress ? (
-                        (!usingGateway ||
-                            (usingGateway &&
-                                selectedGateway &&
-                                gatewayStatus[selectedGateway].options
-                                    .enabled)) &&
-                        isAddressValid &&
-                        !depositAddress.memo ? (
-                            <div
-                                className="container-row"
-                                style={{textAlign: "center"}}
-                            >
-                                {QR}
-                            </div>
-                        ) : null
-                    ) : (
+                    {fetchingAddress ? (
                         <div
                             className="container-row"
                             style={{textAlign: "center", paddingTop: 15}}
                         >
                             <LoadingIndicator type="three-bounce" />
                         </div>
-                    )}
+                    ) : null}
                     {selectedGateway &&
                     gatewayStatus[selectedGateway].options.enabled &&
                     isAddressValid ? (
-                        <div className="container-row">
-                            <div className="grid-block container-row">
-                                <div style={{paddingRight: "1rem"}}>
-                                    <CopyButton
-                                        text={depositAddress.address}
-                                        className={"copyIcon"}
-                                    />
-                                </div>
-                                <div style={{wordBreak: "break-word"}}>
-                                    <Translate
-                                        component="div"
-                                        style={{
-                                            fontSize: "0.8rem",
-                                            fontWeight: "bold",
-                                            paddingBottom: "0.3rem"
-                                        }}
-                                        content="gateway.purchase_notice"
-                                        inputAsset={selectedAsset}
-                                        outputAsset={
-                                            selectedGateway +
-                                            "." +
-                                            selectedAsset
-                                        }
-                                    />
+                        <AssetGatewayInfoAccept
+                            asset={getCleanAssetSymbol(backingAsset.symbol)}
+                            name={backingAsset.name}
+                            tag={depositAddress.tag}
+                        >
+                            {!fetchingAddress ? (
+                                (!usingGateway ||
+                                    (usingGateway &&
+                                        selectedGateway &&
+                                        gatewayStatus[selectedGateway].options
+                                            .enabled)) &&
+                                isAddressValid &&
+                                !depositAddress.memo ? (
                                     <div
-                                        className="modal__highlight"
-                                        style={{
-                                            fontSize: "0.9rem",
-                                            wordBreak: "break-all"
-                                        }}
+                                        className="container-row"
+                                        style={{textAlign: "center"}}
                                     >
-                                        {depositAddress.address}
+                                        {QR}
                                     </div>
-                                </div>
-                            </div>
-                            {/* CRYPTOBRIDGE */}
-                            {depositAddress.tag && (
-                                <div className="grid-block container-row">
-                                    <div style={{paddingRight: "1rem"}}>
-                                        <CopyButton
-                                            text={depositAddress.tag}
-                                            className={"copyIcon"}
-                                        />
-                                    </div>
-                                    <div>
-                                        <Translate
-                                            component="div"
-                                            style={{
-                                                fontSize: "0.8rem",
-                                                fontWeight: "bold",
-                                                paddingBottom: "0.3rem"
-                                            }}
-                                            unsafe
-                                            content="cryptobridge.gateway.deposit.tag_notice"
-                                        />
-                                        <div
-                                            className="modal__highlight"
-                                            style={{wordBreak: "break-all"}}
-                                        >
-                                            {depositAddress.tag}
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                            {/* /CRYPTOBRIDGE */}
-                            {depositAddress.memo ? (
-                                <div className="grid-block container-row">
-                                    <div style={{paddingRight: "1rem"}}>
-                                        <CopyButton
-                                            text={depositAddress.memo}
-                                            className={"copyIcon"}
-                                        />
-                                    </div>
-                                    <div>
-                                        <Translate
-                                            component="div"
-                                            style={{
-                                                fontSize: "0.8rem",
-                                                fontWeight: "bold",
-                                                paddingBottom: "0.3rem"
-                                            }}
-                                            unsafe
-                                            content="gateway.purchase_notice_memo"
-                                        />
-                                        <div
-                                            className="modal__highlight"
-                                            style={{wordBreak: "break-all"}}
-                                        >
-                                            {depositAddress.memo}
-                                        </div>
-                                    </div>
-                                </div>
+                                ) : null
                             ) : null}
-                            <AssetGatewayInfo
-                                asset={backingAsset}
-                                filter={"deposit"}
-                                minDeposit={minDeposit}
-                            />
-                        </div>
+                            <div className="container-row">
+                                <div className="grid-block container-row">
+                                    <div style={{paddingRight: "1rem"}}>
+                                        <CopyButton
+                                            text={depositAddress.address}
+                                            className={"copyIcon"}
+                                        />
+                                    </div>
+                                    <div style={{wordBreak: "break-word"}}>
+                                        <Translate
+                                            component="div"
+                                            style={{
+                                                fontSize: "0.8rem",
+                                                fontWeight: "bold",
+                                                paddingBottom: "0.3rem"
+                                            }}
+                                            content="cryptobridge.gateway.deposit.address.notice"
+                                            asset={selectedAsset}
+                                        />
+                                        <div
+                                            className="modal__highlight"
+                                            style={{
+                                                fontSize: "0.9rem",
+                                                wordBreak: "break-all"
+                                            }}
+                                        >
+                                            {depositAddress.address}
+                                        </div>
+                                    </div>
+                                </div>
+                                {/* CRYPTOBRIDGE */}
+                                {depositAddress.tag && (
+                                    <div className="grid-block container-row">
+                                        <div style={{paddingRight: "1rem"}}>
+                                            <CopyButton
+                                                text={depositAddress.tag}
+                                                className={"copyIcon"}
+                                            />
+                                        </div>
+                                        <div>
+                                            <Translate
+                                                component="div"
+                                                style={{
+                                                    fontSize: "0.8rem",
+                                                    fontWeight: "bold",
+                                                    paddingBottom: "0.3rem"
+                                                }}
+                                                unsafe
+                                                content="cryptobridge.gateway.deposit.tag.notice"
+                                            />
+                                            <div
+                                                className="modal__highlight"
+                                                style={{wordBreak: "break-all"}}
+                                            >
+                                                {depositAddress.tag}
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                                {/* /CRYPTOBRIDGE */}
+                                {depositAddress.memo ? (
+                                    <div className="grid-block container-row">
+                                        <div style={{paddingRight: "1rem"}}>
+                                            <CopyButton
+                                                text={depositAddress.memo}
+                                                className={"copyIcon"}
+                                            />
+                                        </div>
+                                        <div>
+                                            <Translate
+                                                component="div"
+                                                style={{
+                                                    fontSize: "0.8rem",
+                                                    fontWeight: "bold",
+                                                    paddingBottom: "0.3rem"
+                                                }}
+                                                unsafe
+                                                content="gateway.purchase_notice_memo"
+                                            />
+                                            <div
+                                                className="modal__highlight"
+                                                style={{wordBreak: "break-all"}}
+                                            >
+                                                {depositAddress.memo}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ) : null}
+                                <AssetGatewayInfo
+                                    asset={backingAsset}
+                                    filter={"deposit"}
+                                    minDeposit={minDeposit}
+                                />
+                            </div>
+                        </AssetGatewayInfoAccept>
                     ) : null}
                     {!usingGateway ? (
                         <div className="container-row deposit-directly">

@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import ChainTypes from "../ChainTypes";
 import Translate from "react-translate-component";
+import {getCleanAssetSymbol} from "lib/cryptobridge/assetMethods";
 
 export default class AssetGatewayInfo extends React.Component {
     static propTypes = {
@@ -62,7 +63,7 @@ export default class AssetGatewayInfo extends React.Component {
                         className="asset-gateway-info"
                         content="gateway.min_deposit_warning_asset"
                         minDeposit={minDeposit}
-                        coin={asset.symbol}
+                        coin={getCleanAssetSymbol(asset.symbol)}
                     />
                 ) : null}
 
