@@ -239,6 +239,8 @@ export default class TicketForm extends React.Component {
                     values
                 );
 
+                delete ticket.reCaptchaToken;
+
                 this.setState({
                     loading: true
                 });

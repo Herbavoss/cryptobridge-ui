@@ -109,11 +109,11 @@ class SupportActions {
         };
     }
 
-    addComment(ticketId, comment, reCaptchaToken) {
+    addComment(ticketId, comment) {
         return dispatch => {
             const options = {
                 method: "POST",
-                headers: getBasicHeaders(undefined),
+                headers: getBasicHeaders(),
                 body: JSON.stringify({data: comment})
             };
 
@@ -149,7 +149,7 @@ class SupportActions {
         return dispatch => {
             const options = {
                 method: "POST",
-                headers: getBasicHeaders(undefined),
+                headers: getBasicHeaders(undefined, {reCaptchaToken}),
                 body: JSON.stringify(ticket)
             };
 
