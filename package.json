@@ -2,7 +2,7 @@
     "name": "CryptoBridge",
     "version": "0.2.0",
     "description": "Advanced wallet interface for the BitShares financial blockchain.",
-    "homepage": "https://github.com/bitshares/bitshares-ui",
+    "homepage": "https://github.com/CryptoBridge/cryptobridge-ui",
     "author": "BitShares UI Worker <ui-dev@bitshares.org>",
     "contributors": [
         "Sigve Kvalsvik",
@@ -18,7 +18,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git://github.com/bitshares/bitshares-ui"
+        "url": "git://github.com/CryptoBridge/cryptobridge-ui"
     },
     "main": "build/electron/index.js",
     "scripts": {
@@ -55,6 +55,7 @@
         "package-snap": "npm run prepackage && build  -p never --linux snap",
         "package-win": "npm run prepackage && build  -p never --windows",
         "package-mac": "npm run prepackage && build  -p never --mac dmg",
+        "package-all": "npm run package-mac && npm run package-win && npm run package-deb",
         "postpackage": "node write_digest.js",
         "scam": "node scamParser.js"
     },
@@ -86,8 +87,8 @@
     },
     "browsersList": "electron 1.7",
     "build": {
-        "productName": "BitShares",
-        "appId": "org.bitshares.graphene",
+        "productName": "CryptoBridge",
+        "appId": "crypto-bridge.org",
         "files": [
             "build/electron",
             "!node_modules"

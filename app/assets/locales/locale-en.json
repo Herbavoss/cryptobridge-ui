@@ -2553,14 +2553,12 @@
                     "error": "Could not fetch BridgeCoin rewards"
                 },
                 "claim": {
-                    "claim": {
-                        "success": "BridgeCoins claimed!",
-                        "error": "Could not claim BridgeCoins."
-                    },
-                    "stake": {
-                        "success": "BridgeCoins staked!",
-                        "error": "Could not stake BridgeCoins."
-                    }
+                    "success": "BridgeCoins claimed!",
+                    "error": "Could not claim BridgeCoins."
+                },
+                "stake": {
+                    "success": "BridgeCoins staked!",
+                    "error": "Could not stake BridgeCoins."
                 }
             },
             "compliance": {

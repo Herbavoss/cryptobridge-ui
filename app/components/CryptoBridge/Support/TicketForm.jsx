@@ -298,9 +298,13 @@ export default class TicketForm extends React.Component {
             <Form onSubmit={this.onSubmit}>
                 {this.props.children}
                 <Form.Item
-                    label={counterpart.translate(
-                        "cryptobridge.support.tickets.create.form.recaptcha.label"
-                    )}
+                    label={
+                        __ELECTRON__
+                            ? null
+                            : counterpart.translate(
+                                  "cryptobridge.support.tickets.create.form.recaptcha.label"
+                              )
+                    }
                 >
                     {getFieldDecorator("reCaptchaToken", {
                         rules: [

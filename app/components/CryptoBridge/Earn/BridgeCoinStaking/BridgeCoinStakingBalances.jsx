@@ -60,9 +60,12 @@ export default class BridgeCoinStakingBalances extends React.Component {
             >
                 <Translate content="account.member.claim" />
             </Button>
-        ) : (
-            <Translate content="cryptobridge.earn.staking.staking" />
-        );
+        ) : daysLeft > 0 ? (
+            <Translate
+                days={daysLeft}
+                content="cryptobridge.earn.staking.days"
+            />
+        ) : null;
 
         return (
             <List.Item actions={[action]}>
@@ -81,17 +84,12 @@ export default class BridgeCoinStakingBalances extends React.Component {
                     {!available ? (
                         <Translate content="cryptobridge.earn.staking.remaining" />
                     ) : null}
-                    {daysLeft > 0 ? (
-                        <Translate
-                            days={daysLeft}
-                            content="cryptobridge.earn.staking.days"
-                        />
-                    ) : (
+                    {daysLeft <= 0 ? (
                         <Translate
                             className="green"
                             content="cryptobridge.earn.staking.available"
                         />
-                    )}
+                    ) : null}
                 </div>
             </List.Item>
         );

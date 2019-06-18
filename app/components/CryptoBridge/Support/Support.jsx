@@ -76,18 +76,18 @@ class Support extends React.Component {
 
         return (
             <Tabs defaultActiveKey={"contact"}>
-                <Tabs.TabPane
-                    tab={counterpart.translate(
-                        "cryptobridge.support.faq.title"
-                    )}
-                    key="faq"
-                >
-                    <Row>
-                        <Col>
-                            <Faqs />
-                        </Col>
-                    </Row>
-                </Tabs.TabPane>
+                {/*<Tabs.TabPane*/}
+                {/*tab={counterpart.translate(*/}
+                {/*"cryptobridge.support.faq.title"*/}
+                {/*)}*/}
+                {/*key="faq"*/}
+                {/*>*/}
+                {/*<Row>*/}
+                {/*<Col>*/}
+                {/*<Faqs />*/}
+                {/*</Col>*/}
+                {/*</Row>*/}
+                {/*</Tabs.TabPane>*/}
                 <Tabs.TabPane
                     tab={counterpart.translate(
                         "cryptobridge.support.contact.title"
