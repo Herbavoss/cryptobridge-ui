@@ -46,7 +46,11 @@ export function getCleanAssetSymbol(asset) {
 }
 
 export function getCleanAssetPrice(price) {
-    if (price && price.toString().indexOf("e") !== -1) {
+    if (
+        price &&
+        !Number.isNaN(parseFloat(price)) &&
+        price.toString().indexOf("e") !== -1
+    ) {
         price = price.toFixed(8);
     }
 

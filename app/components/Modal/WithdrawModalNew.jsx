@@ -749,8 +749,6 @@ class WithdrawModalNew extends React.Component {
         const paymentIdError =
             paymentId && !getIsValidPaymentId(asset, paymentId);
 
-        console.log(asset);
-
         this.setState({
             paymentId,
             paymentIdError
@@ -795,7 +793,10 @@ class WithdrawModalNew extends React.Component {
             gateFee,
             memo,
             btsAccount,
-            feeAmount
+            feeAmount,
+            /* CRYPTOBRIDGE */
+            paymentId
+            /* /CRYPTOBRIDGE */
         } = this.state;
 
         let gatewayStatus = this.state.gatewayStatus[selectedGateway];
@@ -876,6 +877,7 @@ class WithdrawModalNew extends React.Component {
                 assetName +
                 ":" +
                 address +
+                (paymentId ? ":" + paymentId : "") +
                 (memo ? ":" + new Buffer(memo, "utf-8") : "");
             to = intermediateAccount.get("id");
         }
