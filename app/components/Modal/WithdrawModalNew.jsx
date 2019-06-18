@@ -966,7 +966,9 @@ class WithdrawModalNew extends React.Component {
             assets,
             balances,
             authenticated,
-            requiresComplianceEnforcement
+            requiresComplianceEnforcement,
+            requiresTermsAndConditions,
+            requiresUserVerification
         } = props;
         let {
             selectedAsset,
@@ -1092,7 +1094,10 @@ class WithdrawModalNew extends React.Component {
                         )}
                     />
                 ) : requiresComplianceEnforcement ? (
-                    <ComplianceInfo />
+                    <ComplianceInfo
+                        requiresUserVerification={requiresUserVerification}
+                        requiresTermsAndConditions={requiresTermsAndConditions}
+                    />
                 ) : (
                     <div className="grid-block vertical no-overflow">
                         <div className="modal__body" style={{paddingTop: 0}}>
@@ -1564,7 +1569,9 @@ const ConnectedWrapper = connect(
             return {
                 account: AccountStore.getState().currentAccount,
                 authenticated,
-                requiresComplianceEnforcement
+                requiresComplianceEnforcement,
+                requiresTermsAndConditions: me.getRequiresTermsAndConditions(),
+                requiresUserVerification: me.getRequiresUserVerification()
             };
         }
     }

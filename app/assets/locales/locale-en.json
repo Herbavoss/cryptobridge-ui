@@ -2564,7 +2564,9 @@
                 }
             },
             "compliance": {
-                "info": "Compliance info"
+                "info": "Please note:",
+                "terms": "Accepting the CryptoBridge Terms of Service is required.",
+                "user_verification": "US citizens are required to submit user verification to use CryptoBridge."
             }
         },
         "earn": {

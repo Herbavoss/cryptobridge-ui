@@ -295,7 +295,9 @@ class DepositModalContent extends DecimalChecker {
         const {
             account,
             authenticated,
-            requiresComplianceEnforcement
+            requiresComplianceEnforcement,
+            requiresTermsAndConditions,
+            requiresUserVerification
         } = this.props;
 
         /* CRYPTOBRIDGE */
@@ -309,7 +311,12 @@ class DepositModalContent extends DecimalChecker {
             );
         }
         if (requiresComplianceEnforcement) {
-            return <ComplianceInfo />;
+            return (
+                <ComplianceInfo
+                    requiresUserVerification={requiresUserVerification}
+                    requiresTermsAndConditions={requiresTermsAndConditions}
+                />
+            );
         }
 
         /* /CRYPTOBRIDGE */
@@ -564,7 +571,9 @@ DepositModalContent = connect(
 
             return {
                 authenticated,
-                requiresComplianceEnforcement
+                requiresComplianceEnforcement,
+                requiresTermsAndConditions: me.getRequiresTermsAndConditions(),
+                requiresUserVerification: me.getRequiresUserVerification()
             };
         }
     }

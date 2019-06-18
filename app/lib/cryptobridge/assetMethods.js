@@ -44,3 +44,11 @@ export function getCleanAssetSymbol(asset) {
 
     return "";
 }
+
+export function getCleanAssetPrice(price) {
+    if (price && price.toString().indexOf("e") !== -1) {
+        price = price.toFixed(8);
+    }
+
+    return price;
+}

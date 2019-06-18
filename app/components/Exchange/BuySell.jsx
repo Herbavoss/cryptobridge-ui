@@ -486,8 +486,8 @@ class BuySell extends React.Component {
         let noBalance = isPredictionMarket
             ? false
             : !(balanceAmount.getAmount() > 0 && hasBalance);
-        let invalidPrice = !(price > 0);
-        let invalidAmount = !(amount > 0);
+        let invalidPrice = !(price >= 0.00000001);
+        let invalidAmount = !(amount >= 0.00000001);
 
         let disabled = noBalance || invalidPrice || invalidAmount;
 
