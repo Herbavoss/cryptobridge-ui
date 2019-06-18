@@ -134,6 +134,7 @@ class WithdrawModalNew extends React.Component {
         this.setState(this._getAssetPairVariables(this.props, initialState));
     }
 
+    /* CRYPTOBRIDGE */
     componentDidMount() {
         if (
             this.props.authenticated &&
@@ -157,7 +158,12 @@ class WithdrawModalNew extends React.Component {
         ) {
             ZfApi.publish("check_required_account_actions");
         }
+
+        if (!Immutable.is(prevProps.balances, this.props.balances)) {
+            this.forceRender();
+        }
     }
+    /* /CRYPTOBRIDGE */
 
     _getAssetAndGatewayFromInitialSymbol(initialSymbol) {
         let {selectedAsset, selectedGateway} = getAssetAndGateway(
