@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width" />
     <meta name="format-detection" content="telephone=no">
     <title>{{title}}</title>
-    <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' blob:; worker-src 'self' blob:; script-src https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/ 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' *; font-src 'self' data: https://at.alicdn.com; img-src 'self' data:;">-->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' blob:; worker-src 'self' blob:; script-src https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/ https://www.google.com/ https://www.gstatic.com https://www.googletagmanager.com https://www.google-analytics.com 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' *; frame-src 'self' https://crypto-bridge.org https://www.google.com https://widgets.crypto-bridge.org; font-src 'self' data: https://at.alicdn.com; img-src 'self' data: https://www.googletagmanager.com https://www.google.com/ https://www.google-analytics.com https://stats.g.doubleclick.net https://crypto-bridge.org https://wallet.crypto-bridge.org {{walletUrl}}">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
         body {
@@ -62,6 +62,15 @@
         }
     </script>
     {{/if}}
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-113295938-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-113295938-1');
+    </script>
 </head>
 
 <body>
@@ -150,7 +159,7 @@
             var btn = document.createElement("button");
 
             var headerText = document.createTextNode("Unsupported browser");
-            var bodyText = document.createTextNode("The Browser you are using has not been fully tested to support the BitShares Wallet. We highly recommend that you backup your local wallet and import it using the Chrome Browser.");
+            var bodyText = document.createTextNode("The Browser you are using has not been fully tested to support the CryptoBridge Wallet. We highly recommend that you backup your local wallet and import it using the Chrome Browser.");
             var linkText = document.createTextNode("Google Chrome");
             var closeLinkText = document.createTextNode("×");
             var btnText = document.createTextNode("I UNDERSTAND");

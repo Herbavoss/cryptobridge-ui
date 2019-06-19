@@ -23,6 +23,9 @@ import {message, Notification, Button, Form} from "bitshares-ui-style-guide";
 import {withRouter} from "react-router-dom";
 import ZfApi from "react-foundation-apps/src/utils/foundation-api";
 
+import CryptoBridgeIcon from "components/CryptoBridge/Global/CryptoBridgeIcon";
+import Cookies from "cookies-js";
+
 export class CryptoBridgeUser {
     constructor({me, rewards, access}) {
         this.me = me || {};
@@ -229,6 +232,40 @@ class CryptoBridgeAccount extends React.Component {
         });
 
         this.checkRequiredAccountActions();
+
+        if (!Cookies.get("cbtd")) {
+            setTimeout(() => {
+                const tradingCompetitionModalKey = "tradingCompetitionModal";
+
+                Notification.info({
+                    key: tradingCompetitionModalKey,
+                    message: counterpart.translate(
+                        "cryptobridge.earn.competition.notification.title"
+                    ),
+                    description: counterpart.translate(
+                        "cryptobridge.earn.competition.notification.description"
+                    ),
+                    btn: (
+                        <Button
+                            type="primary"
+                            size="small"
+                            onClick={() => {
+                                window.open(
+                                    "https://crypto-bridge.org/trading-competition/"
+                                );
+                            }}
+                        >
+                            <Translate content="cryptobridge.earn.competition.notification.action" />
+                        </Button>
+                    ),
+                    duration: 0,
+                    icon: <CryptoBridgeIcon />,
+                    onClose: () => {
+                        Cookies.set("cbtd", "1", {expires: 60 * 60 * 24 * 7});
+                    }
+                });
+            }, 1000);
+        }
     }
 
     componentWillUnmount() {
