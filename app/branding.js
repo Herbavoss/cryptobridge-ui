@@ -110,14 +110,7 @@ export function getMyMarketsQuotes() {
             "BRIDGE.RVN",
             "BRIDGE.XRP",
             "BRIDGE.BCH",
-            "BRIDGE.XMR",
-            "BRIDGE.ZEC",
-            "BRIDGE.MONA",
-            "BRIDGE.SMART",
-            "BRIDGE.ZNY",
-            "BRIDGE.XP",
-            "BRIDGE.DOGE",
-            "BRIDGE.SHND"
+            "BRIDGE.XMR"
         ]
     };
 
