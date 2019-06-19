@@ -74,7 +74,7 @@ export function getCleanAssetPrice(price) {
         !Number.isNaN(parseFloat(price)) &&
         price.toString().indexOf("e") !== -1
     ) {
-        price = price.toFixed(8);
+        price = parseFloat(price).toFixed(8);
     }
 
     return price;
