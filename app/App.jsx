@@ -257,6 +257,7 @@ class App extends React.Component {
         if (
             !(
                 window.electron ||
+                user_agent.indexOf("safari") > -1 ||
                 user_agent.indexOf("firefox") > -1 ||
                 user_agent.indexOf("chrome") > -1 ||
                 user_agent.indexOf("edge") > -1
