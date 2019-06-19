@@ -111,8 +111,8 @@ jobs:
               - cat ./build/dist/index.html
               - export AWS_ACCESS_KEY_ID=$LEGACY_AWS_ACCESS_KEY_ID
               - export AWS_SECRET_ACCESS_KEY=$LEGACY_AWS_SECRET_ACCESS_KEY
-              - aws s3 rm s3://wallet.crypto-bridge.org/index.html
-              - aws s3 sync ./build/dist/ s3://wallet.crypto-bridge.org/ --delete --exclude "assets/*"
+              - aws s3 rm s3://wallet.legacy.crypto-bridge.org/index.html
+              - aws s3 sync ./build/dist/ s3://wallet.legacy.crypto-bridge.org/ --delete --exclude "assets/*"
 
         - stage: build-prod
           script:
@@ -130,5 +130,5 @@ jobs:
               - cat ./build/dist/index.html
               - export AWS_ACCESS_KEY_ID=$PROD_AWS_ACCESS_KEY_ID
               - export AWS_SECRET_ACCESS_KEY=$PROD_AWS_SECRET_ACCESS_KEY
-              - aws s3 rm s3://wallet.preview.crypto-bridge.org/index.html
-              - aws s3 sync ./build/dist/ s3://wallet.preview.crypto-bridge.org/ --delete --exclude "assets/*"
+              - aws s3 rm s3://wallet.crypto-bridge.org/index.html
+              - aws s3 sync ./build/dist/ s3://wallet.crypto-bridge.org/ --delete --exclude "assets/*"
