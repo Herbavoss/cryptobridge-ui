@@ -5,7 +5,9 @@ export default class Logo extends React.Component {
         return (
             <ul>
                 <li>
-                    <img src="/cryptobridge/cryptobridge-logo.svg" />
+                    <img
+                        src={`${__BASE_URL__}cryptobridge/cryptobridge-logo.svg`}
+                    />
                 </li>
                 <li>
                     <svg

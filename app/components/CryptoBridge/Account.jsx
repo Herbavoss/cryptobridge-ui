@@ -38,7 +38,7 @@ export class CryptoBridgeUser {
     }
 
     getAvatar() {
-        return "/cryprobridge/cryptobridge-logo.svg"; // TODO get user avatar
+        return `${__BASE_URL__}cryprobridge/cryptobridge-logo.svg`; // TODO get user avatar
     }
 
     getRequiresUserVerification() {

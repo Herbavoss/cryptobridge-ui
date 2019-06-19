@@ -83,7 +83,7 @@ class SupportActions {
                                 return {
                                     author: comment.username,
                                     avatar: comment.isSupport
-                                        ? "/cryptobridge/cryptobridge-logo.svg"
+                                        ? `${__BASE_URL__}cryptobridge/cryptobridge-logo.svg`
                                         : null, // TODO get user avatar
                                     content: comment.comment,
                                     datetime: moment(comment.datetime).fromNow()
