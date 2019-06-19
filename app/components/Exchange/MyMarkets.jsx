@@ -953,18 +953,20 @@ class MyMarkets extends React.Component {
                         }}
                     >
                         <Form>
-                            <Form.Item>
-                                <Checkbox
-                                    checked={this.props.onlyLiquid}
-                                    onChange={e => {
-                                        SettingsActions.changeViewSetting({
-                                            onlyLiquid: e.target.checked
-                                        });
-                                    }}
-                                >
-                                    <Translate content="exchange.show_only_liquid" />
-                                </Checkbox>
-                            </Form.Item>
+                            {!__ELECTRON__ && (
+                                <Form.Item>
+                                    <Checkbox
+                                        checked={this.props.onlyLiquid}
+                                        onChange={e => {
+                                            SettingsActions.changeViewSetting({
+                                                onlyLiquid: e.target.checked
+                                            });
+                                        }}
+                                    >
+                                        <Translate content="exchange.show_only_liquid" />
+                                    </Checkbox>
+                                </Form.Item>
+                            )}
                             <Form.Item>
                                 <Checkbox
                                     checked={this.props.onlyStars}
@@ -1189,7 +1191,11 @@ class MyMarkets extends React.Component {
                             findMarketTab={!myMarketTab}
                             location={this.props.location}
                             history={this.props.history}
-                            onlyLiquid={this.props.onlyLiquid && myMarketTab}
+                            onlyLiquid={
+                                this.props.onlyLiquid &&
+                                myMarketTab &&
+                                !__ELECTRON__
+                            }
                         />
                     ) : null}
                 </div>
@@ -1219,12 +1225,13 @@ export default connect(
             return [SettingsStore, MarketsStore, AssetStore];
         },
         getProps() {
+            const onlyLiquid = __ELECTRON__
+                ? false
+                : SettingsStore.getState().viewSettings.get("onlyLiquid", true);
+
             return {
                 starredMarkets: SettingsStore.getState().starredMarkets,
-                onlyLiquid: SettingsStore.getState().viewSettings.get(
-                    "onlyLiquid",
-                    true
-                ),
+                onlyLiquid,
                 chainMarkets: SettingsStore.getState().chainMarkets,
                 defaultMarkets: SettingsStore.getState().defaultMarkets,
                 viewSettings: SettingsStore.getState().viewSettings,
