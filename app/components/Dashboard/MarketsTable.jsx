@@ -273,18 +273,20 @@ class MarketsTable extends React.Component {
                         </div>
                     </div>
 
-                    <div style={{paddingTop: "0.5rem"}}>
-                        <Checkbox
-                            checked={this.props.onlyLiquid}
-                            onChange={() => {
-                                SettingsActions.changeViewSetting({
-                                    onlyLiquid: !this.props.onlyLiquid
-                                });
-                            }}
-                        >
-                            <Translate content="exchange.show_only_liquid" />
-                        </Checkbox>
-                    </div>
+                    {false && ( // tmp disabled for further investigation
+                        <div style={{paddingTop: "0.5rem"}}>
+                            <Checkbox
+                                checked={this.props.onlyLiquid}
+                                onChange={() => {
+                                    SettingsActions.changeViewSetting({
+                                        onlyLiquid: !this.props.onlyLiquid
+                                    });
+                                }}
+                            >
+                                <Translate content="exchange.show_only_liquid" />
+                            </Checkbox>
+                        </div>
+                    )}
                 </div>
                 <PaginatedList
                     style={{paddingLeft: 0, paddingRight: 0}}
