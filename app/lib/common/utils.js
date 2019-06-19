@@ -7,6 +7,10 @@ import {ChainTypes} from "bitsharesjs";
 var {object_type} = ChainTypes;
 
 import {getAssetNamespaces, getAssetHideNamespaces} from "../../branding";
+import {
+    getIsCryptoBridgeAsset,
+    getRealAssetName
+} from "lib/cryptobridge/assetMethods";
 
 var Utils = {
     is_object_id: obj_id => {
@@ -453,6 +457,12 @@ var Utils = {
                 break;
             }
         }
+
+        /* CRYPTOBRIDGE */
+        if (getIsCryptoBridgeAsset(asset)) {
+            name = getRealAssetName(name);
+        }
+        /* /CRYPTOBRIDGE */
 
         let namespace = isBitAsset ? "bit" : toReplace[i];
         let prefix = null;

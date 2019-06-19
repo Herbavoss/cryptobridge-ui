@@ -6,6 +6,7 @@ import counterpart from "counterpart";
 import {Select} from "bitshares-ui-style-guide";
 /* CRYPTOBRIDGE */
 import AssetImage from "components/Utility/CryptoBridge/AssetImage";
+import {getRealAssetName} from "lib/cryptobridge/assetMethods";
 /* /CRYPTOBRIDGE */
 
 class DepositWithdrawAssetSelector extends React.Component {
@@ -150,7 +151,7 @@ class DepositWithdrawAssetSelector extends React.Component {
                         className="asset-selector--option"
                     >
                         <AssetImage asset={coin.label} forceImage={true} />{" "}
-                        {coin.label}{" "}
+                        {getRealAssetName(coin.label)}{" "}
                         <span className="asset-selector--asset-name">
                             ({coin.name})
                         </span>

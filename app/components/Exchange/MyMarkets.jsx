@@ -953,20 +953,18 @@ class MyMarkets extends React.Component {
                         }}
                     >
                         <Form>
-                            {!__ELECTRON__ && (
-                                <Form.Item>
-                                    <Checkbox
-                                        checked={this.props.onlyLiquid}
-                                        onChange={e => {
-                                            SettingsActions.changeViewSetting({
-                                                onlyLiquid: e.target.checked
-                                            });
-                                        }}
-                                    >
-                                        <Translate content="exchange.show_only_liquid" />
-                                    </Checkbox>
-                                </Form.Item>
-                            )}
+                            <Form.Item>
+                                <Checkbox
+                                    checked={this.props.onlyLiquid}
+                                    onChange={e => {
+                                        SettingsActions.changeViewSetting({
+                                            onlyLiquid: e.target.checked
+                                        });
+                                    }}
+                                >
+                                    <Translate content="exchange.show_only_liquid" />
+                                </Checkbox>
+                            </Form.Item>
                             <Form.Item>
                                 <Checkbox
                                     checked={this.props.onlyStars}
@@ -1225,9 +1223,10 @@ export default connect(
             return [SettingsStore, MarketsStore, AssetStore];
         },
         getProps() {
-            const onlyLiquid = __ELECTRON__
-                ? false
-                : SettingsStore.getState().viewSettings.get("onlyLiquid", true);
+            const onlyLiquid = SettingsStore.getState().viewSettings.get(
+                "onlyLiquid",
+                true
+            );
 
             return {
                 starredMarkets: SettingsStore.getState().starredMarkets,

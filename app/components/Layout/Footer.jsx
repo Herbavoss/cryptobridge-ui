@@ -623,7 +623,14 @@ class Footer extends React.Component {
                                                 </span>
                                             ) : (
                                                 <span className="success">
-                                                    {activeNode.name}
+                                                    {typeof activeNode.name ===
+                                                        "object" &&
+                                                    activeNode.name.translate
+                                                        ? counterpart.translate(
+                                                              activeNode.name
+                                                                  .translate
+                                                          )
+                                                        : activeNode.name}
                                                 </span>
                                             )}
                                         </div>

@@ -45,6 +45,29 @@ export function getCleanAssetSymbol(asset) {
     return "";
 }
 
+export function getRealAssetName(asset) {
+    if (asset) {
+        const symbol = typeof asset === "object" ? asset.get("symbol") : asset;
+
+        const realAssetNames = {
+            BRIM: "BR1M",
+            SUBIX: "SUB1X",
+            DV: "DV7",
+            NLC: "NLC2",
+            XDOGE: "DOGE",
+            DOGE: "DOGE (DEPRECATED)"
+        };
+
+        if (realAssetNames[symbol]) {
+            return realAssetNames[symbol];
+        }
+
+        return symbol;
+    }
+
+    return asset;
+}
+
 export function getCleanAssetPrice(price) {
     if (
         price &&

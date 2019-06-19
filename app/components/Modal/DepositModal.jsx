@@ -29,7 +29,10 @@ import LoginButton from "components/CryptoBridge/Global/LoginButton";
 import ComplianceInfo from "components/CryptoBridge/Global/ComplianceInfo";
 import {CryptoBridgeUser} from "../CryptoBridge/Account";
 import ZfApi from "react-foundation-apps/src/utils/foundation-api";
-import {getCleanAssetSymbol} from "lib/cryptobridge/assetMethods";
+import {
+    getCleanAssetSymbol,
+    getRealAssetName
+} from "lib/cryptobridge/assetMethods";
 /* /CRYPTOBRIDGE */
 
 class DepositModalContent extends DecimalChecker {
@@ -457,7 +460,9 @@ class DepositModalContent extends DecimalChecker {
                                                 paddingBottom: "0.3rem"
                                             }}
                                             content="cryptobridge.gateway.deposit.address.notice"
-                                            asset={selectedAsset}
+                                            asset={getRealAssetName(
+                                                selectedAsset
+                                            )}
                                         />
                                         <div
                                             className="modal__highlight"

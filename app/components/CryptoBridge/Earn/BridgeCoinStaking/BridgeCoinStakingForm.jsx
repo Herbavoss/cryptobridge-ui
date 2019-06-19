@@ -273,7 +273,7 @@ export default class BridgeCoinStakingForm extends React.Component {
 
     _setStakingPeriod = stakingPeriodValue => {
         this.setState({
-            stakingPeriodValue: parseInt(stakingPeriodValue.target.value, 10)
+            stakingPeriodValue: parseInt(stakingPeriodValue, 10)
         });
     };
 
@@ -451,6 +451,9 @@ export default class BridgeCoinStakingForm extends React.Component {
                     <Button
                         onClick={this._stakeBalance.bind(this)}
                         type="primary"
+                        disabled={
+                            showValidationErrors && !confirmationCheckboxChecked
+                        }
                     >
                         <Translate content="cryptobridge.earn.staking.create" />
                     </Button>
