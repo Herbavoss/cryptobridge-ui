@@ -23,9 +23,14 @@ stages:
       if: branch = master
 
     - name: build-preview
-      if: branch = feature/cb-1648-upstream
+      if: branch = preview
     - name: deploy-preview
-      if: branch = feature/cb-1648-upstream
+      if: branch = preview
+
+    - name: build-legacy
+      if: branch = master-legacy-20190618
+    - name: deploy-legacy
+      if: branch = master-legacy-20190618
 
     - name: build-prod
       if: tag =~ /^v\d+\.\d+(\.\d+)?$/
@@ -38,7 +43,7 @@ jobs:
           script:
               - export RECAPTCHA_SITE_KEY=$TEST_RECAPTCHA_SITE_KEY
               - export CRYPTOBRIDGE_PUB_KEY=$TEST_CRYPTOBRIDGE_PUB_KEY
-              - export TESTNET=true
+              - export CHAIN_ID=$TEST_CHAIN_ID
               - export WALLET_URL=$TEST_WALLET_URL
               - export API_URL=$TEST_API_URL
               - export API_SUPPORT_URL=$TEST_API_SUPPORT_URL
@@ -57,7 +62,6 @@ jobs:
           script:
               - export RECAPTCHA_SITE_KEY=$STAGE_RECAPTCHA_SITE_KEY
               - export CRYPTOBRIDGE_PUB_KEY=$STAGE_CRYPTOBRIDGE_PUB_KEY
-              - export STAGENET=true
               - export CHAIN_ID=$STAGE_CHAIN_ID
               - export WALLET_URL=$STAGE_WALLET_URL
               - export API_URL=$STAGE_API_URL
@@ -92,10 +96,29 @@ jobs:
               - aws s3 rm s3://wallet.preview.crypto-bridge.org/index.html
               - aws s3 sync ./build/dist/ s3://wallet.preview.crypto-bridge.org/ --delete --exclude "assets/*"
 
+        - stage: build-legacy
+          script:
+              - export RECAPTCHA_SITE_KEY=$LEGACY_RECAPTCHA_SITE_KEY
+              - export CRYPTOBRIDGE_PUB_KEY=$LEGACY_CRYPTOBRIDGE_PUB_KEY
+              - export WALLET_URL=$LEGACY_WALLET_URL
+              - export API_URL=$LEGACY_API_URL
+              - export API_SUPPORT_URL=$LEGACY_API_SUPPORT_URL
+              - npm install
+              - npm run build
+        - stage: deploy-legacy
+          script:
+              - ls -la ./build/dist/
+              - cat ./build/dist/index.html
+              - export AWS_ACCESS_KEY_ID=$LEGACY_AWS_ACCESS_KEY_ID
+              - export AWS_SECRET_ACCESS_KEY=$LEGACY_AWS_SECRET_ACCESS_KEY
+              - aws s3 rm s3://wallet.crypto-bridge.org/index.html
+              - aws s3 sync ./build/dist/ s3://wallet.crypto-bridge.org/ --delete --exclude "assets/*"
+
         - stage: build-prod
           script:
               - export RECAPTCHA_SITE_KEY=$PROD_RECAPTCHA_SITE_KEY
               - export CRYPTOBRIDGE_PUB_KEY=$PROD_CRYPTOBRIDGE_PUB_KEY
+              - export CHAIN_ID=$PROD_CHAIN_ID
               - export WALLET_URL=$PROD_WALLET_URL
               - export API_URL=$PROD_API_URL
               - export API_SUPPORT_URL=$PROD_API_SUPPORT_URL
@@ -107,5 +130,5 @@ jobs:
               - cat ./build/dist/index.html
               - export AWS_ACCESS_KEY_ID=$PROD_AWS_ACCESS_KEY_ID
               - export AWS_SECRET_ACCESS_KEY=$PROD_AWS_SECRET_ACCESS_KEY
-              - aws s3 rm s3://wallet.crypto-bridge.org/index.html
-              - aws s3 sync ./build/dist/ s3://wallet.crypto-bridge.org/ --delete --exclude "assets/*"
+              - aws s3 rm s3://wallet.preview.crypto-bridge.org/index.html
+              - aws s3 sync ./build/dist/ s3://wallet.preview.crypto-bridge.org/ --delete --exclude "assets/*"
