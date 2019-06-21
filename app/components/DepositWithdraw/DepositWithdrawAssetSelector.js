@@ -137,6 +137,9 @@ class DepositWithdrawAssetSelector extends React.Component {
                 notFoundContent={counterpart.translate(
                     "cryptobridge.gateway.asset.not_found"
                 )}
+                filterOption={(input, option) =>
+                    option.props.dataFilter.indexOf(input.toLowerCase()) >= 0
+                }
             >
                 {/*
                     NOTE
@@ -148,6 +151,7 @@ class DepositWithdrawAssetSelector extends React.Component {
                 {coinItems.map(coin => (
                     <Select.Option
                         key={coin.label}
+                        dataFilter={`${coin.label} ${coin.name}`.toLowerCase()}
                         className="asset-selector--option"
                     >
                         <AssetImage asset={coin.label} forceImage={true} />{" "}
