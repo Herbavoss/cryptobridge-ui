@@ -166,8 +166,6 @@ class PasswordInput extends Component {
     getConfirmPasswordErrorMessage() {
         let {password, confirmPassword} = this.state;
 
-        console.log(password, confirmPassword, password !== confirmPassword);
-
         if (password !== confirmPassword) {
             return counterpart.translate("wallet.confirm_error");
         }

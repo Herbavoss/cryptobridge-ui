@@ -240,7 +240,7 @@ class WalletRegistrationForm extends React.Component {
     isValid() {
         /* CRYPTOBRIDGE */
         if (
-            this.state.usCitizen !== true ||
+            (this.state.usCitizen !== true && this.state.usCitizen !== false) ||
             this.state.confirmedTermsAndConditions !== true ||
             this.state.confirmedDisclaimer !== true ||
             !this.state.reCaptchaToken
