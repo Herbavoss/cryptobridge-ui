@@ -18,7 +18,7 @@ import {availableGateways, availableGatewaysAmount} from "common/gateways";
 import {getGatewayStatusByAsset} from "common/gatewayUtils";
 import CryptoLinkFormatter from "../Utility/CryptoLinkFormatter";
 import counterpart from "counterpart";
-import {Modal, Button} from "bitshares-ui-style-guide";
+import {Modal, Button, Tooltip} from "bitshares-ui-style-guide";
 
 /* /CRYPTOBRIDGE */
 import {connect} from "alt-react";
@@ -163,7 +163,11 @@ class DepositModalContent extends DecimalChecker {
         };
     }
 
-    _getDepositAddress(selectedAsset, selectedGateway) {
+    _getDepositAddress(
+        selectedAsset,
+        selectedGateway,
+        forceNewAddress = false
+    ) {
         let {account} = this.props;
         let {gatewayStatus} = this.state;
 
@@ -200,7 +204,7 @@ class DepositModalContent extends DecimalChecker {
         }
 
         let depositAddress;
-        if (selectedGateway && selectedAsset) {
+        if (selectedGateway && selectedAsset && !forceNewAddress) {
             depositAddress = this.deposit_address_cache.getCachedInputAddress(
                 selectedGateway.toLowerCase(),
                 account,
@@ -230,23 +234,28 @@ class DepositModalContent extends DecimalChecker {
                 const fullAssetName = backingAsset.symbol;
 
                 if (this.props.authenticated && this.props.account) {
-                    getDepositAddress({
-                        coin: assetName,
-                        account: this.props.account
-                    })
-                        .then(address => {
-                            this.addDepositAddress(address);
+                    const depositObject = this._getDepositObject(
+                        assetName,
+                        fullAssetName,
+                        selectedGateway,
+                        gatewayStatus[selectedGateway].baseAPI.BASE
+                    );
+
+                    if (forceNewAddress) {
+                        console.log("force!");
+                        requestDepositAddress(depositObject);
+                    } else {
+                        getDepositAddress({
+                            coin: assetName,
+                            account: this.props.account
                         })
-                        .catch(() => {
-                            requestDepositAddress(
-                                this._getDepositObject(
-                                    assetName,
-                                    fullAssetName,
-                                    selectedGateway,
-                                    gatewayStatus[selectedGateway].baseAPI.BASE
-                                )
-                            );
-                        });
+                            .then(address => {
+                                this.addDepositAddress(address);
+                            })
+                            .catch(() => {
+                                requestDepositAddress(depositObject);
+                            });
+                    }
                 }
             } else {
                 this.setState({
@@ -279,6 +288,19 @@ class DepositModalContent extends DecimalChecker {
             depositAddress,
             fetchingAddress: false
         });
+    }
+
+    generateNewDepositAddress() {
+        const {selectedGateway, selectedAsset} = this.state;
+        const forceNewAddress = true;
+
+        if (selectedAsset && selectedGateway) {
+            this._getDepositAddress(
+                selectedAsset,
+                selectedGateway,
+                forceNewAddress
+            );
+        }
     }
 
     render() {
@@ -488,6 +510,20 @@ class DepositModalContent extends DecimalChecker {
                                             }}
                                         >
                                             {depositAddress.address}
+                                            <Tooltip
+                                                title={counterpart.translate(
+                                                    "cryptobridge.gateway.deposit.address.new"
+                                                )}
+                                            >
+                                                <Button
+                                                    onClick={() => {
+                                                        this.generateNewDepositAddress();
+                                                    }}
+                                                    icon={"sync"}
+                                                    size={"small"}
+                                                    style={{marginLeft: "1rem"}}
+                                                />
+                                            </Tooltip>
                                         </div>
                                     </div>
                                 </div>

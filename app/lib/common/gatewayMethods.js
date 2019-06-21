@@ -237,10 +237,10 @@ export function getDepositAddress({coin, account, stateCallback}) {
     })
         .then(
             reply => {
-                if (reply.status === 404) {
+                if (!reply.ok) {
                     throw new Error("Address not found");
                 } else {
-                    reply.json().then(
+                    return reply.json().then(
                         json => {
                             const address = {
                                 address: json.address,
@@ -265,6 +265,7 @@ export function getDepositAddress({coin, account, stateCallback}) {
             if (stateCallback) {
                 stateCallback({address: err.message, memo: null});
             }
+            throw err;
         });
 }
 

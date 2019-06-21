@@ -2479,7 +2479,8 @@
                     }
                 },
                 "address": {
-                    "notice": "%(asset)s deposit address:"
+                    "notice": "%(asset)s deposit address:",
+                    "new": "You can generate a new address every 15 minutes"
                 },
                 "fee_warning": "WARNING: Depositing %(asset)s more than once every %(fee_time_frame)s minutes will incur a %(fee_percentage)s% deposit fee (minimum %(fee_minimum)s %(asset)s). A deposit fee of %(fee_percentage_low_amounts)s% is charged when the deposit is below 1 %(asset)s.",
                 "required_confirmations": "Required confirmations: %(required_confirmations)s"
