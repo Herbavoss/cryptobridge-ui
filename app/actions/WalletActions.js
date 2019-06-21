@@ -236,25 +236,22 @@ class WalletActions {
 
                     ...accountInfo // CRYPTOBRIDGE
                 })
-            }).then(r => r.json());
+            }).then(result => result.ok);
 
             return create_account_promise
-                .then(result => {
-                    if (result.error) {
-                        throw result.error;
-                    }
+                .then(() => {
                     return updateWallet();
                 })
-                .catch(error => {
+                .catch(err => {
                     /*
-                * Since the account creation failed, we need to decrement the
-                * sequence used to generate private keys from the brainkey. Three
-                * keys were generated, so we decrement three times.
-                */
+                    * Since the account creation failed, we need to decrement the
+                    * sequence used to generate private keys from the brainkey. Three
+                    * keys were generated, so we decrement three times.
+                    */
                     WalletDb.decrementBrainKeySequence();
                     WalletDb.decrementBrainKeySequence();
                     WalletDb.decrementBrainKeySequence();
-                    throw error;
+                    throw err;
                 });
         }
     }
