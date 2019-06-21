@@ -54,14 +54,6 @@ class DepositModalContent extends DecimalChecker {
         this._setDepositAsset(asset);
     }
 
-    shouldComponentUpdate(np, ns) {
-        return (
-            np.authenticated !== this.props.authenticated ||
-            np.asset !== this.props.asset ||
-            !utils.are_equal_shallow(ns, this.state)
-        );
-    }
-
     componentDidMount() {
         if (
             this.props.authenticated &&
@@ -98,11 +90,14 @@ class DepositModalContent extends DecimalChecker {
     }
 
     onAssetSelected(asset) {
-        if (asset.gateway == "")
-            return this.setState({
-                selectedAsset: asset.id,
-                selectedGateway: null
-            });
+        this.setState({
+            selectedAsset: asset.id,
+            selectedGateway: null
+        });
+
+        if (asset.gateway == "") {
+            return;
+        }
 
         let {selectedAsset, selectedGateway} = _onAssetSelected.call(
             this,
@@ -300,7 +295,8 @@ class DepositModalContent extends DecimalChecker {
             authenticated,
             requiresComplianceEnforcement,
             requiresTermsAndConditions,
-            requiresUserVerification
+            requiresUserVerification,
+            backedCoins
         } = this.props;
 
         /* CRYPTOBRIDGE */
@@ -380,6 +376,26 @@ class DepositModalContent extends DecimalChecker {
             </div>
         );
 
+        /* CRYPTOBRDGE */
+        let selectedAssetBackedCoin;
+
+        if (selectedAsset && backedCoins && backedCoins.get("BRIDGE")) {
+            selectedAssetBackedCoin = backedCoins
+                .get("BRIDGE")
+                .find(backedCoin => {
+                    return backedCoin.backingCoinType === selectedAsset;
+                });
+        }
+
+        const assetGatewayInfo = selectedAssetBackedCoin ? (
+            <AssetGatewayInfo
+                asset={selectedAssetBackedCoin}
+                filter={"deposit"}
+                minDeposit={minDeposit}
+            />
+        ) : null;
+        /* /CRYPTOBRIDGE */
+
         return (
             <div className="grid-block vertical no-overflow">
                 <div className="modal__body" style={{paddingTop: "0"}}>
@@ -425,7 +441,7 @@ class DepositModalContent extends DecimalChecker {
                         <AssetGatewayInfoAccept
                             asset={getCleanAssetSymbol(backingAsset.symbol)}
                             name={backingAsset.name}
-                            tag={depositAddress.tag}
+                            tag={depositAddress.tag ? true : false}
                         >
                             {!fetchingAddress ? (
                                 (!usingGateway ||
@@ -533,14 +549,12 @@ class DepositModalContent extends DecimalChecker {
                                         </div>
                                     </div>
                                 ) : null}
-                                <AssetGatewayInfo
-                                    asset={backingAsset}
-                                    filter={"deposit"}
-                                    minDeposit={minDeposit}
-                                />
+                                {assetGatewayInfo}
                             </div>
                         </AssetGatewayInfoAccept>
-                    ) : null}
+                    ) : (
+                        assetGatewayInfo
+                    )}
                     {!usingGateway ? (
                         <div className="container-row deposit-directly">
                             <h2

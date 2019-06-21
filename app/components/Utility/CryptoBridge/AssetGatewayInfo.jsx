@@ -6,6 +6,7 @@ import {
     getCleanAssetSymbol,
     getRealAssetName
 } from "lib/cryptobridge/assetMethods";
+import {Alert} from "bitshares-ui-style-guide";
 
 export default class AssetGatewayInfo extends React.Component {
     static propTypes = {
@@ -22,15 +23,33 @@ export default class AssetGatewayInfo extends React.Component {
     render() {
         const {asset, filter, minDeposit} = this.props;
 
+        let messages = [];
+
+        if (asset.info) {
+            messages = asset.info.filter(message => message.type === "error");
+            if (!messages.length) {
+                messages = asset.info.filter(
+                    message => message.type !== "error"
+                );
+            }
+        }
+
         return (
             <ul className={"asset-gateway-info"}>
-                {asset.info &&
-                    asset.info.map((info, i) => {
+                {messages &&
+                    messages.map((info, i) => {
                         if (
                             !info.section ||
                             info.section === filter ||
                             filter === "none"
                         ) {
+                            const message = info.text;
+                            let type = info.type;
+
+                            if (type === "warn") {
+                                type = "warning";
+                            }
+
                             return (
                                 <li
                                     key={`assetInfo${i}`}
@@ -38,49 +57,69 @@ export default class AssetGatewayInfo extends React.Component {
                                         info.type
                                     }`}
                                 >
-                                    {info.text}
+                                    <Alert message={message} type={type} />
                                 </li>
                             );
                         }
                     })}
 
-                {asset.depositFeeEnabled ? (
-                    <Translate
-                        component="li"
-                        className="asset-gateway-info__warn"
-                        content="cryptobridge.gateway.deposit.fee_warning"
-                        with={{
-                            asset: asset.name,
-                            fee_time_frame: asset.depositFeeTimeframe,
-                            fee_percentage: asset.depositFeePercentage,
-                            fee_percentage_low_amounts:
-                                asset.depositFeePercentageLowAmounts,
-                            fee_minimum: asset.depositFeeMinimum
-                        }}
-                    />
+                {filter !== "withdrawal" && asset.depositFeeEnabled ? (
+                    <li className="asset-gateway-info__warn">
+                        <Alert
+                            message={
+                                <Translate
+                                    content="cryptobridge.gateway.deposit.fee_warning"
+                                    with={{
+                                        asset: asset.name,
+                                        fee_time_frame:
+                                            asset.depositFeeTimeframe,
+                                        fee_percentage:
+                                            asset.depositFeePercentage,
+                                        fee_percentage_low_amounts:
+                                            asset.depositFeePercentageLowAmounts,
+                                        fee_minimum: asset.depositFeeMinimum
+                                    }}
+                                />
+                            }
+                            type={"warning"}
+                        />
+                    </li>
                 ) : null}
 
-                {minDeposit ? (
-                    <Translate
-                        component="li"
-                        className="asset-gateway-info"
-                        content="gateway.min_deposit_warning_asset"
-                        minDeposit={minDeposit}
-                        coin={getRealAssetName(
-                            getCleanAssetSymbol(asset.symbol)
-                        )}
-                    />
+                {filter !== "withdrawal" && minDeposit ? (
+                    <li className="asset-gateway-info">
+                        <Alert
+                            message={
+                                <Translate
+                                    content="gateway.min_deposit_warning_asset"
+                                    minDeposit={minDeposit}
+                                    coin={getRealAssetName(
+                                        getCleanAssetSymbol(asset.symbol)
+                                    )}
+                                />
+                            }
+                            type={"info"}
+                        />
+                    </li>
                 ) : null}
 
-                {asset.requiredConfirmations > 0 && (
-                    <Translate
-                        component="li"
-                        content="cryptobridge.gateway.deposit.required_confirmations"
-                        with={{
-                            required_confirmations: asset.requiredConfirmations
-                        }}
-                    />
-                )}
+                {filter !== "withdrawal" &&
+                    asset.requiredConfirmations > 0 && (
+                        <li className="asset-gateway-info">
+                            <Alert
+                                message={
+                                    <Translate
+                                        content="cryptobridge.gateway.deposit.required_confirmations"
+                                        with={{
+                                            required_confirmations:
+                                                asset.requiredConfirmations
+                                        }}
+                                    />
+                                }
+                                type={"info"}
+                            />
+                        </li>
+                    )}
             </ul>
         );
     }

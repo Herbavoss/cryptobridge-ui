@@ -371,11 +371,13 @@ export function getBackedCoins({allCoins, tradingPairs, backer}) {
             outputCoin
         ) {
             let isDepositAllowed =
+                inputCoin.depositAllowed &&
                 allowed_outputs_by_input[inputCoin.backingCoinType] &&
                 allowed_outputs_by_input[inputCoin.backingCoinType][
                     inputCoin.coinType
                 ];
             let isWithdrawalAllowed =
+                inputCoin.withdrawalAllowed &&
                 allowed_outputs_by_input[inputCoin.coinType] &&
                 allowed_outputs_by_input[inputCoin.coinType][
                     inputCoin.backingCoinType
