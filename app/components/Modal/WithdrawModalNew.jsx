@@ -1036,7 +1036,7 @@ class WithdrawModalNew extends React.Component {
             let id = item.get("asset_type");
             let asset = assets.get(id);
 
-            if (asset && item.get("balance") > 0) {
+            if (asset) {
                 let [_gateway, _asset] = asset.symbol.split(".");
                 let find = !!_asset ? _asset : _gateway;
                 symbolsToInclude.push(find);
