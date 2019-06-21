@@ -66,7 +66,7 @@ class WithdrawModalNew extends React.Component {
         this.state = {
             selectedAsset: "",
             selectedAssetId: "",
-            selectedGateway: "",
+            selectedGateway: "BRIDGE",
             fee: 0,
             feeAmount: new Asset({amount: 0}),
             feeStatus: {},
