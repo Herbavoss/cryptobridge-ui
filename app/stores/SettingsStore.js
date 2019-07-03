@@ -485,6 +485,10 @@ class SettingsStore {
     _getDefaultMarkets(additionalMarkets = []) {
         let markets = [];
 
+        if (additionalMarkets.length) {
+            additionalMarkets.push("BTS");
+        }
+
         this.preferredBases.forEach(base => {
             addMarkets(markets, base, this.chainMarkets);
         });

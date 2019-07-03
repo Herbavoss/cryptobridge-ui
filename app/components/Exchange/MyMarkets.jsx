@@ -1101,7 +1101,7 @@ class MyMarkets extends React.Component {
                 )}
 
                 <Tabs
-                    defaultActiveKey="0"
+                    defaultActiveKey={activeMarketTab.toString()}
                     size="small"
                     onChange={index => {
                         this.setActiveMarketTab(index);

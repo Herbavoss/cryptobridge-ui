@@ -100,7 +100,7 @@ class MarketRow extends React.Component {
         }
 
         if (!stats || !stats.price) {
-            rowStyles.display = "none";
+            // rowStyles.display = "none";
         }
 
         let changeClass = "";
