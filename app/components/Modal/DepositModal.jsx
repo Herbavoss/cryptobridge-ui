@@ -322,6 +322,10 @@ class DepositModalContent extends DecimalChecker {
         } = this.props;
 
         /* CRYPTOBRIDGE */
+        let cbDepositAddress = depositAddress
+            ? Object.assign({}, depositAddress)
+            : null;
+
         if (!authenticated) {
             return (
                 <LoginButton
@@ -340,29 +344,27 @@ class DepositModalContent extends DecimalChecker {
             );
         }
 
-        /* /CRYPTOBRIDGE */
-
         let usingGateway = true;
 
         if (selectedGateway == null && selectedAsset == "BTS") {
             usingGateway = false;
-            depositAddress = {address: account};
+            cbDepositAddress = {address: account};
         }
 
         /* CRYPTOBRIDGE */
-        if (depositAddress && typeof depositAddress.address === "string") {
-            const address = depositAddress.address.split(":");
-            depositAddress.address = address[0];
-            depositAddress.tag = address[1] || null;
+        if (cbDepositAddress && typeof cbDepositAddress.address === "string") {
+            const address = cbDepositAddress.address.split(":");
+            cbDepositAddress.address = address[0];
+            cbDepositAddress.tag = address[1] || null;
         }
         /* /CRYPTOBRIDGE */
 
         // Count available gateways
         let nAvailableGateways = _getNumberAvailableGateways.call(this);
         let isAddressValid =
-            depositAddress &&
-            depositAddress.address !== "unknown" &&
-            !depositAddress.error;
+            cbDepositAddress &&
+            cbDepositAddress.address !== "unknown" &&
+            !cbDepositAddress.error;
 
         let minDeposit = 0;
         if (!!backingAsset) {
@@ -382,7 +384,7 @@ class DepositModalContent extends DecimalChecker {
         const QR = isAddressValid ? (
             <CryptoLinkFormatter
                 size={140}
-                address={usingGateway ? depositAddress.address : account}
+                address={usingGateway ? cbDepositAddress.address : account}
                 asset={selectedAsset}
             />
         ) : (
@@ -444,7 +446,7 @@ class DepositModalContent extends DecimalChecker {
                               selectedGateway,
                               gatewayStatus,
                               nAvailableGateways,
-                              error: depositAddress && depositAddress.error,
+                              error: cbDepositAddress && cbDepositAddress.error,
                               onGatewayChanged: this.onGatewayChanged.bind(this)
                           })
                         : null}
@@ -463,7 +465,7 @@ class DepositModalContent extends DecimalChecker {
                         <AssetGatewayInfoAccept
                             asset={getCleanAssetSymbol(backingAsset.symbol)}
                             name={backingAsset.name}
-                            tag={depositAddress.tag ? true : false}
+                            tag={cbDepositAddress.tag ? true : false}
                         >
                             {!fetchingAddress ? (
                                 (!usingGateway ||
@@ -472,7 +474,7 @@ class DepositModalContent extends DecimalChecker {
                                         gatewayStatus[selectedGateway].options
                                             .enabled)) &&
                                 isAddressValid &&
-                                !depositAddress.memo ? (
+                                !cbDepositAddress.memo ? (
                                     <div
                                         className="container-row"
                                         style={{textAlign: "center"}}
@@ -485,7 +487,7 @@ class DepositModalContent extends DecimalChecker {
                                 <div className="grid-block container-row">
                                     <div style={{paddingRight: "1rem"}}>
                                         <CopyButton
-                                            text={depositAddress.address}
+                                            text={cbDepositAddress.address}
                                             className={"copyIcon"}
                                         />
                                     </div>
@@ -509,7 +511,7 @@ class DepositModalContent extends DecimalChecker {
                                                 wordBreak: "break-all"
                                             }}
                                         >
-                                            {depositAddress.address}
+                                            {cbDepositAddress.address}
                                             <Tooltip
                                                 title={counterpart.translate(
                                                     "cryptobridge.gateway.deposit.address.new"
@@ -528,11 +530,11 @@ class DepositModalContent extends DecimalChecker {
                                     </div>
                                 </div>
                                 {/* CRYPTOBRIDGE */}
-                                {depositAddress.tag && (
+                                {cbDepositAddress.tag && (
                                     <div className="grid-block container-row">
                                         <div style={{paddingRight: "1rem"}}>
                                             <CopyButton
-                                                text={depositAddress.tag}
+                                                text={cbDepositAddress.tag}
                                                 className={"copyIcon"}
                                             />
                                         </div>
@@ -551,17 +553,17 @@ class DepositModalContent extends DecimalChecker {
                                                 className="modal__highlight"
                                                 style={{wordBreak: "break-all"}}
                                             >
-                                                {depositAddress.tag}
+                                                {cbDepositAddress.tag}
                                             </div>
                                         </div>
                                     </div>
                                 )}
                                 {/* /CRYPTOBRIDGE */}
-                                {depositAddress.memo ? (
+                                {cbDepositAddress.memo ? (
                                     <div className="grid-block container-row">
                                         <div style={{paddingRight: "1rem"}}>
                                             <CopyButton
-                                                text={depositAddress.memo}
+                                                text={cbDepositAddress.memo}
                                                 className={"copyIcon"}
                                             />
                                         </div>
@@ -580,7 +582,7 @@ class DepositModalContent extends DecimalChecker {
                                                 className="modal__highlight"
                                                 style={{wordBreak: "break-all"}}
                                             >
-                                                {depositAddress.memo}
+                                                {cbDepositAddress.memo}
                                             </div>
                                         </div>
                                     </div>

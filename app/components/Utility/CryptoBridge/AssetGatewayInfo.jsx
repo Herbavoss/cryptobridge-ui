@@ -46,7 +46,7 @@ export default class AssetGatewayInfo extends React.Component {
                             const message = info.text;
                             let type = info.type;
 
-                            if (type === "warn") {
+                            if (type === "warn" || type === "alert") {
                                 type = "warning";
                             }
 
